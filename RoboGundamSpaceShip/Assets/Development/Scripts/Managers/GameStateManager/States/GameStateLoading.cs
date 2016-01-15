@@ -19,7 +19,7 @@ public class GameStateLoading : GameStateBase
 	public override void UpdateState()
 	{
 		//add some loading screen shenanigans before this
-		m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_03_INPLAY);
+		//m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_03_INPLAY);
 	}
 
 	public override void ExitState(Enums.GameStateNames p_nextState)

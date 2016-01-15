@@ -10,11 +10,11 @@ public class Managers : MonoBehaviour {
 	//Variables
 	private static Managers m_instance = null;
 	private GameStateManager m_gamestatemanager = null;
-	//private CommandManager m_commandmanager = null;
+	private NetworkManager m_networkmanager = null;
 	private GameProperties m_gameproperties = null;
 	//private LoadManager m_loadmanager = null;
 	//private InputManager m_inputmanager = null;
-	//private GUIManager m_guimanager = null;
+	private GUIManager m_guimanager = null;
 	#endregion
 
 	#region Protected Variables
@@ -35,10 +35,10 @@ public class Managers : MonoBehaviour {
 		return m_gamestatemanager;
 	}
 
-	//public CommandManager GetCommandManager()
-	//{
-	//	return m_commandmanager;
-	//}
+	public NetworkManager GetNetworkManager()
+	{
+		return m_networkmanager;
+	}
 
 	public GameProperties GetGameProperties()
 	{
@@ -54,11 +54,11 @@ public class Managers : MonoBehaviour {
 	//{
 	//	return m_inputmanager;
 	//}
-	
-	//public GUIManager GetGUIManager()
-	//{
-	//	return m_guimanager;
-	//}
+
+	public GUIManager GetGUIManager()
+	{
+		return m_guimanager;
+	}
 
 	#endregion
 
@@ -73,10 +73,10 @@ public class Managers : MonoBehaviour {
 	{
 		m_gameproperties = m_instance.GetComponent<GameProperties>();
 		m_gamestatemanager = gameObject.AddComponent<GameStateManager>();
-		//m_commandmanager = gameObject.AddComponent<CommandManager>();
+		m_networkmanager = gameObject.AddComponent<NetworkManager>();
 		//m_loadmanager = gameObject.AddComponent<LoadManager>();
 		//m_inputmanager = gameObject.AddComponent<InputManager>();
-		//m_guimanager = gameObject.AddComponent<GUIManager>();
+		m_guimanager = gameObject.AddComponent<GUIManager>();
 		m_gamestatemanager.Init();
 		
 	}

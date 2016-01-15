@@ -19,6 +19,8 @@ public class GameProperties : MonoBehaviour {
 		get { return m_menuScene; }
 	}
 
-
+	public GameObject MenuCamera;
+	public GameObject MainCamera;
+	public GameObject PawnMaster;
 
 }

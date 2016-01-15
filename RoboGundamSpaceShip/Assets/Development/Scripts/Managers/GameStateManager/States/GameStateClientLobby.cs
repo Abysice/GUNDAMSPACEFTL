@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 
-public class GameStateLeaving : GameStateBase
+public class GameStateClientLobby : GameStateBase
 {
-	public GameStateLeaving(GameStateManager p_gameStateManager)
+	public GameStateClientLobby(GameStateManager p_gameStateManager)
 	{
 		m_gameStateManager = p_gameStateManager;
 	}
