@@ -20,6 +20,7 @@ public class GameProperties : MonoBehaviour {
 	}
 
 	public GameObject MenuCamera;
+	public GameObject MainMenu;
 	public GameObject MainCamera;
 	public GameObject PawnMaster;
 

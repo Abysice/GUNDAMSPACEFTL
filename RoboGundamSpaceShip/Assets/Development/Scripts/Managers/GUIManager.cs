@@ -1,9 +1,11 @@
-﻿// Script Comments go here
+﻿// This class will handle GUI events and junk
 //
 //
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GUIManager : MonoBehaviour {
 
@@ -15,6 +17,7 @@ public class GUIManager : MonoBehaviour {
     #endregion
 
     #region Private Variables
+	private static GameObject m_mainMenuObject;
     #endregion
 
     #region Accessors
@@ -37,7 +40,15 @@ public class GUIManager : MonoBehaviour {
 	//spawn the main menu into the scene
 	public void LoadMainMenu()
 	{
+		m_mainMenuObject = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MainMenu);
+	}
 
+	//called by the gui to quit the game
+	public void QuitGameButton()
+	{
+		Debug.Log("Quittin");
+		Application.Quit();
+		UnityEditor.EditorApplication.isPlaying = false;
 	}
     #endregion
 

@@ -24,6 +24,7 @@ public class GameStart : MonoBehaviour {
 	void Start()
 	{
 		Application.targetFrameRate = 60;
+		Application.runInBackground = true;
 		gameObject.AddComponent<Managers>();
 		DontDestroyOnLoad(this);
 	}

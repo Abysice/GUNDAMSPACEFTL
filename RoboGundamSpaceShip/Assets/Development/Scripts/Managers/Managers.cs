@@ -3,14 +3,14 @@
 //
 using UnityEngine;
 using System.Collections;
-
+using UnityEngine.Networking;
 public class Managers : MonoBehaviour {
 	
 	#region Public Variables
 	//Variables
 	private static Managers m_instance = null;
 	private GameStateManager m_gamestatemanager = null;
-	private NetworkManager m_networkmanager = null;
+	private NetworkController m_networkcontroller = null;
 	private GameProperties m_gameproperties = null;
 	//private LoadManager m_loadmanager = null;
 	//private InputManager m_inputmanager = null;
@@ -35,20 +35,15 @@ public class Managers : MonoBehaviour {
 		return m_gamestatemanager;
 	}
 
-	public NetworkManager GetNetworkManager()
+	public NetworkController GetNetworkController()
 	{
-		return m_networkmanager;
+		return m_networkcontroller;
 	}
 
 	public GameProperties GetGameProperties()
 	{
 		return m_gameproperties;
 	}
-	
-	//public LoadManager GetLoadManager()
-	//{
-	//	return m_loadmanager;
-	//}
 
 	//public InputManager GetInputManager()
 	//{
@@ -73,8 +68,7 @@ public class Managers : MonoBehaviour {
 	{
 		m_gameproperties = m_instance.GetComponent<GameProperties>();
 		m_gamestatemanager = gameObject.AddComponent<GameStateManager>();
-		m_networkmanager = gameObject.AddComponent<NetworkManager>();
-		//m_loadmanager = gameObject.AddComponent<LoadManager>();
+		m_networkcontroller = gameObject.AddComponent<NetworkController>();
 		//m_inputmanager = gameObject.AddComponent<InputManager>();
 		m_guimanager = gameObject.AddComponent<GUIManager>();
 		m_gamestatemanager.Init();
