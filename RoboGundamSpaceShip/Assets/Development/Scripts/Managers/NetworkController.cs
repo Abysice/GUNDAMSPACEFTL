@@ -32,7 +32,7 @@ public class NetworkController : NetworkLobbyManager
 		m_playerList = new List<PlayerController>();
 		this.networkPort = Constants.MULTIPLAYER_PORT;
 		this.autoCreatePlayer = false;
-		this.maxPlayers = 3;
+		this.maxPlayers = 1;
 		this.maxPlayersPerConnection = 1;
     }
     //runs every frame
