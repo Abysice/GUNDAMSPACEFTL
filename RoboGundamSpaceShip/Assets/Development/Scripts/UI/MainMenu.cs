@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour {
 
 
     #region Public Variables
+    public Text m_CurrentIP;
     #endregion
 
     #region Protected Variables
@@ -26,6 +27,7 @@ public class MainMenu : MonoBehaviour {
     //initialization
     public void Start()
     {
+        m_CurrentIP.text = Network.player.ipAddress.ToString();
 
     }
     //runs every frame
@@ -53,6 +55,12 @@ public class MainMenu : MonoBehaviour {
 	{
 		Managers.GetInstance().GetGUIManager().QuitGameButton();
 	}
+
+    public void UserInput(string l_userIP)
+    {
+        Managers.GetInstance().GetNetworkController().m_ip = l_userIP;
+    }
+
     #endregion
 
     #region Protected Methods
