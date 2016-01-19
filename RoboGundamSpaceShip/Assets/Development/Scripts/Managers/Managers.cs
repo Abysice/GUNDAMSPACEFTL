@@ -4,6 +4,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+
 public class Managers : MonoBehaviour {
 	
 	#region Public Variables
@@ -68,7 +69,8 @@ public class Managers : MonoBehaviour {
 	{
 		m_gameproperties = m_instance.GetComponent<GameProperties>();
 		m_gamestatemanager = gameObject.AddComponent<GameStateManager>();
-		m_networkcontroller = gameObject.AddComponent<NetworkController>();
+		m_networkcontroller = gameObject.GetComponent<NetworkController>();
+		
 		//m_inputmanager = gameObject.AddComponent<InputManager>();
 		m_guimanager = gameObject.AddComponent<GUIManager>();
 		m_gamestatemanager.Init();
