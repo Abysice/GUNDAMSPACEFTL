@@ -1,1 +1,0 @@
-C:\git\GUNDAMSPACEFTL\RoboGundamSpaceShip\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
