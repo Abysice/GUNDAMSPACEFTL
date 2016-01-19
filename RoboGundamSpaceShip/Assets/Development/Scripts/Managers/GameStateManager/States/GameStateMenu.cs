@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameStateMenu : GameStateBase
 {
+	private GameObject m_menuCamera;
+
 	public GameStateMenu(GameStateManager p_gameStateManager)
 	{
 		m_gameStateManager = p_gameStateManager;
@@ -13,7 +15,8 @@ public class GameStateMenu : GameStateBase
 	{
 		Debug.Log("Entered Menu State");
 		//Spawn Menu placeholder
-		GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
+		if (m_menuCamera == null)
+			m_menuCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
 		Managers.GetInstance().GetGUIManager().LoadMainMenu(); //spawn menu gui
 	}
 

@@ -16,6 +16,7 @@ public class GameStateServerLobby : GameStateBase
 	public override void EnterState(Enums.GameStateNames p_prevState)
 	{
 		Debug.Log("Entered Lobby (as a server)");
+		Managers.GetInstance().GetNetworkController().showLobbyGUI = true;
 	}
 
 	public override void UpdateState()

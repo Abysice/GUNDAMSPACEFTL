@@ -56,7 +56,7 @@ public class GUIManager : MonoBehaviour {
 	{
 		Debug.Log("Quittin");
 		Application.Quit();
-		UnityEditor.EditorApplication.isPlaying = false;
+		
 	}
     #endregion
 

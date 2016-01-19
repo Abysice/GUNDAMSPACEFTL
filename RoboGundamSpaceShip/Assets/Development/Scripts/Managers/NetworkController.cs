@@ -7,11 +7,12 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NetworkController : NetworkManager
+public class NetworkController : NetworkLobbyManager
 {
 
 
     #region Public Variables
+	public string m_ip = "";
     #endregion
 
     #region Protected Variables
@@ -29,8 +30,10 @@ public class NetworkController : NetworkManager
     public void Start()
     {
 		m_playerList = new List<PlayerController>();
-		NetworkManager.singleton.networkPort = Constants.MULTIPLAYER_PORT;
-		NetworkManager.singleton.autoCreatePlayer = false;
+		this.networkPort = Constants.MULTIPLAYER_PORT;
+		this.autoCreatePlayer = false;
+		this.maxPlayers = 3;
+		this.maxPlayersPerConnection = 1;
     }
     //runs every frame
     public void Update()
@@ -40,27 +43,50 @@ public class NetworkController : NetworkManager
 	//called when the server is started
 	public override void OnStartServer()
 	{
-		base.OnStartServer();
+		//base.OnStartServer();
 		Debug.Log("Server Started");
 	}
-	//called when a client connects (includes the local server)
+
+	public override void OnStartClient(NetworkClient client)
+	{
+		//base.OnStartServer();
+		Debug.Log("Client Started");
+	}
+	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
 	{
-		base.OnClientConnect(p_connection);
-		Debug.Log(p_connection.connectionId + " Connected to the Server");
-		
-		PlayerController l_newPlayer = new PlayerController();
-		l_newPlayer.playerControllerId = (short)p_connection.connectionId;
-		m_playerList.Add(l_newPlayer);
+		Debug.Log(p_connection.connectionId + "Connected to the Server(client message)");
 	}
-    #endregion
+	//called on server
+	public override void OnServerConnect(NetworkConnection conn)
+	{
+		Debug.Log(conn.connectionId + " Connected to the Server(server message)");
+
+		PlayerController l_newPlayer = new PlayerController();
+		l_newPlayer.playerControllerId = (short)conn.connectionId;
+		m_playerList.Add(l_newPlayer); // ONLY THE SERVER HAS THIS LIST SO FAR
+		
+	}
+	//called on server when error ocurrs
+	public override void OnServerError(NetworkConnection conn, int errorCode)
+	{
+		Debug.Log("CONNECTION ERROR:" + errorCode);
+	}
+
+	//called on client when error occurs
+	public override void OnClientError(NetworkConnection conn, int errorCode)
+	{
+		Debug.Log("CONNECTION ERROR: " + errorCode);
+	}
+
+	    #endregion
 
     #region Public Methods
 
 	//called by the gui to host a multiplayer game
 	public void HostGameButton()
 	{
-		this.StartHost();
+		StartHost();
 		Managers.GetInstance().GetGUIManager().HideMainMenu();
 		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_02_SERVERLOBBY);
 	}
@@ -68,7 +94,11 @@ public class NetworkController : NetworkManager
 	//called by the gui to join a multiplayer game
 	public void JoinGameButton()
 	{
-		this.StartClient();
+		if (m_ip == "")
+			this.networkAddress = Network.player.ipAddress.ToString();
+		else
+			this.networkAddress = m_ip;
+		StartClient();
 		Managers.GetInstance().GetGUIManager().HideMainMenu();
 		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_CLIENTLOBBY);
 	}
