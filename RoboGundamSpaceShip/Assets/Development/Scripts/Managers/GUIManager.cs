@@ -40,7 +40,15 @@ public class GUIManager : MonoBehaviour {
 	//spawn the main menu into the scene
 	public void LoadMainMenu()
 	{
-		m_mainMenuObject = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MainMenu);
+		if (m_mainMenuObject)
+			m_mainMenuObject.SetActive(true);
+		else
+			m_mainMenuObject = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MainMenu);
+	}
+
+	public void HideMainMenu()
+	{
+		m_mainMenuObject.SetActive(false);
 	}
 
 	//called by the gui to quit the game

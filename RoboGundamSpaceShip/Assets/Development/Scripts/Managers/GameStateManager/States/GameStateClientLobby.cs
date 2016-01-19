@@ -12,7 +12,7 @@ public class GameStateClientLobby : GameStateBase
 
 	public override void EnterState(Enums.GameStateNames p_prevState)
 	{
-
+		Debug.Log("Entered Lobby (as a client)");
 	}
 
 	public override void UpdateState()

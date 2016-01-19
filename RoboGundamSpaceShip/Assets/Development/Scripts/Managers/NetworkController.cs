@@ -5,6 +5,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NetworkController : NetworkManager
 {
@@ -17,6 +18,7 @@ public class NetworkController : NetworkManager
     #endregion
 
     #region Private Variables
+	private List<PlayerController> m_playerList;
     #endregion
 
     #region Accessors
@@ -26,6 +28,7 @@ public class NetworkController : NetworkManager
     //initialization
     public void Start()
     {
+		m_playerList = new List<PlayerController>();
 		NetworkManager.singleton.networkPort = Constants.MULTIPLAYER_PORT;
 		NetworkManager.singleton.autoCreatePlayer = false;
     }
@@ -41,10 +44,14 @@ public class NetworkController : NetworkManager
 		Debug.Log("Server Started");
 	}
 	//called when a client connects (includes the local server)
-	public override void OnClientConnect(NetworkConnection conn)
+	public override void OnClientConnect(NetworkConnection p_connection)
 	{
-		base.OnClientConnect(conn);
-		Debug.Log("Connected to the Server");
+		base.OnClientConnect(p_connection);
+		Debug.Log(p_connection.connectionId + " Connected to the Server");
+		
+		PlayerController l_newPlayer = new PlayerController();
+		l_newPlayer.playerControllerId = (short)p_connection.connectionId;
+		m_playerList.Add(l_newPlayer);
 	}
     #endregion
 
@@ -54,12 +61,16 @@ public class NetworkController : NetworkManager
 	public void HostGameButton()
 	{
 		this.StartHost();
+		Managers.GetInstance().GetGUIManager().HideMainMenu();
+		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_02_SERVERLOBBY);
 	}
 
 	//called by the gui to join a multiplayer game
 	public void JoinGameButton()
 	{
 		this.StartClient();
+		Managers.GetInstance().GetGUIManager().HideMainMenu();
+		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_CLIENTLOBBY);
 	}
     #endregion
 
