@@ -62,11 +62,10 @@ public class GameStateManager : MonoBehaviour
 	{
 		// Initialise the bookstateDictionary
 		m_gameStateDictionary.Add(Enums.GameStateNames.GS_01_MENU, new GameStateMenu(this));
-		m_gameStateDictionary.Add(Enums.GameStateNames.GS_02_SERVERLOBBY, new GameStateServerLobby(this));
-		m_gameStateDictionary.Add(Enums.GameStateNames.GS_03_CLIENTLOBBY, new GameStateClientLobby(this));
-		m_gameStateDictionary.Add(Enums.GameStateNames.GS_04_LOADING, new GameStateLoading(this));
-		m_gameStateDictionary.Add(Enums.GameStateNames.GS_05_INPLAY, new GameStateInplay(this));
-		m_gameStateDictionary.Add(Enums.GameStateNames.GS_06_CLEANUP, new GameStateCleanup(this));
+		m_gameStateDictionary.Add(Enums.GameStateNames.GS_02_LOBBY, new GameStateLobby(this));
+		m_gameStateDictionary.Add(Enums.GameStateNames.GS_03_LOADING, new GameStateLoading(this));
+		m_gameStateDictionary.Add(Enums.GameStateNames.GS_04_INPLAY, new GameStateInplay(this));
+		m_gameStateDictionary.Add(Enums.GameStateNames.GS_05_CLEANUP, new GameStateCleanup(this));
 
 		//start the state machine
 		ChangeGameState(Enums.GameStateNames.GS_01_MENU); //starts in the menu state

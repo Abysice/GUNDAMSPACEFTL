@@ -7,6 +7,7 @@ using System.Collections;
 public class GameProperties : MonoBehaviour {
 
 	private string m_levelScene = "LEVEL_SCENE";
+	private string m_lobbyScene = "LOBBY_SCENE";
 	private string m_menuScene = "MAIN_MENU";
 
 
@@ -18,10 +19,15 @@ public class GameProperties : MonoBehaviour {
 	{
 		get { return m_menuScene; }
 	}
+	public string LobbyScene
+	{
+		get { return m_lobbyScene; }
+	}
 
 	public GameObject MenuCamera;
 	public GameObject MainMenu;
-	public GameObject MainCamera;
+	public GameObject LobbyMenu;
+	public GameObject playerCamera;
 	public GameObject PawnMaster;
 
 }

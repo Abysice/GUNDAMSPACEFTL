@@ -15,9 +15,8 @@ public class GameStateMenu : GameStateBase
 	{
 		Debug.Log("Entered Menu State");
 		//Spawn Menu placeholder
-		if (m_menuCamera == null)
-			m_menuCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
-		Managers.GetInstance().GetGUIManager().LoadMainMenu(); //spawn menu gui
+		m_menuCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
+		Managers.GetInstance().GetGUIManager().LoadMenu(); //spawn menu gui
 	}
 
 	public override void UpdateState()
@@ -27,6 +26,6 @@ public class GameStateMenu : GameStateBase
 
 	public override void ExitState(Enums.GameStateNames p_nextState)
 	{
-
+		GameObject.Destroy(m_menuCamera);
 	}
 }

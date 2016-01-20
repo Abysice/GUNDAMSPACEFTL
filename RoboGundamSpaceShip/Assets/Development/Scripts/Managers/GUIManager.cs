@@ -38,12 +38,16 @@ public class GUIManager : MonoBehaviour {
 
     #region Public Methods
 	//spawn the main menu into the scene
-	public void LoadMainMenu()
+	public void LoadMenu()
 	{
 		if (m_mainMenuObject)
 			m_mainMenuObject.SetActive(true);
 		else
-			m_mainMenuObject = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MainMenu);
+			m_mainMenuObject = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MainMenu);	
+	}
+	public void LoadLobbyGUI()
+	{
+		m_mainMenuObject = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().LobbyMenu);	
 	}
 
 	public void HideMainMenu()

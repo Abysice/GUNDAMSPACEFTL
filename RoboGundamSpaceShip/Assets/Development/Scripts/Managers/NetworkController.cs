@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
-public class NetworkController : NetworkLobbyManager
+public class NetworkController : NetworkManager
 {
 
 
@@ -19,7 +20,7 @@ public class NetworkController : NetworkLobbyManager
     #endregion
 
     #region Private Variables
-	private List<PlayerController> m_playerList;
+	private List<NetworkClient> m_playerList;
     #endregion
 
     #region Accessors
@@ -29,11 +30,9 @@ public class NetworkController : NetworkLobbyManager
     //initialization
     public void Start()
     {
-		m_playerList = new List<PlayerController>();
+		m_playerList = new List<NetworkClient>();
 		this.networkPort = Constants.MULTIPLAYER_PORT;
-		this.autoCreatePlayer = false;
-		this.maxPlayers = 1;
-		this.maxPlayersPerConnection = 1;
+
     }
     //runs every frame
     public void Update()
@@ -43,14 +42,21 @@ public class NetworkController : NetworkLobbyManager
 	//called when the server is started
 	public override void OnStartServer()
 	{
-		//base.OnStartServer();
+		base.OnStartServer();
 		Debug.Log("Server Started");
+	}
+
+	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+	{
+		base.OnServerAddPlayer(conn, playerControllerId);
+		
 	}
 
 	public override void OnStartClient(NetworkClient client)
 	{
-		//base.OnStartServer();
-		Debug.Log("Client Started");
+		base.OnStartServer();
+		//Debug.Log("Client connected: " + client.connection.connectionId);
+		m_playerList.Add(client); // ONLY THE SERVER HAS THIS LIST SO FAR
 	}
 	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
@@ -61,11 +67,6 @@ public class NetworkController : NetworkLobbyManager
 	public override void OnServerConnect(NetworkConnection conn)
 	{
 		Debug.Log(conn.connectionId + " Connected to the Server(server message)");
-
-		PlayerController l_newPlayer = new PlayerController();
-		l_newPlayer.playerControllerId = (short)conn.connectionId;
-		m_playerList.Add(l_newPlayer); // ONLY THE SERVER HAS THIS LIST SO FAR
-		
 	}
 	//called on server when error ocurrs
 	public override void OnServerError(NetworkConnection conn, int errorCode)
@@ -78,17 +79,39 @@ public class NetworkController : NetworkLobbyManager
 	{
 		Debug.Log("CONNECTION ERROR: " + errorCode);
 	}
+	//called on each client when server closes
+	public override void OnStopClient()
+	{
+		Debug.Log("server closed");
+		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_01_MENU);
+	}
+	//called on the server when the scene changes to the next
+	public override void OnServerSceneChanged(string sceneName)
+	{
+		base.OnServerSceneChanged(sceneName);
+	}
+	//called on the client when the scene changes to the next
+	public override void OnClientSceneChanged(NetworkConnection conn)
+	{
+		base.OnClientSceneChanged(conn);
+		//move state machine once scene's have loaded
+		if (networkSceneName == Managers.GetInstance().GetGameProperties().LobbyScene)
+			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_02_LOBBY);
+		else if (networkSceneName == Managers.GetInstance().GetGameProperties().LevelScene)
+			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_LOADING);
+		
+	}
 
-	    #endregion
+	#endregion
 
     #region Public Methods
 
 	//called by the gui to host a multiplayer game
 	public void HostGameButton()
 	{
-		StartHost();
-		Managers.GetInstance().GetGUIManager().HideMainMenu();
-		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_02_SERVERLOBBY);
+		NetworkClient temp = StartHost();
+		ServerChangeScene(Managers.GetInstance().GetGameProperties().LobbyScene);
+		
 	}
 
 	//called by the gui to join a multiplayer game
@@ -99,8 +122,12 @@ public class NetworkController : NetworkLobbyManager
 		else
 			this.networkAddress = m_ip;
 		StartClient();
-		Managers.GetInstance().GetGUIManager().HideMainMenu();
-		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_CLIENTLOBBY);
+	}
+
+	public void BeginMatchButton()
+	{
+		Debug.Log("MATCH STARTED");
+		ServerChangeScene(Managers.GetInstance().GetGameProperties().LevelScene);
 	}
     #endregion
 
