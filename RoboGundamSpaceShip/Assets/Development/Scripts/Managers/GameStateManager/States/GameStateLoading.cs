@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 public class GameStateLoading : GameStateBase
 {
@@ -11,21 +12,18 @@ public class GameStateLoading : GameStateBase
 
 	public override void EnterState(Enums.GameStateNames p_prevState)
 	{
-		Application.LoadLevel(Managers.GetInstance().GetGameProperties().LevelScene);
 		Debug.Log("Entered Loading State");
-
+		m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_04_INPLAY);
+		Managers.GetInstance().GetPlayerManager().CmdSpawnPlayer();
 	}
 
 	public override void UpdateState()
 	{
 		//add some loading screen shenanigans before this
-		//m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_03_INPLAY);
 	}
 
 	public override void ExitState(Enums.GameStateNames p_nextState)
 	{
-		//Managers.GetInstance().GetLoadManager().SpawnPlayer();
-		//Managers.GetInstance().GetLoadManager().SpawnCamera();
-		//Managers.GetInstance().GetGUIManager().LoadGameGUI();
+
 	}
 }
