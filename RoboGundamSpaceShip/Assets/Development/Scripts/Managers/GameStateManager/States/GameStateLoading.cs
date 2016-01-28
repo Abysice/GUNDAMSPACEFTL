@@ -13,8 +13,9 @@ public class GameStateLoading : GameStateBase
 	public override void EnterState(Enums.GameStateNames p_prevState)
 	{
 		Debug.Log("Entered Loading State");
-		m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_04_INPLAY);
+
 		Managers.GetInstance().GetPlayerManager().CmdSpawnPlayer();
+		m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_04_INPLAY);
 	}
 
 	public override void UpdateState()

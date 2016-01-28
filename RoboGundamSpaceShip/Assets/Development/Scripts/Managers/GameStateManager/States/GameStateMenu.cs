@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameStateMenu : GameStateBase
 {
-	private GameObject m_menuCamera;
+	//private GameObject m_menuCamera;
 
 	public GameStateMenu(GameStateManager p_gameStateManager)
 	{
@@ -15,7 +15,7 @@ public class GameStateMenu : GameStateBase
 	{
 		Debug.Log("Entered Menu State");
 		//Spawn Menu placeholder
-		m_menuCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
+		//m_menuCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
 		Managers.GetInstance().GetGUIManager().LoadMenu(); //spawn menu gui
 	}
 
@@ -26,6 +26,6 @@ public class GameStateMenu : GameStateBase
 
 	public override void ExitState(Enums.GameStateNames p_nextState)
 	{
-		GameObject.Destroy(m_menuCamera);
+
 	}
 }

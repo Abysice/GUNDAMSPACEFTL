@@ -19,7 +19,7 @@ public class NetworkController : NetworkManager
     #endregion
 
     #region Private Variables
-	private List<NetworkClient> m_playerList;
+
     #endregion
 
     #region Accessors
@@ -29,9 +29,7 @@ public class NetworkController : NetworkManager
     //initialization
     public void Start()
     {
-		m_playerList = new List<NetworkClient>();
 		this.networkPort = Constants.MULTIPLAYER_PORT;
-
     }
     //runs every frame
     public void Update()
@@ -48,48 +46,50 @@ public class NetworkController : NetworkManager
 	//called by the server when a player is addded.
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
-		base.OnServerAddPlayer(conn, playerControllerId);
+		//base.OnServerAddPlayer(conn, playerControllerId);
 		Debug.Log("a player has been added");
 		
 	}
 	//called by clients when they connect
 	public override void OnStartClient(NetworkClient client)
 	{
-		Debug.Log("client connected");
+		Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
 		base.OnStartClient(client);
 		//Debug.Log("Client connected: " + client.connection.connectionId);
-		m_playerList.Add(client); // ONLY THE SERVER HAS THIS LIST SO FAR
+		//Managers.GetInstance().GetPlayerManager().AddPlayer(client); // ONLY THE SERVER HAS THIS LIST SO FAR
 	}
 	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
 	{
 		base.OnClientConnect(p_connection);
-		Debug.Log(p_connection.connectionId + " Connected to the Server(client message)");
+		Debug.Log("OnClientConnect " + p_connection.connectionId);
+		
 	}
 	//called on server
-	public override void OnServerConnect(NetworkConnection conn)
+	public override void OnServerConnect(NetworkConnection p_connection)
 	{
-		base.OnServerConnect(conn);
-		Debug.Log(conn.connectionId + " Connected to the Server(server message)");
+		base.OnServerConnect(p_connection);
+		Debug.Log("OnServerConnect " + p_connection.connectionId);
+		Managers.GetInstance().GetPlayerManager().AddPlayer(p_connection); // ONLY THE SERVER HAS THIS LIST SO FAR
 	}
 	//called on server when error ocurrs
-	public override void OnServerError(NetworkConnection conn, int errorCode)
+	public override void OnServerError(NetworkConnection p_connection, int errorCode)
 	{
-		base.OnServerError(conn, errorCode);
+		base.OnServerError(p_connection, errorCode);
 		Debug.Log("CONNECTION ERROR:" + errorCode);
 	}
 
 	//called on client when error occurs
-	public override void OnClientError(NetworkConnection conn, int errorCode)
+	public override void OnClientError(NetworkConnection p_connection, int errorCode)
 	{
-		base.OnClientError(conn, errorCode);
+		base.OnClientError(p_connection, errorCode);
 		Debug.Log("CONNECTION ERROR: " + errorCode);
 	}
 	//called on each client when server closes
 	public override void OnStopClient()
 	{
 		base.OnStopClient();
-		Debug.Log("server closed");
+		Debug.Log("OnStopClient");
 		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_01_MENU);
 	}
 	//called on the server when the scene changes to the next
@@ -98,7 +98,7 @@ public class NetworkController : NetworkManager
 		base.OnServerSceneChanged(sceneName);
 	}
 	//called on the client when the scene changes to the next
-	public override void OnClientSceneChanged(NetworkConnection conn)
+	public override void OnClientSceneChanged(NetworkConnection p_connection)
 	{
 		//base.OnClientSceneChanged(conn);
 		//move state machine once scene's have loaded
@@ -107,7 +107,8 @@ public class NetworkController : NetworkManager
 		else if (networkSceneName == Managers.GetInstance().GetGameProperties().LevelScene)
 		{
 			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_LOADING);
-			
+			//spawn the players
+			Managers.GetInstance().GetPlayerManager().SpawnPlayers();
 		}
 			
 		
@@ -139,8 +140,8 @@ public class NetworkController : NetworkManager
 	public void BeginMatchButton()
 	{
 		Debug.Log("MATCH STARTED");
-		SceneManager.LoadScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		ServerChangeScene(Managers.GetInstance().GetGameProperties().LevelScene);
+
 	}
     #endregion
 

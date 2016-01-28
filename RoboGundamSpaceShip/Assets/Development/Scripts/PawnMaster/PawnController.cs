@@ -13,7 +13,7 @@ public class PawnController : NetworkBehaviour {
 
 	#region Private Variables
 	[SyncVar] private Vector2 m_playerPosition; //synchronized over the network
-	private GameObject m_localGameCamera;
+	
 	#endregion
 
 	#region Accessors
@@ -25,14 +25,13 @@ public class PawnController : NetworkBehaviour {
 	{
 		m_playerPosition = transform.position;
 		//spawn local Camera
-		GameObject m_localGameCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().playerCamera);
+		
 	}
 	//runs every frame
 	public void Update()
 	{
-		if (isLocalPlayer) //is this my player? return if its not mine
+		if (!isLocalPlayer) //is this my player? return if its not mine
 		{
-			Debug.Log("RETURNING LOL");
 			return;
 		}
 			
@@ -52,7 +51,7 @@ public class PawnController : NetworkBehaviour {
 	#endregion
 
 	#region Public Methods
-		#endregion
+	#endregion
 
 	#region Protected Methods
 	#endregion

@@ -7,7 +7,7 @@ using System.Collections;
 
 public class GameStateLobby : GameStateBase
 {
-	private GameObject m_lobbyCamera = null;
+	//private GameObject m_lobbyCamera = null;
 
 	public GameStateLobby(GameStateManager p_gameStateManager)
 	{
@@ -19,21 +19,17 @@ public class GameStateLobby : GameStateBase
 	{
 		Debug.Log("Entered Lobby state");
 		//lobby placeholder
-		m_lobbyCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera);
+		//m_lobbyCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera);
 		Managers.GetInstance().GetGUIManager().LoadLobbyGUI();//spawn menu gui
 	}
 
 	public override void UpdateState()
 	{
-		if(!m_lobbyCamera)
-		{
-
-		}
 
 	}
 
 	public override void ExitState(Enums.GameStateNames p_nextState)
 	{
-		GameObject.Destroy(m_lobbyCamera);
+
 	}
 }
