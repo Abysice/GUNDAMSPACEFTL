@@ -13,9 +13,12 @@ public class Managers : MonoBehaviour {
 	private GameStateManager m_gamestatemanager = null;
 	private NetworkController m_networkcontroller = null;
 	private GameProperties m_gameproperties = null;
+	private PlayerManager m_playermanager = null;
 	//private LoadManager m_loadmanager = null;
 	//private InputManager m_inputmanager = null;
 	private GUIManager m_guimanager = null;
+
+	private GameObject m_spawnerObject = null;
 	#endregion
 
 	#region Protected Variables
@@ -46,6 +49,10 @@ public class Managers : MonoBehaviour {
 		return m_gameproperties;
 	}
 
+	public PlayerManager GetPlayerManager()
+	{
+		return m_playermanager;
+	}
 	//public InputManager GetInputManager()
 	//{
 	//	return m_inputmanager;
@@ -63,6 +70,8 @@ public class Managers : MonoBehaviour {
 	void Awake()
 	{
 		m_instance = this;
+		m_spawnerObject = new GameObject(); //create a seperate spawner object
+		m_spawnerObject.transform.parent = this.transform;
 	}
 	// Use this for initialization
 	void Start()
@@ -70,7 +79,7 @@ public class Managers : MonoBehaviour {
 		m_gameproperties = m_instance.GetComponent<GameProperties>();
 		m_gamestatemanager = gameObject.AddComponent<GameStateManager>();
 		m_networkcontroller = gameObject.GetComponent<NetworkController>();
-		
+		m_playermanager = m_spawnerObject.AddComponent<PlayerManager>();
 		//m_inputmanager = gameObject.AddComponent<InputManager>();
 		m_guimanager = gameObject.AddComponent<GUIManager>();
 		m_gamestatemanager.Init();

@@ -7,11 +7,10 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class NetworkController : NetworkManager
 {
-
-
     #region Public Variables
 	public string m_ip = "";
     #endregion
@@ -46,14 +45,17 @@ public class NetworkController : NetworkManager
 		Debug.Log("Server Started");
 	}
 
+	//called by the server when a player is addded.
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
 		base.OnServerAddPlayer(conn, playerControllerId);
+		Debug.Log("a player has been added");
 		
 	}
-
+	//called by clients when they connect
 	public override void OnStartClient(NetworkClient client)
 	{
+		Debug.Log("client connected");
 		base.OnStartServer();
 		//Debug.Log("Client connected: " + client.connection.connectionId);
 		m_playerList.Add(client); // ONLY THE SERVER HAS THIS LIST SO FAR
@@ -61,7 +63,7 @@ public class NetworkController : NetworkManager
 	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
 	{
-		Debug.Log(p_connection.connectionId + "Connected to the Server(client message)");
+		Debug.Log(p_connection.connectionId + " Connected to the Server(client message)");
 	}
 	//called on server
 	public override void OnServerConnect(NetworkConnection conn)
@@ -98,7 +100,11 @@ public class NetworkController : NetworkManager
 		if (networkSceneName == Managers.GetInstance().GetGameProperties().LobbyScene)
 			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_02_LOBBY);
 		else if (networkSceneName == Managers.GetInstance().GetGameProperties().LevelScene)
+		{
 			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_LOADING);
+			
+		}
+			
 		
 	}
 
@@ -110,6 +116,7 @@ public class NetworkController : NetworkManager
 	public void HostGameButton()
 	{
 		NetworkClient temp = StartHost();
+		SceneManager.LoadScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		ServerChangeScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		
 	}
@@ -127,6 +134,7 @@ public class NetworkController : NetworkManager
 	public void BeginMatchButton()
 	{
 		Debug.Log("MATCH STARTED");
+		SceneManager.LoadScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		ServerChangeScene(Managers.GetInstance().GetGameProperties().LevelScene);
 	}
     #endregion

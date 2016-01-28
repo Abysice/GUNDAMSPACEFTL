@@ -28,6 +28,6 @@ public class GameProperties : MonoBehaviour {
 	public GameObject MainMenu;
 	public GameObject LobbyMenu;
 	public GameObject playerCamera;
-	public GameObject PawnMaster;
+	public GameObject playerPrefab;
 
 }
