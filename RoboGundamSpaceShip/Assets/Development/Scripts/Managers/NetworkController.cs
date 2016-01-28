@@ -56,34 +56,39 @@ public class NetworkController : NetworkManager
 	public override void OnStartClient(NetworkClient client)
 	{
 		Debug.Log("client connected");
-		base.OnStartServer();
+		base.OnStartClient(client);
 		//Debug.Log("Client connected: " + client.connection.connectionId);
 		m_playerList.Add(client); // ONLY THE SERVER HAS THIS LIST SO FAR
 	}
 	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
 	{
+		base.OnClientConnect(p_connection);
 		Debug.Log(p_connection.connectionId + " Connected to the Server(client message)");
 	}
 	//called on server
 	public override void OnServerConnect(NetworkConnection conn)
 	{
+		base.OnServerConnect(conn);
 		Debug.Log(conn.connectionId + " Connected to the Server(server message)");
 	}
 	//called on server when error ocurrs
 	public override void OnServerError(NetworkConnection conn, int errorCode)
 	{
+		base.OnServerError(conn, errorCode);
 		Debug.Log("CONNECTION ERROR:" + errorCode);
 	}
 
 	//called on client when error occurs
 	public override void OnClientError(NetworkConnection conn, int errorCode)
 	{
+		base.OnClientError(conn, errorCode);
 		Debug.Log("CONNECTION ERROR: " + errorCode);
 	}
 	//called on each client when server closes
 	public override void OnStopClient()
 	{
+		base.OnStopClient();
 		Debug.Log("server closed");
 		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_01_MENU);
 	}
@@ -95,7 +100,7 @@ public class NetworkController : NetworkManager
 	//called on the client when the scene changes to the next
 	public override void OnClientSceneChanged(NetworkConnection conn)
 	{
-		base.OnClientSceneChanged(conn);
+		//base.OnClientSceneChanged(conn);
 		//move state machine once scene's have loaded
 		if (networkSceneName == Managers.GetInstance().GetGameProperties().LobbyScene)
 			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_02_LOBBY);
@@ -116,7 +121,7 @@ public class NetworkController : NetworkManager
 	public void HostGameButton()
 	{
 		NetworkClient temp = StartHost();
-		SceneManager.LoadScene(Managers.GetInstance().GetGameProperties().LobbyScene);
+		//SceneManager.LoadScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		ServerChangeScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		
 	}
