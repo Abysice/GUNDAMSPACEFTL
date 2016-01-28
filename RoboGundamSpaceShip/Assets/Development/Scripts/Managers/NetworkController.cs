@@ -53,9 +53,7 @@ public class NetworkController : NetworkManager
 	//called by clients when they connect
 	public override void OnStartClient(NetworkClient client)
 	{
-		Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
-		base.OnStartClient(client);
-		//Debug.Log("Client connected: " + client.connection.connectionId);
+		//Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
 		//Managers.GetInstance().GetPlayerManager().AddPlayer(client); // ONLY THE SERVER HAS THIS LIST SO FAR
 	}
 	//called when another client connects

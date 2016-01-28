@@ -26,6 +26,7 @@ public class PlayerManager : NetworkBehaviour {
 	public void Start()
 	{
 		m_playerList = new List<NetworkConnection>();
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
 	}
 	//runs every frame
 	public void Update()
