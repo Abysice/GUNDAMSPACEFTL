@@ -15,8 +15,8 @@ public class PlayerManager : NetworkBehaviour {
 	#endregion
 
 	#region Private Variables
-	private List<NetworkConnection> m_playerList;
 	private GameObject m_localCamera;
+	private GameObject m_ship;
 	#endregion
 
 	#region Accessors
@@ -30,7 +30,6 @@ public class PlayerManager : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
-		m_playerList = new List<NetworkConnection>();
 		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		DontDestroyOnLoad(m_localCamera);
 		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
@@ -43,35 +42,23 @@ public class PlayerManager : NetworkBehaviour {
 	#endregion
 
 	#region Public Methods
-	public void AddPlayer(NetworkConnection p_newPlayer)
-	{
-		//make sure its not already there
-		foreach (NetworkConnection client in m_playerList)
-		{
-			if (p_newPlayer.connectionId == client.connectionId)
-				return;
-		}
-		m_playerList.Add(p_newPlayer);
-	}
-
+	
 	public void SpawnPlayers()
 	{
-		foreach (NetworkConnection client in m_playerList)
+		for (int i = 0; i < NetworkServer.connections.Count; i++)
 		{
-			Debug.Log("spawnin a dude for :" + client.connectionId);
+			Debug.Log("spawnin a dude for :" + NetworkServer.connections[i]);
 			GameObject l_player = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().playerPrefab);
-			NetworkServer.AddPlayerForConnection(client, l_player, 0);
+			l_player.transform.parent = m_ship.transform;
+			//add spawn point stuff here
+			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i], l_player, 0);
 		}
-		
 	}
 
-	[Command]
-	public void CmdSpawnPlayer()
+	public void SpawnShip()
 	{
-		//NetworkServer.AddPlayerForConnection()
-		//GameObject l_player = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().playerPrefab);
-		//ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
-		//NetworkServer.Spawn(l_player);
+		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
+		NetworkServer.Spawn(m_ship);
 	}
 	#endregion
 

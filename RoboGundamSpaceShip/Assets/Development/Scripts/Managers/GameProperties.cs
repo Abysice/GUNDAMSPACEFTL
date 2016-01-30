@@ -24,10 +24,9 @@ public class GameProperties : MonoBehaviour {
 		get { return m_lobbyScene; }
 	}
 
-	public GameObject MenuCamera;
 	public GameObject MainMenu;
 	public GameObject LobbyMenu;
 	public GameObject mainCamera;
 	public GameObject playerPrefab;
-
+	public GameObject shipPrefab;
 }

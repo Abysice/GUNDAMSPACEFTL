@@ -68,7 +68,6 @@ public class NetworkController : NetworkManager
 	{
 		base.OnServerConnect(p_connection);
 		Debug.Log("OnServerConnect " + p_connection.connectionId);
-		Managers.GetInstance().GetPlayerManager().AddPlayer(p_connection); // ONLY THE SERVER HAS THIS LIST SO FAR
 	}
 	//called on server when error ocurrs
 	public override void OnServerError(NetworkConnection p_connection, int errorCode)
@@ -106,6 +105,7 @@ public class NetworkController : NetworkManager
 		{
 			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_LOADING);
 			//spawn the players
+			Managers.GetInstance().GetPlayerManager().SpawnShip();
 			Managers.GetInstance().GetPlayerManager().SpawnPlayers();
 		}
 			
@@ -119,7 +119,7 @@ public class NetworkController : NetworkManager
 	//called by the gui to host a multiplayer game
 	public void HostGameButton()
 	{
-		NetworkClient temp = StartHost();
+		StartHost();
 		//SceneManager.LoadScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		ServerChangeScene(Managers.GetInstance().GetGameProperties().LobbyScene);
 		
