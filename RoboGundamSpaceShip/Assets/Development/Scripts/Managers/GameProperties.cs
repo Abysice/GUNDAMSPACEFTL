@@ -6,9 +6,9 @@ using System.Collections;
 
 public class GameProperties : MonoBehaviour {
 
-	private string m_levelScene = "LEVEL_SCENE";
-	private string m_lobbyScene = "LOBBY_SCENE";
-	private string m_menuScene = "MAIN_MENU";
+	private const string m_levelScene = "LEVEL_SCENE";
+	private const string m_lobbyScene = "LOBBY_SCENE";
+	private const string m_menuScene = "MAIN_MENU";
 
 
 	public string LevelScene
@@ -27,7 +27,7 @@ public class GameProperties : MonoBehaviour {
 	public GameObject MenuCamera;
 	public GameObject MainMenu;
 	public GameObject LobbyMenu;
-	public GameObject playerCamera;
+	public GameObject mainCamera;
 	public GameObject playerPrefab;
 
 }

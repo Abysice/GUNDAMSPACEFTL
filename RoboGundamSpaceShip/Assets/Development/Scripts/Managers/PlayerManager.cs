@@ -16,9 +16,14 @@ public class PlayerManager : NetworkBehaviour {
 
 	#region Private Variables
 	private List<NetworkConnection> m_playerList;
+	private GameObject m_localCamera;
 	#endregion
 
 	#region Accessors
+	public GameObject GetPlayerCamera()
+	{
+		return m_localCamera;
+	}
 	#endregion
 
 	#region Unity Defaults
@@ -26,6 +31,8 @@ public class PlayerManager : NetworkBehaviour {
 	public void Start()
 	{
 		m_playerList = new List<NetworkConnection>();
+		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
+		DontDestroyOnLoad(m_localCamera);
 		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
 	}
 	//runs every frame

@@ -14,7 +14,6 @@ public class GameStateMenu : GameStateBase
 	public override void EnterState(Enums.GameStateNames p_prevState)
 	{
 		Debug.Log("Entered Menu State");
-		//Spawn Menu placeholder
 		//m_menuCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().MenuCamera); 
 		Managers.GetInstance().GetGUIManager().LoadMenu(); //spawn menu gui
 	}
