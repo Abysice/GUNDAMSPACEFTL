@@ -80,17 +80,18 @@ public class PawnController : NetworkBehaviour {
 		m_oldinput = m_moveVec;
 		
 		//DO SOME RAYCAST SHIT HERE
-		
+		m_moveVec = Vector2.zero;
+
 		if (Input.GetKey(KeyCode.UpArrow))
 			m_moveVec = new Vector2(0, 1);
-		else if (Input.GetKey(KeyCode.DownArrow))
+		if (Input.GetKey(KeyCode.DownArrow))
 			m_moveVec = new Vector2(0, -1);
-		else if (Input.GetKey(KeyCode.RightArrow))
-			m_moveVec = new Vector2(1, 0);
-		else if (Input.GetKey(KeyCode.LeftArrow))
-			m_moveVec = new Vector2(-1, 0);
-		else
-			m_moveVec = Vector2.zero;
+		if (Input.GetKey(KeyCode.RightArrow))
+			m_moveVec = new Vector2(1, m_moveVec.y);
+		if (Input.GetKey(KeyCode.LeftArrow))
+			m_moveVec = new Vector2(-1, m_moveVec.y);
+		
+		
 
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, m_moveVec, 0.8f);
 		if (hit.collider != null)

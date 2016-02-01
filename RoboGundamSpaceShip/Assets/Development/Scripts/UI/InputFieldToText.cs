@@ -23,10 +23,11 @@ public class InputFieldToText : MonoBehaviour {
     {
         //string currentText = output.text; //maybe add ToString()?
         string l_inputText = arg0;
-		
+		Managers.GetInstance().GetNetworkController().m_ip = l_inputText;
 		output.text = l_inputText;
         input.text = "";
         input.ActivateInputField();
+
     }
 
 
