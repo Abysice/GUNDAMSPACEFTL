@@ -116,7 +116,7 @@ public class PawnController : NetworkBehaviour {
 
 
 		transform.position = Vector2.MoveTowards(transform.position, l_localPos, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-		m_PlayerCamera.transform.position = transform.position; //smooth camera out later
+		m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, transform.position, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 	}
 	#endregion
 }
