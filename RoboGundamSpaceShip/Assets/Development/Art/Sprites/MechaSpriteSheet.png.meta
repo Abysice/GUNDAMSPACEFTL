@@ -1,9 +1,21 @@
 fileFormatVersion: 2
 guid: 5f79a024ad82d3d498793baa3893b9d1
-timeCreated: 1454313132
+timeCreated: 1454361408
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: MechaSpriteSheet_0
+    21300002: MechaSpriteSheet_1
+    21300004: MechaSpriteSheet_2
+    21300006: MechaSpriteSheet_3
+    21300008: MechaSpriteSheet_4
+    21300010: MechaSpriteSheet_5
+    21300012: MechaSpriteSheet_6
+    21300014: MechaSpriteSheet_7
+    21300016: MechaSpriteSheet_8
+    21300018: MechaSpriteSheet_9
+    21300020: MechaSpriteSheet_10
+    21300022: MechaSpriteSheet_11
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -30,7 +42,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -38,18 +50,250 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 15
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: MechaSpriteSheet_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 225
+        width: 63
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 26.5, y: 33}
+        - {x: 13.5, y: 37}
+        - {x: -19.5, y: 37}
+        - {x: -31.5, y: 24}
+        - {x: -31.5, y: -37}
+        - {x: 26.5, y: -37}
+        - {x: 27.5, y: -35}
+        - {x: 31.5, y: -20}
+        - {x: 31.5, y: 29}
+    - name: MechaSpriteSheet_1
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 226
+        width: 63
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 17.5, y: 37}
+        - {x: -10.5, y: 37}
+        - {x: -12.5, y: 35}
+        - {x: -31.5, y: 23}
+        - {x: -31.5, y: -28}
+        - {x: -26.5, y: -37}
+        - {x: 19.5, y: -37}
+        - {x: 20.5, y: -36}
+        - {x: 31.5, y: -19}
+        - {x: 31.5, y: 25}
+    - name: MechaSpriteSheet_2
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 225
+        width: 63
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25.5, y: 37}
+        - {x: -31.5, y: 26}
+        - {x: -31.5, y: -33}
+        - {x: -25.5, y: -37}
+        - {x: 27.5, y: -37}
+        - {x: 31.5, y: -20}
+        - {x: 31.5, y: 29}
+        - {x: 19.5, y: 37}
+    - name: MechaSpriteSheet_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 151
+        width: 65
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23.5, y: 36.5}
+        - {x: -32.5, y: 27.5}
+        - {x: -32.5, y: -36.5}
+        - {x: 22.5, y: -36.5}
+        - {x: 32.5, y: -21.5}
+        - {x: 32.5, y: 30.5}
+        - {x: 19.5, y: 36.5}
+    - name: MechaSpriteSheet_4
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 151
+        width: 65
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 14.5, y: 37}
+        - {x: -8.5, y: 37}
+        - {x: -28.5, y: 20}
+        - {x: -29.5, y: 11}
+        - {x: -32.5, y: 1}
+        - {x: -32.5, y: -29}
+        - {x: -29.5, y: -37}
+        - {x: 19.5, y: -37}
+        - {x: 32.5, y: -13}
+        - {x: 32.5, y: 3}
+        - {x: 24.5, y: 20}
+    - name: MechaSpriteSheet_5
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 150
+        width: 65
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20.5, y: 37}
+        - {x: -32.5, y: 29}
+        - {x: -32.5, y: -37}
+        - {x: 20.5, y: -37}
+        - {x: 32.5, y: -9}
+        - {x: 32.5, y: 8}
+        - {x: 15.5, y: 37}
+    - name: MechaSpriteSheet_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 75
+        width: 65
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 32.5, y: 29}
+        - {x: 11.5, y: 37}
+        - {x: -21.5, y: 37}
+        - {x: -32.5, y: 8}
+        - {x: -32.5, y: -13}
+        - {x: -14.5, y: -37}
+        - {x: 21.5, y: -37}
+        - {x: 21.5, y: -34}
+        - {x: 18.5, y: -31}
+        - {x: 32.5, y: -15}
+    - name: MechaSpriteSheet_7
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 76
+        width: 65
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22.5, y: 37}
+        - {x: -32.5, y: 12}
+        - {x: -32.5, y: -17}
+        - {x: -19.5, y: -37}
+        - {x: 27.5, y: -37}
+        - {x: 32.5, y: -25}
+        - {x: 32.5, y: 29}
+        - {x: 12.5, y: 37}
+    - name: MechaSpriteSheet_8
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 76
+        width: 65
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -19.5, y: 36.5}
+        - {x: -32.5, y: 29.5}
+        - {x: -32.5, y: -22.5}
+        - {x: -18.5, y: -36.5}
+        - {x: 32.5, y: -36.5}
+        - {x: 32.5, y: 24.5}
+        - {x: 22.5, y: 36.5}
+    - name: MechaSpriteSheet_9
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 63
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23.5, y: 36}
+        - {x: -31.5, y: 21}
+        - {x: -31.5, y: -27}
+        - {x: -26.5, y: -36}
+        - {x: 29.5, y: -36}
+        - {x: 31.5, y: -29}
+        - {x: 31.5, y: 36}
+    - name: MechaSpriteSheet_10
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 0
+        width: 63
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15.5, y: 36.5}
+        - {x: -31.5, y: 25.5}
+        - {x: -31.5, y: -17.5}
+        - {x: -22.5, y: -36.5}
+        - {x: 29.5, y: -36.5}
+        - {x: 31.5, y: -34.5}
+        - {x: 31.5, y: 28.5}
+        - {x: 27.5, y: 36.5}
+    - name: MechaSpriteSheet_11
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 0
+        width: 63
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -29.5, y: 36}
+        - {x: -31.5, y: 30}
+        - {x: -31.5, y: -28}
+        - {x: -15.5, y: -36}
+        - {x: 23.5, y: -36}
+        - {x: 31.5, y: -16}
+        - {x: 31.5, y: 32}
+        - {x: 25.5, y: 36}
     outline: []
   spritePackingTag: 
   userData: 

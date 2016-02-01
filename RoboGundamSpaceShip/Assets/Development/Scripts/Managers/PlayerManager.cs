@@ -35,6 +35,7 @@ public class PlayerManager : NetworkBehaviour {
 		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		DontDestroyOnLoad(m_localCamera);
 		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().shipPrefab);
 	}
 	//runs every frame
 	public void Update()

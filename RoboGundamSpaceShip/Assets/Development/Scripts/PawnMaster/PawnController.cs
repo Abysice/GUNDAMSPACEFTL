@@ -78,7 +78,7 @@ public class PawnController : NetworkBehaviour {
 	private void DoLocalMovement()
 	{
 		m_oldinput = m_moveVec;
-
+		
 		//DO SOME RAYCAST SHIT HERE
 		
 		if (Input.GetKey(KeyCode.UpArrow))
