@@ -9,7 +9,7 @@ public class ShipController : NetworkBehaviour {
 
     #region Public Variables
     public float forceMultiplier = 10000f;
-    public float MaxSpeed = 20f;
+    public float MaxSpeed = 7f;
     public Vector2 velocity;
     #endregion
 
@@ -35,10 +35,10 @@ public class ShipController : NetworkBehaviour {
 	public void Update()
 	{
         // will need to be given AssignClientAuthority by the server before you can control
-        //if (!isLocalPlayer)
-        //{
-        //    return;
-        //}
+        if (!isServer)
+        {
+            return;
+        }
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -65,26 +65,32 @@ public class ShipController : NetworkBehaviour {
         {
             m_direction.x = 0;
         }
+        CmdUpdateInput(m_direction);
 
-        m_ship_RigidBody.AddForce(m_direction*forceMultiplier);
+        
 
-        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, MaxSpeed);
-
-        velocity = m_ship_RigidBody.velocity;
 
 
 
     }
 
 
-	#endregion
+    #endregion
 
-	#region Public Methods
-	#endregion
+    #region Public Methods
+    [Command]
+    public void CmdUpdateInput(Vector2 p_input)
+    {
+        m_ship_RigidBody.AddForce(p_input * forceMultiplier);
+        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, MaxSpeed);
 
-	#region Protected Methods
-	#endregion
+        velocity = m_ship_RigidBody.velocity;
+    }
+    #endregion
 
-	#region Private Methods
-	#endregion
+    #region Protected Methods
+    #endregion
+
+    #region Private Methods
+    #endregion
 }
