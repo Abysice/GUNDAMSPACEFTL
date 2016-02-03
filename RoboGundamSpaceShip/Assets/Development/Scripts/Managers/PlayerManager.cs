@@ -1,5 +1,5 @@
 ﻿// This class will keep track of the player prefabs and such and such
-//
+// NOTE THAT RPCS AND COMMANDS WILL NOT WORK ON THIS CLASS
 // Written by: Adam Bysice
 using UnityEngine;
 using System.Collections;
@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 public class PlayerManager : NetworkBehaviour {
 
 	#region Public Variables
+	public GameObject m_ship;
 	#endregion
 
 	#region Protected Variables
@@ -16,8 +17,9 @@ public class PlayerManager : NetworkBehaviour {
 
 	#region Private Variables
 	private GameObject m_localCamera;
-	private GameObject m_ship;
+
 	private Transform[] m_spawns;
+	
 	#endregion
 
 	#region Accessors
@@ -34,8 +36,6 @@ public class PlayerManager : NetworkBehaviour {
 		m_spawns = new Transform[3];
 		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		DontDestroyOnLoad(m_localCamera);
-		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
-		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().shipPrefab);
 	}
 	//runs every frame
 	public void Update()
@@ -46,29 +46,29 @@ public class PlayerManager : NetworkBehaviour {
 
 	#region Public Methods
 	
-	public void SpawnPlayers()
+	public void SpawnPrefabs()
 	{
+		//spawn the ship
+		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
+		NetworkServer.AddPlayerForConnection(NetworkServer.connections[0], m_ship, 1);
+
+		Transform l_spawns = m_ship.transform.Find("Spawns");
+		int count = 0;
+		foreach (Transform child in l_spawns)
+		{
+			m_spawns[count] = child;
+			count++;
+		}
+
+		//spawn the players
 		for (int i = 0; i < NetworkServer.connections.Count; i++)
 		{
 			Debug.Log("spawnin a dude for :" + NetworkServer.connections[i]);
 			GameObject l_player = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().playerPrefab);
-			l_player.transform.parent = m_ship.transform;
 			l_player.transform.position = m_spawns[i].position;
+			
 			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i], l_player, 0);
-		}
-	}
-
-	//ship must be spawned before the player for there to be spawn points
-	public void SpawnShip()
-	{
-		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
-		NetworkServer.Spawn(m_ship);
-		Transform l_spawns = m_ship.transform.Find("Spawns");
-		int i = 0;
-		foreach (Transform child in l_spawns)
-		{
-			m_spawns[i] = child;
-			i++;
+			//l_player.transform.parent = m_ship.transform;
 		}
 	}
 	#endregion

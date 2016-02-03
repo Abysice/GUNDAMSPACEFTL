@@ -28,6 +28,7 @@ public class ShipController : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
+		Managers.GetInstance().GetPlayerManager().m_ship = gameObject;
         m_ship_RigidBody = GetComponent<Rigidbody2D>();
         m_direction = new Vector2(0, 0);
 	}
@@ -42,7 +43,6 @@ public class ShipController : NetworkBehaviour {
 
         if (Input.GetKey(KeyCode.W))
         {
-            Debug.Log("high");
             m_direction.y = 1;
         }
         else if (Input.GetKey(KeyCode.S))

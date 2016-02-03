@@ -5,7 +5,7 @@ using System.Collections;
 
 public class PawnController : NetworkBehaviour {
 	#region Public Variables
-	public float PLAYER_MOVE_MULTIPLIER = 5.0f; //make a const later
+	public float PLAYER_MOVE_MULTIPLIER = 0.5f; //make a const later
 	public float CAMERA_LERP_MULTIPLIER = 1.0f;
 	#endregion
 
@@ -27,9 +27,12 @@ public class PawnController : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
-		m_playerPosition = transform.position;
+		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
+		m_playerPosition = transform.localPosition;
 		//spawn local Camera
 		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
+		m_PlayerCamera.transform.position = transform.position;
+		m_PlayerCamera.transform.parent = transform.parent;
 	}
 
 	//this is mostly placeholder code
@@ -39,8 +42,8 @@ public class PawnController : NetworkBehaviour {
 			UpdateMovePosition();//set the player's movement direction depending on their input
 
 		if (!isLocalPlayer)
-		{ 
-			transform.position = Vector2.MoveTowards(transform.position, m_playerPosition, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+		{
+			transform.localPosition = Vector2.MoveTowards(transform.localPosition, m_playerPosition, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 			return;
 		}
 		
@@ -104,7 +107,7 @@ public class PawnController : NetworkBehaviour {
 		if (m_oldinput != m_moveVec)
 			CmdUpdateInput(m_moveVec);
 
-		Vector2 l_localPos = transform.position;
+		Vector2 l_localPos = transform.localPosition;
 		if (m_moveVec.y == 1)
 			l_localPos += (new Vector2(0, 1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 		else if (m_moveVec.y == -1)
@@ -115,8 +118,8 @@ public class PawnController : NetworkBehaviour {
 			l_localPos += (new Vector2(-1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 
 
-		transform.position = Vector2.MoveTowards(transform.position, l_localPos, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-		m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, transform.position, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+		transform.localPosition = Vector2.MoveTowards(transform.localPosition, l_localPos, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+		m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 	}
 	#endregion
 }

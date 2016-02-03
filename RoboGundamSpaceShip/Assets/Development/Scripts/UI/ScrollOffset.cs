@@ -27,8 +27,7 @@ public class ScrollOffset : MonoBehaviour {
 
         m_mr = GetComponent<MeshRenderer>();
         m_spacePBack = m_mr.material;
-        
-        
+		        
 	}
 	
 	// Update is called once per frame

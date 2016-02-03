@@ -13,13 +13,14 @@ public class NetworkController : NetworkManager
 {
     #region Public Variables
 	public string m_ip = "";
+	public bool isServer = false;
     #endregion
 
     #region Protected Variables
     #endregion
 
     #region Private Variables
-
+	
     #endregion
 
     #region Accessors
@@ -41,20 +42,20 @@ public class NetworkController : NetworkManager
 	{
 		base.OnStartServer();
 		Debug.Log("Server Started");
+		isServer = true;
 	}
 
 	//called by the server when a player is addded.
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
-		//base.OnServerAddPlayer(conn, playerControllerId);
 		Debug.Log("a player has been added");
 		
 	}
+	
 	//called by clients when they connect
 	public override void OnStartClient(NetworkClient client)
 	{
-		//Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
-		//Managers.GetInstance().GetPlayerManager().AddPlayer(client); // ONLY THE SERVER HAS THIS LIST SO FAR
+		Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
 	}
 	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
@@ -89,6 +90,12 @@ public class NetworkController : NetworkManager
 		Debug.Log("OnStopClient");
 		Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_01_MENU);
 	}
+
+	public override void OnStopServer()
+	{
+		base.OnStopServer();
+		Debug.Log("Server stoped");
+	}
 	//called on the server when the scene changes to the next
 	public override void OnServerSceneChanged(string sceneName)
 	{
@@ -105,8 +112,10 @@ public class NetworkController : NetworkManager
 		{
 			Managers.GetInstance().GetGameStateManager().ChangeGameState(Enums.GameStateNames.GS_03_LOADING);
 			//spawn the players
-			Managers.GetInstance().GetPlayerManager().SpawnShip();
-			Managers.GetInstance().GetPlayerManager().SpawnPlayers();
+			//wait for all the bitches
+			if (isServer)
+				Managers.GetInstance().GetPlayerManager().SpawnPrefabs();
+			
 		}
 			
 		
@@ -139,8 +148,9 @@ public class NetworkController : NetworkManager
 	{
 		Debug.Log("MATCH STARTED");
 		ServerChangeScene(Managers.GetInstance().GetGameProperties().LevelScene);
-
 	}
+
+
     #endregion
 
     #region Protected Methods
