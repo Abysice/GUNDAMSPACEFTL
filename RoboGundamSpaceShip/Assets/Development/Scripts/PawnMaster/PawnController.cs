@@ -17,7 +17,6 @@ public class PawnController : NetworkBehaviour {
 	[SyncVar] private Vector2 m_moveVec;
 	private Vector2 m_oldinput;
 	private GameObject m_PlayerCamera;
-
 	#endregion
 
 	#region Accessors
@@ -99,12 +98,12 @@ public class PawnController : NetworkBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, m_moveVec, 0.8f);
 		if (hit.collider != null)
 		{
-			Debug.Log("HIT DISTANCE " + hit.distance + "NORMAL : " + hit.normal);
+			//Debug.Log("HIT DISTANCE " + hit.distance + "NORMAL : " + hit.normal);
 			m_moveVec = Vector2.zero;
 		}
 
 		//send input vec to server
-		if (m_oldinput != m_moveVec)
+		if (m_oldinput != m_moveVec || hit.collider != null)
 			CmdUpdateInput(m_moveVec);
 
 		Vector2 l_localPos = transform.localPosition;
