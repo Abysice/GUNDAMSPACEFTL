@@ -17,4 +17,13 @@ public class Enums : MonoBehaviour {
         GS_05_CLEANUP
     };
 
+	public enum PlayerStateNames
+	{
+		PS_00_NULL = -1,
+		PS_01_IDLE = 0,
+		PS_02_CAPTAIN = 1,
+		PS_03_GUNNER,
+		PS_04_PILOT
+	};
+
 }

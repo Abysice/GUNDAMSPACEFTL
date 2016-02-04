@@ -50,8 +50,8 @@ public class PlayerManager : NetworkBehaviour {
 	{
 		//spawn the ship
 		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
-		NetworkServer.AddPlayerForConnection(NetworkServer.connections[0], m_ship, 1);
-
+		NetworkServer.Spawn(m_ship);
+		//NetworkServer.AddPlayerForConnection(NetworkServer.connections[0], m_ship, 1);
 		Transform l_spawns = m_ship.transform.Find("Spawns");
 		int count = 0;
 		foreach (Transform child in l_spawns)

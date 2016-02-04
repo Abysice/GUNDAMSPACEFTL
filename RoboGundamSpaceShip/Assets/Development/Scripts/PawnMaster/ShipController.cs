@@ -36,7 +36,7 @@ public class ShipController : NetworkBehaviour {
 	public void Update()
 	{
         // will need to be given AssignClientAuthority by the server before you can control
-        if (!isServer)
+		if (!hasAuthority)
         {
             return;
         }
@@ -67,13 +67,12 @@ public class ShipController : NetworkBehaviour {
         }
         CmdUpdateInput(m_direction);
 
-        
-
-
-
-
     }
 
+	public void OnStartAuthority()
+	{
+		Debug.Log("CONTROL STARTED");
+	}
 
     #endregion
 

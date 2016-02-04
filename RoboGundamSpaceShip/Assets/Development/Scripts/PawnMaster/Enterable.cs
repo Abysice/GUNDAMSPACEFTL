@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class Enterable : NetworkBehaviour {
+public class Enterable : MonoBehaviour {
 
 	#region Public Variables
 	#endregion
@@ -33,10 +33,21 @@ public class Enterable : NetworkBehaviour {
 	
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		//do stuff here
-		Debug.Log("player " + other.gameObject.GetComponent<NetworkIdentity>().playerControllerId + " is on the trigger");
+		
+		//notify the player controller that they can "enter" this item
+		//hard coded for ships
+		other.gameObject.GetComponent<PawnController>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_ship);
+
 	}
 
+	public void OnTriggerExit2D(Collider2D other)
+	{
+		//notify the player controller that they scan no longer "enter" this item
+		//hard coded for ships *FOR NOW*
+		other.gameObject.GetComponent<PawnController>().UpdateEnterable(null);
+		
+
+	}
 	#endregion
 
 	#region Public Methods

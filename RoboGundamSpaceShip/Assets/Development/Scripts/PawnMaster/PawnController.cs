@@ -17,6 +17,8 @@ public class PawnController : NetworkBehaviour {
 	[SyncVar] private Vector2 m_moveVec;
 	private Vector2 m_oldinput;
 	private GameObject m_PlayerCamera;
+	private GameObject m_enterable;
+	[SyncVar] private Enums.PlayerStateNames m_playerState;
 	#endregion
 
 	#region Accessors
@@ -26,6 +28,7 @@ public class PawnController : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
+		m_playerState = Enums.PlayerStateNames.PS_01_IDLE;
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
 		m_playerPosition = transform.localPosition;
 		//spawn local Camera
@@ -37,21 +40,81 @@ public class PawnController : NetworkBehaviour {
 	//this is mostly placeholder code
 	public void Update()
 	{
-		if(isServer)
-			UpdateMovePosition();//set the player's movement direction depending on their input
-
-		if (!isLocalPlayer)
+		if (m_playerState == Enums.PlayerStateNames.PS_01_IDLE) //normal walking around
 		{
-			transform.localPosition = Vector2.MoveTowards(transform.localPosition, m_playerPosition, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-			return;
+			if (isServer)
+				UpdateMovePosition();//set the player's movement direction depending on their input
+
+			if (!isLocalPlayer)
+			{
+				transform.localPosition = Vector2.MoveTowards(transform.localPosition, m_playerPosition, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+				return;
+			}
+
+			DoLocalMovement();
 		}
-		
-		DoLocalMovement();
+		//request to enter/unenter an object
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			if(m_enterable)
+			{
+				//send request to server asking to get in or out
+				CmdRequestToEnter();
+			}
+		}
 
 	}
 	#endregion
 
 	#region Public Methods
+	public void UpdateEnterable(GameObject p_actor)
+	{
+		if(!isServer)
+			return;
+		
+		m_enterable = p_actor;
+		
+		if (m_enterable == null)
+			RpcClearEnterable();
+		else
+			RpcUpdateEnterable(p_actor.GetComponent<NetworkIdentity>().netId);
+	}
+	
+	//update "enterable" for local players
+	[ClientRpc]
+	public void RpcUpdateEnterable(NetworkInstanceId p_id)
+	{
+		Debug.Log("Updating the enterable");
+		m_enterable = ClientScene.FindLocalObject(p_id);
+	}
+	//clear any "enterable" objects for the client
+	[ClientRpc]
+	public void RpcClearEnterable()
+	{
+		Debug.Log("Clearing the enterable");
+		m_enterable = null;
+	}
+
+	[Command]
+	public void CmdRequestToEnter()
+	{
+		//change ownership of the ship
+		if (m_playerState == Enums.PlayerStateNames.PS_01_IDLE)
+		{
+			bool butts = Managers.GetInstance().GetPlayerManager().m_ship.GetComponent<NetworkIdentity>().AssignClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+			Debug.Log("dick docked");
+			//tell everyone to change the player state
+			m_playerState = Enums.PlayerStateNames.PS_02_CAPTAIN; //HARD CODED TO CAPTAIN
+		}
+		else
+		{
+			bool dicks = Managers.GetInstance().GetPlayerManager().m_ship.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+			Debug.Log("dick undocked");
+			m_playerState = Enums.PlayerStateNames.PS_01_IDLE;
+		}
+
+	}
+	//send update of input to the server
 	[Command]
 	public void CmdUpdateInput(Vector2 p_input)
 	{
