@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class Enterable : MonoBehaviour {
+public class ConsoleControl : MonoBehaviour {
 
 	#region Public Variables
 	#endregion
@@ -36,7 +36,7 @@ public class Enterable : MonoBehaviour {
 		
 		//notify the player controller that they can "enter" this item
 		//hard coded for ships
-		other.gameObject.GetComponent<PawnController>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_ship);
+		other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_ship);
 
 	}
 
@@ -44,7 +44,7 @@ public class Enterable : MonoBehaviour {
 	{
 		//notify the player controller that they scan no longer "enter" this item
 		//hard coded for ships *FOR NOW*
-		other.gameObject.GetComponent<PawnController>().UpdateEnterable(null);
+		other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
 		
 
 	}

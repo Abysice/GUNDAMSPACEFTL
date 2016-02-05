@@ -65,8 +65,11 @@ public class ShipController : NetworkBehaviour {
         {
             m_direction.x = 0;
         }
-        CmdUpdateInput(m_direction);
+        //CmdUpdateInput(m_direction);
+		m_ship_RigidBody.AddForce(m_direction * forceMultiplier);
+		m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, MaxSpeed);
 
+		velocity = m_ship_RigidBody.velocity;
     }
 
 	public void OnStartAuthority()
