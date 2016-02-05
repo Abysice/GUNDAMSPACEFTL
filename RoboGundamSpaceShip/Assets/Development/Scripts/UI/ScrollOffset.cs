@@ -39,6 +39,8 @@ public class ScrollOffset : MonoBehaviour {
         m_textureOffset.x = m_ship.position.x/ m_parallax;
         m_spacePBack.mainTextureOffset = m_textureOffset;
 
+        transform.position = m_ship.position;
+
 
 
     }

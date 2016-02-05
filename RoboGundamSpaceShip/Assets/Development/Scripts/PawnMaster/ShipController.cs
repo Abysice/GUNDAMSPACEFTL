@@ -8,9 +8,11 @@ using UnityEngine.Networking;
 public class ShipController : NetworkBehaviour {
 
     #region Public Variables
-    public float forceMultiplier = 10000f;
-    public float MaxSpeed = 7f;
-    public Vector2 velocity;
+    public float m_forceMultiplier = 40000f;
+    public float m_torqueMultiplier = 400000f;
+    public float m_MaxSpeed = 7f;
+    public float m_MaxTorque = 5f;
+    public Vector2 m_velocity;
     #endregion
 
     #region Protected Variables
@@ -28,9 +30,12 @@ public class ShipController : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
+        GameObject l_parralax = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().parallaxPrefab);
+        l_parralax.GetComponent<ScrollOffset>().m_ship = this.transform;
 		Managers.GetInstance().GetPlayerManager().m_ship = gameObject;
         m_ship_RigidBody = GetComponent<Rigidbody2D>();
         m_direction = new Vector2(0, 0);
+     
 	}
 	//runs every frame
 	public void Update()
@@ -66,10 +71,13 @@ public class ShipController : NetworkBehaviour {
             m_direction.x = 0;
         }
         //CmdUpdateInput(m_direction);
-		m_ship_RigidBody.AddForce(m_direction * forceMultiplier);
-		m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, MaxSpeed);
+		m_ship_RigidBody.AddForce(transform.up* m_forceMultiplier*m_direction.y);
+        m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
+        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
+        m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
 
-		velocity = m_ship_RigidBody.velocity;
+
+		m_velocity = m_ship_RigidBody.velocity;
     }
 
     #endregion
@@ -78,10 +86,10 @@ public class ShipController : NetworkBehaviour {
     [Command]
     public void CmdUpdateInput(Vector2 p_input)
     {
-        m_ship_RigidBody.AddForce(p_input * forceMultiplier);
-        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, MaxSpeed);
+        m_ship_RigidBody.AddForce(p_input * m_forceMultiplier);
+        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
 
-        velocity = m_ship_RigidBody.velocity;
+        m_velocity = m_ship_RigidBody.velocity;
     }
     #endregion
 
