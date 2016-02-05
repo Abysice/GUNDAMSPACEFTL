@@ -41,11 +41,11 @@ public class ShipController : NetworkBehaviour {
             return;
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             m_direction.y = 1;
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
             m_direction.y = -1;
         }
@@ -53,11 +53,11 @@ public class ShipController : NetworkBehaviour {
         {
             m_direction.y = 0;
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             m_direction.x = 1;
         }
-        else if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.LeftArrow))
         {
             m_direction.x = -1;
         }
@@ -71,11 +71,6 @@ public class ShipController : NetworkBehaviour {
 
 		velocity = m_ship_RigidBody.velocity;
     }
-
-	public void OnStartAuthority()
-	{
-		Debug.Log("CONTROL STARTED");
-	}
 
     #endregion
 

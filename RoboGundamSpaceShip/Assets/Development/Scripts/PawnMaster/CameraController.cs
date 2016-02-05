@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class CameraController : NetworkBehaviour {
+public class CameraController : MonoBehaviour {
 
 	#region Public Variables
 	#endregion
@@ -16,6 +16,7 @@ public class CameraController : NetworkBehaviour {
 	#region Private Variables
 	private GameStateManager m_gman;
 	private Camera m_cam;
+	private float m_camSize;
 	#endregion
 
 	#region Accessors
@@ -27,6 +28,7 @@ public class CameraController : NetworkBehaviour {
 	{
 		m_gman = Managers.GetInstance().GetGameStateManager();
 		m_cam = gameObject.GetComponent<Camera>();
+		m_camSize = m_cam.orthographicSize;
 	}
 	//runs every frame
 	public void Update()
@@ -37,13 +39,16 @@ public class CameraController : NetworkBehaviour {
 		}
 		else if (m_gman.CurrentState == Enums.GameStateNames.GS_04_INPLAY)
 		{
-			//Move the camera around accordingly
-
+			m_cam.orthographicSize = Mathf.Lerp(m_cam.orthographicSize, m_camSize, 0.05f);
 		}
 	}
 	#endregion
 
 	#region Public Methods
+	public void StartZooming(float p_newsize)
+	{
+		m_camSize = p_newsize;
+	}
 	#endregion
 
 	#region Protected Methods

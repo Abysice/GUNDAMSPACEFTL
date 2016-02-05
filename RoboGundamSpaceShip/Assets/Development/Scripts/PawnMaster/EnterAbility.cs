@@ -14,8 +14,8 @@ public class EnterAbility : NetworkBehaviour {
 	#endregion
 
 	#region Private Variables
-	private PawnController m_pawn;
-	private GameObject m_enterable;
+	public PawnController m_pawn;
+	public GameObject m_enterable;
 	#endregion
 
 	#region Accessors
@@ -74,22 +74,24 @@ public class EnterAbility : NetworkBehaviour {
 		m_enterable = null;
 	}
 
+	//request ownership of the gameobject
 	[Command]
 	public void CmdRequestToEnter()
 	{
 		//change ownership of the ship
-		if (!m_pawn.m_isPiloting)
+		if (!m_pawn.isPiloting())
 		{
+			//add some sort of check to see if its already owned here
 			m_enterable.GetComponent<NetworkIdentity>().AssignClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-			Debug.Log("dick docked");
+			Debug.Log("Controlling the ship");
 			//tell everyone to change the player state
-			m_pawn.m_isPiloting = true;
+			m_pawn.SetToPiloting(m_enterable);
 		}
 		else
 		{
 			m_enterable.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-			Debug.Log("dick undocked");
-			m_pawn.m_isPiloting = false;
+			Debug.Log("No longer controlling the ship");
+			m_pawn.UnpilotPawn();
 		}
 
 	}

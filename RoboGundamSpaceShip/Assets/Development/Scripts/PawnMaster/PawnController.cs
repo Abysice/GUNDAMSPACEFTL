@@ -7,6 +7,8 @@ public class PawnController : NetworkBehaviour {
 	#region Public Variables
 	public float PLAYER_MOVE_MULTIPLIER = 0.5f; //make a const later
 	public float CAMERA_LERP_MULTIPLIER = 1.0f;
+	public float ZOOM_OUT_CAM_SIZE = 30.0f;
+	public float ZOOM_IN_CAM_SIZE = 5.0f;
 	#endregion
 
 	#region Protected Variables
@@ -17,7 +19,7 @@ public class PawnController : NetworkBehaviour {
 	[SyncVar] private Vector2 m_moveVec;
 	private Vector2 m_oldinput;
 	private GameObject m_PlayerCamera;
-	[SyncVar] public bool m_isPiloting;
+	[SyncVar] private bool m_isPiloting;
 	#endregion
 
 	#region Accessors
@@ -56,11 +58,29 @@ public class PawnController : NetworkBehaviour {
 			
 			if (!m_isPiloting) //normal walking around
 				DoLocalMovement();
+
+			if(m_isPiloting)
+				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.GetComponent<EnterAbility>().m_enterable.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 	}
 	#endregion
 
 	#region Public Methods
-	
+	public void SetToPiloting(GameObject p_pawn)
+	{
+		m_isPiloting = true;
+		//tell camera to start zooming out, unparent camera from ship
+		m_PlayerCamera.transform.parent = p_pawn.transform.parent;
+		m_PlayerCamera.GetComponent<CameraController>().StartZooming(ZOOM_OUT_CAM_SIZE);
+	}
+
+	public void UnpilotPawn()
+	{
+		m_isPiloting = false;
+		//m_PlayerCamera.transform.position = transform.position;
+		m_PlayerCamera.transform.parent = transform.parent;
+		m_PlayerCamera.GetComponent<CameraController>().StartZooming(ZOOM_IN_CAM_SIZE);
+	}
+
 	//send update of input to the server
 	[Command]
 	public void CmdUpdateInput(Vector2 p_input)

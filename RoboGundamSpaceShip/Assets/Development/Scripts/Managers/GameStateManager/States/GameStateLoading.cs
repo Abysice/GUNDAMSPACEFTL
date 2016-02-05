@@ -14,7 +14,6 @@ public class GameStateLoading : GameStateBase
 	{
 		Debug.Log("Entered Loading State");
 
-		Managers.GetInstance().GetPlayerManager().GetPlayerCamera().GetComponent<Camera>().orthographicSize = Constants.INIT_CAMERA_SIZE;
 		m_gameStateManager.ChangeGameState(Enums.GameStateNames.GS_04_INPLAY);
 	}
 
