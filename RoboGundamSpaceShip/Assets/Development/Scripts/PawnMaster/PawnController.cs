@@ -7,6 +7,7 @@ public class PawnController : NetworkBehaviour {
 	#region Public Variables
 	public float PLAYER_MOVE_MULTIPLIER = 0.5f; //make a const later
 	public float CAMERA_LERP_MULTIPLIER = 1.0f;
+	public float CAMERA_ROTATION_DELTA = 1.0f;
 	public float ZOOM_OUT_CAM_SIZE = 30.0f;
 	public float ZOOM_IN_CAM_SIZE = 5.0f;
 	#endregion
@@ -37,7 +38,7 @@ public class PawnController : NetworkBehaviour {
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
 		m_playerPosition = transform.localPosition;
 
-		//spawn local Camera
+		// local Camera
 		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
 		m_PlayerCamera.transform.position = transform.position;
 		m_PlayerCamera.transform.parent = transform.parent;
@@ -60,20 +61,26 @@ public class PawnController : NetworkBehaviour {
 				DoLocalMovement();
 
 			if(m_isPiloting)
+			{
 				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.GetComponent<EnterAbility>().m_enterable.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
+				m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
+			}
+				
 	}
 	#endregion
 
 	#region Public Methods
-	public void SetToPiloting(GameObject p_pawn)
+	[ClientRpc]
+	public void RpcSetToPiloting(NetworkInstanceId p_pawn)
 	{
 		m_isPiloting = true;
 		//tell camera to start zooming out, unparent camera from ship
-		m_PlayerCamera.transform.parent = p_pawn.transform.parent;
+		m_PlayerCamera.transform.parent = ClientScene.FindLocalObject(p_pawn).transform.parent;
 		m_PlayerCamera.GetComponent<CameraController>().StartZooming(ZOOM_OUT_CAM_SIZE);
 	}
 
-	public void UnpilotPawn()
+	[ClientRpc]
+	public void RpcUnpilotPawn()
 	{
 		m_isPiloting = false;
 		//m_PlayerCamera.transform.position = transform.position;
@@ -125,7 +132,7 @@ public class PawnController : NetworkBehaviour {
 		
 		
 
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, m_moveVec, 0.8f);
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.rotation*m_moveVec, 0.8f);
 		if (hit.collider != null)
 		{
 			//Debug.Log("HIT DISTANCE " + hit.distance + "NORMAL : " + hit.normal);
@@ -149,6 +156,7 @@ public class PawnController : NetworkBehaviour {
 
 		transform.localPosition = Vector2.MoveTowards(transform.localPosition, l_localPos, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 		m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
+		m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, transform.rotation, CAMERA_ROTATION_DELTA*10.0f);
 	}
 	#endregion
 }

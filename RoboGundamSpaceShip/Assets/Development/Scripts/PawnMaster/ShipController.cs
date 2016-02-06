@@ -31,7 +31,8 @@ public class ShipController : NetworkBehaviour {
 	public void Start()
 	{
         GameObject l_parralax = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().parallaxPrefab);
-        l_parralax.GetComponent<ScrollOffset>().m_ship = this.transform;
+        l_parralax.GetComponent<ScrollOffset>().m_ship = transform;
+
 		Managers.GetInstance().GetPlayerManager().m_ship = gameObject;
         m_ship_RigidBody = GetComponent<Rigidbody2D>();
         m_direction = new Vector2(0, 0);
