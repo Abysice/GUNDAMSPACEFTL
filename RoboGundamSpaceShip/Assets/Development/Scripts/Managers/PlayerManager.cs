@@ -10,6 +10,7 @@ public class PlayerManager : NetworkBehaviour {
 
 	#region Public Variables
 	public GameObject m_ship;
+	public GameObject m_gundam;
 	#endregion
 
 	#region Protected Variables
@@ -33,7 +34,7 @@ public class PlayerManager : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
-		m_spawns = new Transform[3];
+		m_spawns = new Transform[4];
 		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		DontDestroyOnLoad(m_localCamera);
 	}
@@ -70,6 +71,11 @@ public class PlayerManager : NetworkBehaviour {
 			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i], l_player, 0);
 			//l_player.transform.parent = m_ship.transform;
 		}
+		
+		//Spawn Mecha
+		m_gundam = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mechaPrefab);
+		NetworkServer.Spawn(m_gundam);
+		m_gundam.transform.position = m_spawns[3].position;
 	}
 	#endregion
 

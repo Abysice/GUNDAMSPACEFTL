@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 public class CameraController : MonoBehaviour {
 
 	#region Public Variables
+	public float m_camSize;
 	#endregion
 
 	#region Protected Variables
@@ -16,7 +17,8 @@ public class CameraController : MonoBehaviour {
 	#region Private Variables
 	private GameStateManager m_gman;
 	private Camera m_cam;
-	private float m_camSize;
+
+	private bool m_zooming;
 	#endregion
 
 	#region Accessors
@@ -29,6 +31,7 @@ public class CameraController : MonoBehaviour {
 		m_gman = Managers.GetInstance().GetGameStateManager();
 		m_cam = gameObject.GetComponent<Camera>();
 		m_camSize = m_cam.orthographicSize;
+		m_zooming = false;
 	}
 	//runs every frame
 	public void Update()
@@ -45,9 +48,13 @@ public class CameraController : MonoBehaviour {
 	#endregion
 
 	#region Public Methods
-	public void StartZooming(float p_newsize)
+	public void StartZooming()
 	{
-		m_camSize = p_newsize;
+		m_zooming = true;
+	}
+	public void StopZooming()
+	{
+		m_zooming = false;
 	}
 	#endregion
 

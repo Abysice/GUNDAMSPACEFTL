@@ -25,6 +25,7 @@ public class GameStart : MonoBehaviour {
 	{
 		Application.targetFrameRate = 60;
 		Application.runInBackground = true;
+		Physics2D.queriesHitTriggers = false;
 		gameObject.AddComponent<Managers>();
 		DontDestroyOnLoad(this);
 	}

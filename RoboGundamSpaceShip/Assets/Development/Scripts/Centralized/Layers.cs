@@ -7,11 +7,25 @@ using System.Collections;
 public class Layers : MonoBehaviour {
 
 	#region Public Variables
-	public const int PawnLayer = 1 << 8;
-	public const int Pawn = 8;
+	
+	//Physics Layers
+	public const int PawnColLayer = 1 << 8;
+	public const int PawnCol = 8;
+	public const int ShipColLayer = 1 << 9;
+	public const int ShipCol = 9;
+	public const int MechaColLayer = 1 << 10;
+	public const int MechaCol = 10;
 
-	public const int SpaceShipLayer = 1 << 9;
-	public const int SpaceShips = 9;
+	//sprite Layers
+	public const string BackroundLayer = "Background";
+	public const string SpaceDecalLayer = "SpaceDecal";
+	public const string ShipLayer = "Ship";
+	public const string InteriorLayer = "Interior";
+	public const string PawnsLayer = "Pawns";
+	public const string TurretsLayer = "Turrets";
+	public const string ParticleLayer = "ParticleEffects";
+	public const string MechaLayer = "Mecha";
+
 	#endregion
 
 	#region Protected Variables

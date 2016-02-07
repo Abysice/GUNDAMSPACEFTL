@@ -20,7 +20,10 @@ public class ShipController : NetworkBehaviour {
 
     #region Private Variables
     private Vector2 m_direction;
-    private Rigidbody2D m_ship_RigidBody;
+    private Rigidbody2D m_ship_RigidBody;	
+	private GameObject m_PlayerCamera;
+	private CameraController m_camCont;
+
 	#endregion
 
 	#region Accessors
@@ -36,7 +39,8 @@ public class ShipController : NetworkBehaviour {
 		Managers.GetInstance().GetPlayerManager().m_ship = gameObject;
         m_ship_RigidBody = GetComponent<Rigidbody2D>();
         m_direction = new Vector2(0, 0);
-     
+		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
+		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 	}
 	//runs every frame
 	public void Update()
@@ -46,6 +50,7 @@ public class ShipController : NetworkBehaviour {
         {
             return;
         }
+		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
         if (Input.GetKey(KeyCode.UpArrow))
         {

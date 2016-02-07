@@ -83,14 +83,14 @@ public class EnterAbility : NetworkBehaviour {
 		{
 			//add some sort of check to see if its already owned here
 			m_enterable.GetComponent<NetworkIdentity>().AssignClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-			Debug.Log("Controlling the ship");
+			//Debug.Log("Controlling the ship");
 			//tell everyone to change the player state
 			m_pawn.RpcSetToPiloting(m_enterable.GetComponent<NetworkIdentity>().netId);
 		}
 		else
 		{
 			m_enterable.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-			Debug.Log("No longer controlling the ship");
+			//Debug.Log("No longer controlling the ship");
 			m_pawn.RpcUnpilotPawn();
 		}
 

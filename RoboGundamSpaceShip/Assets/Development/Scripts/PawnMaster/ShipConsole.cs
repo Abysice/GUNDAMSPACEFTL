@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class ConsoleControl : MonoBehaviour {
+public class ShipConsole : MonoBehaviour {
 
 	#region Public Variables
 	#endregion

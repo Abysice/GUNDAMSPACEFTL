@@ -29,5 +29,6 @@ public class GameProperties : MonoBehaviour {
 	public GameObject mainCamera;
 	public GameObject playerPrefab;
 	public GameObject shipPrefab;
+	public GameObject mechaPrefab;
     public GameObject parallaxPrefab;
 }

@@ -20,6 +20,7 @@ public class PawnController : NetworkBehaviour {
 	[SyncVar] private Vector2 m_moveVec;
 	private Vector2 m_oldinput;
 	private GameObject m_PlayerCamera;
+	private CameraController m_camCont;
 	[SyncVar] private bool m_isPiloting;
 	#endregion
 
@@ -42,6 +43,8 @@ public class PawnController : NetworkBehaviour {
 		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
 		m_PlayerCamera.transform.position = transform.position;
 		m_PlayerCamera.transform.parent = transform.parent;
+		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
+		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 	}
 
 	//this is mostly placeholder code
@@ -60,7 +63,7 @@ public class PawnController : NetworkBehaviour {
 			if (!m_isPiloting) //normal walking around
 				DoLocalMovement();
 
-			if(m_isPiloting)
+			if(m_isPiloting) //while piloting something
 			{
 				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.GetComponent<EnterAbility>().m_enterable.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 				m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
@@ -75,17 +78,25 @@ public class PawnController : NetworkBehaviour {
 	{
 		m_isPiloting = true;
 		//tell camera to start zooming out, unparent camera from ship
-		m_PlayerCamera.transform.parent = ClientScene.FindLocalObject(p_pawn).transform.parent;
-		m_PlayerCamera.GetComponent<CameraController>().StartZooming(ZOOM_OUT_CAM_SIZE);
+		if(isLocalPlayer)
+		{
+
+			ClientScene.FindLocalObject(p_pawn).GetComponent<SpriteRenderer>().sortingLayerName = Layers.TurretsLayer;
+			m_PlayerCamera.transform.parent = ClientScene.FindLocalObject(p_pawn).transform.parent;
+			m_PlayerCamera.GetComponent<CameraController>().StartZooming();
+		}
 	}
 
 	[ClientRpc]
 	public void RpcUnpilotPawn()
 	{
 		m_isPiloting = false;
-		//m_PlayerCamera.transform.position = transform.position;
-		m_PlayerCamera.transform.parent = transform.parent;
-		m_PlayerCamera.GetComponent<CameraController>().StartZooming(ZOOM_IN_CAM_SIZE);
+		if (isLocalPlayer)
+		{
+			gameObject.GetComponent<EnterAbility>().m_enterable.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
+			m_PlayerCamera.transform.parent = transform.parent;
+			m_PlayerCamera.GetComponent<CameraController>().StopZooming();
+		}
 	}
 
 	//send update of input to the server
@@ -132,7 +143,7 @@ public class PawnController : NetworkBehaviour {
 		
 		
 
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.rotation*m_moveVec, 0.8f);
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.rotation*m_moveVec, 0.8f, Layers.PawnColLayer);
 		if (hit.collider != null)
 		{
 			//Debug.Log("HIT DISTANCE " + hit.distance + "NORMAL : " + hit.normal);
@@ -153,8 +164,9 @@ public class PawnController : NetworkBehaviour {
 		else if (m_moveVec.x == -1)
 			l_localPos += (new Vector2(-1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 
-
+		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 5;
 		transform.localPosition = Vector2.MoveTowards(transform.localPosition, l_localPos, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+		//make camera follow + rotate with the player
 		m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 		m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, transform.rotation, CAMERA_ROTATION_DELTA*10.0f);
 	}
