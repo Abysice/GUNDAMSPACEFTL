@@ -82,7 +82,10 @@ public class PawnController : NetworkBehaviour {
 		{
 
 			ClientScene.FindLocalObject(p_pawn).GetComponent<SpriteRenderer>().sortingLayerName = Layers.TurretsLayer;
-			m_PlayerCamera.transform.parent = ClientScene.FindLocalObject(p_pawn).transform.parent;
+			GameObject l_enterableThing = ClientScene.FindLocalObject(p_pawn);
+			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
+			l_controller.OnControlled();
+			m_PlayerCamera.transform.parent = l_enterableThing.transform.parent;
 			m_PlayerCamera.GetComponent<CameraController>().StartZooming();
 		}
 	}
@@ -93,7 +96,10 @@ public class PawnController : NetworkBehaviour {
 		m_isPiloting = false;
 		if (isLocalPlayer)
 		{
-			gameObject.GetComponent<EnterAbility>().m_enterable.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
+			GameObject l_enterableThing = gameObject.GetComponent<EnterAbility>().m_enterable;
+			l_enterableThing.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
+			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
+			l_controller.OnUnControlled();
 			m_PlayerCamera.transform.parent = transform.parent;
 			m_PlayerCamera.GetComponent<CameraController>().StopZooming();
 		}

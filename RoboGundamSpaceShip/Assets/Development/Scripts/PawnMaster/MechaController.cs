@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 
-public class MechaController : NetworkBehaviour {
+public class MechaController : NetworkBehaviour, IEnterable {
 
 	#region Public Variables
-	public float m_forceMultiplier = 40000f;
-	public float m_torqueMultiplier = 400000f;
+	public float m_forceMultiplier = 400f;
+	public float m_torqueMultiplier = 400f;
 	public float m_MaxSpeed = 7f;
 	public float m_MaxTorque = 5f;
 	public GameObject m_entryConsole;
@@ -49,6 +49,11 @@ public class MechaController : NetworkBehaviour {
 		}
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 10;
 
+		//for grappling hook, use distance joint2d, distance = distance between raycast hit and gameobject OR autoconfiguredistance = true 
+		//maxdistance only = true, 
+
+
+
 		if (Input.GetKey(KeyCode.UpArrow))
 		{
 			m_direction.y = 1;
@@ -74,19 +79,30 @@ public class MechaController : NetworkBehaviour {
 			m_direction.x = 0;
 		}
 		//CmdUpdateInput(m_direction);
+		
 		m_rb.AddForce(m_forceMultiplier * m_direction);
 		m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_MaxSpeed);
 		m_rb.angularVelocity = Mathf.Clamp(m_rb.angularVelocity, -m_MaxTorque, m_MaxTorque);
-		
+	
 	}
 
-	public void OnStartAuthority()
-	{
-		Debug.Log("LOL SHIIIIT");
-	}
+	
 	#endregion
 
 	#region Public Methods
+	public void OnControlled()
+	{
+		transform.GetChild(0).gameObject.SetActive(false);
+		m_rb.isKinematic = false;
+		transform.parent = transform.parent.parent;
+	}
+
+	public void OnUnControlled()
+	{
+		transform.GetChild(0).gameObject.SetActive(true);
+		m_rb.isKinematic = true;
+		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
+	}
 	#endregion
 
 	#region Protected Methods

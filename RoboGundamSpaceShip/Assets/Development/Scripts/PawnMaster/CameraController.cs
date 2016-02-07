@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour  {
 
 	#region Public Variables
 	public float m_camSize;

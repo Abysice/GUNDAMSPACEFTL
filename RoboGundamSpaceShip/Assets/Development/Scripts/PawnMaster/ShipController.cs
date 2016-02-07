@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class ShipController : NetworkBehaviour {
+public class ShipController : NetworkBehaviour, IEnterable {
 
     #region Public Variables
     public float m_forceMultiplier = 40000f;
@@ -35,7 +35,6 @@ public class ShipController : NetworkBehaviour {
 	{
         GameObject l_parralax = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().parallaxPrefab);
         l_parralax.GetComponent<ScrollOffset>().m_ship = transform;
-
 		Managers.GetInstance().GetPlayerManager().m_ship = gameObject;
         m_ship_RigidBody = GetComponent<Rigidbody2D>();
         m_direction = new Vector2(0, 0);
@@ -89,14 +88,16 @@ public class ShipController : NetworkBehaviour {
     #endregion
 
     #region Public Methods
-    [Command]
-    public void CmdUpdateInput(Vector2 p_input)
-    {
-        m_ship_RigidBody.AddForce(p_input * m_forceMultiplier);
-        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
 
-        m_velocity = m_ship_RigidBody.velocity;
-    }
+	public void OnControlled()
+	{
+
+	}
+
+	public void OnUnControlled()
+	{
+
+	}
     #endregion
 
     #region Protected Methods
