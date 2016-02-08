@@ -4,8 +4,8 @@
 using UnityEngine;
 using System.Collections;
 
-public interface IDamageable <T> {
+public interface IDamageable  {
 
     //to be called when the Damageable object's has successfully taken damage
-    void Damage(T damageTaken);
+    void Damage(int damageTaken);
 }

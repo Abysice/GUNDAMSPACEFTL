@@ -4,9 +4,9 @@
 using UnityEngine;
 using System.Collections;
 
-public interface IRepairable <T> {
+public interface IRepairable  {
 
     //to be called when the Damageable object's has successfully taken damage
     void Repair();
-    void FixDamage(T repairAmount);
+    void FixDamage(int repairAmount);
 }
