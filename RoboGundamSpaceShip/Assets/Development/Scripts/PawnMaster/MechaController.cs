@@ -49,11 +49,6 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		}
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 10;
 
-		//for grappling hook, use distance joint2d, distance = distance between raycast hit and gameobject OR autoconfiguredistance = true 
-		//maxdistance only = true, 
-
-
-
 		if (Input.GetKey(KeyCode.UpArrow))
 		{
 			m_direction.y = 1;
