@@ -38,7 +38,13 @@ public class GrappleAbility : NetworkBehaviour {
 		if (!hasAuthority)
 			return;
 
+		
+		//update the cable position stuff
 		m_cable.SetPosition(0, gameObject.transform.position);
+		if(m_hook != null)
+			m_cable.SetPosition(1, m_hook.connectedBody.transform.TransformPoint(m_hook.connectedAnchor));
+			
+		
 		if (Input.GetMouseButtonDown(0))
 		{
 			Vector3 l_mpos = Input.mousePosition;
@@ -56,6 +62,7 @@ public class GrappleAbility : NetworkBehaviour {
 
 			m_hook.connectedBody = l_rb;
 			m_hook.connectedAnchor = m_hook.connectedBody.transform.InverseTransformPoint(hit.point);
+			
 			m_hook.autoConfigureDistance = false;
 			m_hook.enableCollision = true;
 			m_hook.distance = hit.distance;

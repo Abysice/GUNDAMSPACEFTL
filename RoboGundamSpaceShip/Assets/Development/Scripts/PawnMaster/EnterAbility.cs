@@ -46,6 +46,7 @@ public class EnterAbility : NetworkBehaviour {
 	#endregion
 
 	#region Public Methods
+	//updates the players "enterable" object 
 	public void UpdateEnterable(GameObject p_actor)
 	{
 		if (!isServer)
@@ -81,11 +82,16 @@ public class EnterAbility : NetworkBehaviour {
 		//change ownership of the ship
 		if (!m_pawn.isPiloting())
 		{
-			//add some sort of check to see if its already owned here
-			m_enterable.GetComponent<NetworkIdentity>().AssignClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-			//Debug.Log("Controlling the ship");
-			//tell everyone to change the player state
-			m_pawn.RpcSetToPiloting(m_enterable.GetComponent<NetworkIdentity>().netId);
+			
+			
+			NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
+			NetworkIdentity l_enterableid = m_enterable.GetComponent<NetworkIdentity>();
+			if(l_enterableid.clientAuthorityOwner == null)
+			{
+				l_enterableid.AssignClientAuthority(l_id.connectionToClient);
+				//Debug.Log("Controlling the ship");
+				m_pawn.RpcSetToPiloting(l_enterableid.netId);
+			}
 		}
 		else
 		{

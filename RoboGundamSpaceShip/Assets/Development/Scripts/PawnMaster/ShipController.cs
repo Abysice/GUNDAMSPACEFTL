@@ -51,11 +51,11 @@ public class ShipController : NetworkBehaviour, IEnterable {
         }
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.W))
         {
             m_direction.y = 1;
         }
-        else if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.S))
         {
             m_direction.y = -1;
         }
@@ -63,11 +63,11 @@ public class ShipController : NetworkBehaviour, IEnterable {
         {
             m_direction.y = 0;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D))
         {
             m_direction.x = 1;
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.A))
         {
             m_direction.x = -1;
         }

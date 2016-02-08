@@ -35,15 +35,15 @@ public class MechaConsole : MonoBehaviour {
 	public void OnTriggerEnter2D(Collider2D other)
 	{
 		//notify the player controller that they can "enter" this item
-		//hard coded for ships
-		other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_gundam);
+		if(other)
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_gundam);
 	}
 
 	public void OnTriggerExit2D(Collider2D other)
 	{
 		//notify the player controller that they scan no longer "enter" this item
-		//hard coded for ships *FOR NOW*
-		other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
+		if(other)
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
 	}
 	#endregion
 
