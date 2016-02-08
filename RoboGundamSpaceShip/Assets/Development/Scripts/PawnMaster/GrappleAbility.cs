@@ -17,6 +17,7 @@ public class GrappleAbility : NetworkBehaviour {
 	#region Private Variables
 	private MechaController m_mecha;
 	private DistanceJoint2D m_hook;
+	private LineRenderer m_cable;
 	#endregion
 
 	#region Accessors
@@ -27,6 +28,7 @@ public class GrappleAbility : NetworkBehaviour {
 	public void Start()
 	{
 		m_mecha = gameObject.GetComponent<MechaController>();
+		m_cable = gameObject.GetComponent<LineRenderer>();
 
 	}
 	//runs every frame
@@ -36,6 +38,7 @@ public class GrappleAbility : NetworkBehaviour {
 		if (!hasAuthority)
 			return;
 
+		m_cable.SetPosition(0, gameObject.transform.position);
 		if (Input.GetMouseButtonDown(0))
 		{
 			Vector3 l_mpos = Input.mousePosition;
@@ -57,11 +60,15 @@ public class GrappleAbility : NetworkBehaviour {
 			m_hook.enableCollision = true;
 			m_hook.distance = hit.distance;
 			m_hook.maxDistanceOnly = true;
+			m_cable.enabled = true;
+			m_cable.SetPosition(0, gameObject.transform.position);
+			m_cable.SetPosition(1, hit.point);
 		}
-		if (Input.GetMouseButtonDown(1))
+		if (Input.GetMouseButtonUp(0))
 		{
 			if (gameObject.GetComponent<DistanceJoint2D>())
 				DestroyImmediate(gameObject.GetComponent<DistanceJoint2D>());
+			m_cable.enabled = false;
 		}
 
 	}

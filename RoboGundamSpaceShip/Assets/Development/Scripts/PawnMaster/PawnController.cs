@@ -138,13 +138,13 @@ public class PawnController : NetworkBehaviour {
 		//DO SOME RAYCAST SHIT HERE
 		m_moveVec = Vector2.zero;
 
-		if (Input.GetKey(KeyCode.UpArrow))
+		if (Input.GetKey(KeyCode.W))
 			m_moveVec = new Vector2(0, 1);
-		if (Input.GetKey(KeyCode.DownArrow))
+		if (Input.GetKey(KeyCode.S))
 			m_moveVec = new Vector2(0, -1);
-		if (Input.GetKey(KeyCode.RightArrow))
+		if (Input.GetKey(KeyCode.D))
 			m_moveVec = new Vector2(1, m_moveVec.y);
-		if (Input.GetKey(KeyCode.LeftArrow))
+		if (Input.GetKey(KeyCode.A))
 			m_moveVec = new Vector2(-1, m_moveVec.y);
 		
 		
