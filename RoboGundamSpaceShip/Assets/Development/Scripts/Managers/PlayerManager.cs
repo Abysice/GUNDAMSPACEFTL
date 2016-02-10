@@ -76,6 +76,7 @@ public class PlayerManager : NetworkBehaviour {
 		m_gundam = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mechaPrefab);
 		NetworkServer.Spawn(m_gundam);
 		m_gundam.transform.position = m_spawns[3].position;
+		m_gundam.GetComponent<MechaController>().RpcSetPosition(m_gundam.transform.position);
 	}
 	#endregion
 

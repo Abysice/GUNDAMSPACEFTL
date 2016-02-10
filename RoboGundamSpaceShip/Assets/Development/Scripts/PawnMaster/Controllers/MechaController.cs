@@ -36,6 +36,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		m_renderer = gameObject.GetComponent<SpriteRenderer>();
 		m_rb = gameObject.GetComponent<Rigidbody2D>();
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
+		transform.GetChild(0).parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
 		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 		m_rb.isKinematic = true;
@@ -47,6 +48,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		{
 			return;
 		}
+		//set camera zoom while in mecha
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 10;
 
 		if (Input.GetKey(KeyCode.W))
@@ -73,7 +75,6 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		{
 			m_direction.x = 0;
 		}
-		//CmdUpdateInput(m_direction);
 		
 		m_rb.AddForce(m_forceMultiplier * m_direction);
 		m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_MaxSpeed);
@@ -87,16 +88,48 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	#region Public Methods
 	public void OnControlled()
 	{
-		transform.GetChild(0).gameObject.SetActive(false);
-		m_rb.isKinematic = false;
-		transform.parent = transform.parent.parent;
+		CmdRequestToSetupMecha();
 	}
 
 	public void OnUnControlled()
 	{
-		transform.GetChild(0).gameObject.SetActive(true);
+		CmdRequestToResetMecha();
+	}
+
+	//ask the server to setup the mecha
+	[Command]
+	public void CmdRequestToSetupMecha()
+	{
+		RpcSetupMecha();
+	}
+	//ask the server to reset the mecha
+	[Command]
+	public void CmdRequestToResetMecha()
+	{
+		RpcResetMecha();
+	}
+
+	//tell all clients to setup the mecha
+	[ClientRpc]
+	public void RpcSetupMecha()
+	{
+		m_rb.isKinematic = false;
+		transform.parent = transform.parent.parent;
+	}
+
+	//tell all clients to reset the mecha
+	[ClientRpc]
+	public void RpcResetMecha()
+	{
 		m_rb.isKinematic = true;
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
+	}
+
+	//initial position setup
+	[ClientRpc]
+	public void RpcSetPosition(Vector3 p_pos)
+	{
+		gameObject.transform.position = p_pos;
 	}
 	#endregion
 

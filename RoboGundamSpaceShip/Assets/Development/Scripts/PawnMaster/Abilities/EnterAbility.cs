@@ -75,28 +75,25 @@ public class EnterAbility : NetworkBehaviour {
 		m_enterable = null;
 	}
 
-	//request ownership of the gameobject
+	//request ownership of the gameobject that you are allowed to enter
 	[Command]
 	public void CmdRequestToEnter()
 	{
-		//change ownership of the ship
+		//change ownership of the object
 		if (!m_pawn.isPiloting())
 		{
-			
-			
 			NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
 			NetworkIdentity l_enterableid = m_enterable.GetComponent<NetworkIdentity>();
+			//don't let them enter if someone is already in it
 			if(l_enterableid.clientAuthorityOwner == null)
 			{
 				l_enterableid.AssignClientAuthority(l_id.connectionToClient);
-				//Debug.Log("Controlling the ship");
 				m_pawn.RpcSetToPiloting(l_enterableid.netId);
 			}
 		}
-		else
+		else //make them get out
 		{
 			m_enterable.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-			//Debug.Log("No longer controlling the ship");
 			m_pawn.RpcUnpilotPawn();
 		}
 

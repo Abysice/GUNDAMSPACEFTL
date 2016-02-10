@@ -31,7 +31,6 @@ public class CameraController : MonoBehaviour  {
 		m_gman = Managers.GetInstance().GetGameStateManager();
 		m_cam = gameObject.GetComponent<Camera>();
 		m_camSize = m_cam.orthographicSize;
-		m_zooming = false;
 	}
 	//runs every frame
 	public void Update()
@@ -48,14 +47,7 @@ public class CameraController : MonoBehaviour  {
 	#endregion
 
 	#region Public Methods
-	public void StartZooming()
-	{
-		m_zooming = true;
-	}
-	public void StopZooming()
-	{
-		m_zooming = false;
-	}
+
 	#endregion
 
 	#region Protected Methods

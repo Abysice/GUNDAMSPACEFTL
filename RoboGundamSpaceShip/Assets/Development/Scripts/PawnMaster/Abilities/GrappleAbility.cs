@@ -17,7 +17,9 @@ public class GrappleAbility : NetworkBehaviour {
 	#region Private Variables
 	private MechaController m_mecha;
 	private DistanceJoint2D m_hook;
-	private LineRenderer m_cable;
+	private GameObject m_connected;
+	private LineRenderer m_cableLine;
+	private Vector2 m_attachpoint;
 	#endregion
 
 	#region Accessors
@@ -28,23 +30,26 @@ public class GrappleAbility : NetworkBehaviour {
 	public void Start()
 	{
 		m_mecha = gameObject.GetComponent<MechaController>();
-		m_cable = gameObject.GetComponent<LineRenderer>();
+		m_cableLine = gameObject.GetComponent<LineRenderer>();
 
 	}
 	//runs every frame
 	public void Update()
 	{
-		//request to enter/unenter an object
+		
 		if (!hasAuthority)
+		{
+			m_cableLine.SetPosition(0, gameObject.transform.position);
+			if(m_connected)
+				m_cableLine.SetPosition(1, m_connected.transform.TransformPoint(m_attachpoint));
 			return;
+		}
 
-		
-		//update the cable position stuff
-		m_cable.SetPosition(0, gameObject.transform.position);
+		m_cableLine.SetPosition(0, gameObject.transform.position);
 		if(m_hook != null)
-			m_cable.SetPosition(1, m_hook.connectedBody.transform.TransformPoint(m_hook.connectedAnchor));
+			m_cableLine.SetPosition(1, m_hook.connectedBody.transform.TransformPoint(m_hook.connectedAnchor));
 			
-		
+		//fire the cable
 		if (Input.GetMouseButtonDown(0))
 		{
 			Vector3 l_mpos = Input.mousePosition;
@@ -61,27 +66,64 @@ public class GrappleAbility : NetworkBehaviour {
 			Rigidbody2D l_rb = hit.transform.gameObject.GetComponent<Rigidbody2D>();
 
 			m_hook.connectedBody = l_rb;
+			m_connected = l_rb.gameObject;
 			m_hook.connectedAnchor = m_hook.connectedBody.transform.InverseTransformPoint(hit.point);
-			
 			m_hook.autoConfigureDistance = false;
 			m_hook.enableCollision = true;
 			m_hook.distance = hit.distance;
 			m_hook.maxDistanceOnly = true;
-			m_cable.enabled = true;
-			m_cable.SetPosition(0, gameObject.transform.position);
-			m_cable.SetPosition(1, hit.point);
+			m_cableLine.enabled = true;
+			m_cableLine.SetPosition(0, gameObject.transform.position);
+			m_cableLine.SetPosition(1, hit.point);
+
+			//enable line on the network
+			CmdRequestEnableLine(m_connected.GetComponent<NetworkIdentity>().netId, m_hook.connectedAnchor);
+			
 		}
+		//release the cable
 		if (Input.GetMouseButtonUp(0))
 		{
 			if (gameObject.GetComponent<DistanceJoint2D>())
 				DestroyImmediate(gameObject.GetComponent<DistanceJoint2D>());
-			m_cable.enabled = false;
+			m_cableLine.enabled = false;
+			//disable line on network
+			CmdRequestDisableLine();
 		}
 
 	}
 	#endregion
 
 	#region Public Methods
+
+	[Command]
+	public void CmdRequestEnableLine(NetworkInstanceId p_id , Vector2 p_attachpoint)
+	{
+		m_connected = ClientScene.FindLocalObject(p_id);
+		m_attachpoint = p_attachpoint;
+		RpcEnableLine(p_id, p_attachpoint);
+		m_cableLine.enabled = true;
+	}
+
+	[Command]
+	public void CmdRequestDisableLine()
+	{
+		m_cableLine.enabled = false;
+		RpcDisableLine();
+	}
+
+	[ClientRpc]
+	public void RpcEnableLine(NetworkInstanceId p_id, Vector2 p_attachpoint)
+	{
+		m_connected = ClientScene.FindLocalObject(p_id);
+		m_attachpoint = p_attachpoint;
+		m_cableLine.enabled = true;
+	}
+
+	[ClientRpc]
+	public void RpcDisableLine()
+	{
+		m_cableLine.enabled = false;
+	}
 	#endregion
 
 	#region Protected Methods

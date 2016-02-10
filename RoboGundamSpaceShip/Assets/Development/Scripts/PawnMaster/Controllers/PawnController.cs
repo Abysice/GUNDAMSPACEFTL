@@ -86,7 +86,6 @@ public class PawnController : NetworkBehaviour {
 			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
 			l_controller.OnControlled();
 			m_PlayerCamera.transform.parent = l_enterableThing.transform.parent;
-			m_PlayerCamera.GetComponent<CameraController>().StartZooming();
 		}
 	}
 
@@ -101,7 +100,6 @@ public class PawnController : NetworkBehaviour {
 			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
 			l_controller.OnUnControlled();
 			m_PlayerCamera.transform.parent = transform.parent;
-			m_PlayerCamera.GetComponent<CameraController>().StopZooming();
 		}
 	}
 

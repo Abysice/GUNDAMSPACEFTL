@@ -36,7 +36,10 @@ public class MechaConsole : MonoBehaviour {
 	{
 		//notify the player controller that they can "enter" this item
 		if(other)
+		{
 			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_gundam);
+		}
+			
 	}
 
 	public void OnTriggerExit2D(Collider2D other)
