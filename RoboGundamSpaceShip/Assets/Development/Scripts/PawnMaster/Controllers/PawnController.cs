@@ -21,6 +21,7 @@ public class PawnController : NetworkBehaviour {
 	private Vector2 m_oldinput;
 	private GameObject m_PlayerCamera;
 	private CameraController m_camCont;
+	private EnterAbility m_enterAbility;
 	[SyncVar] private bool m_isPiloting;
 	#endregion
 
@@ -38,7 +39,7 @@ public class PawnController : NetworkBehaviour {
 		m_isPiloting = false;
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
 		m_playerPosition = transform.localPosition;
-
+		m_enterAbility = gameObject.GetComponent<EnterAbility>();
 		// local Camera
 		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
 		m_PlayerCamera.transform.position = transform.position;
@@ -65,10 +66,19 @@ public class PawnController : NetworkBehaviour {
 
 			if(m_isPiloting) //while piloting something
 			{
-				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.GetComponent<EnterAbility>().m_enterable.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
+				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position, Time.deltaTime);
 				m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
 			}
 				
+	}
+
+	public void FixedUpdate()
+	{
+		if (m_isPiloting) //while piloting something
+		{
+			m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position,CAMERA_LERP_MULTIPLIER* Time.deltaTime);
+			m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
+		}
 	}
 	#endregion
 
@@ -80,7 +90,6 @@ public class PawnController : NetworkBehaviour {
 		//tell camera to start zooming out, unparent camera from ship
 		if(isLocalPlayer)
 		{
-
 			ClientScene.FindLocalObject(p_pawn).GetComponent<SpriteRenderer>().sortingLayerName = Layers.TurretsLayer;
 			GameObject l_enterableThing = ClientScene.FindLocalObject(p_pawn);
 			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
@@ -95,7 +104,7 @@ public class PawnController : NetworkBehaviour {
 		m_isPiloting = false;
 		if (isLocalPlayer)
 		{
-			GameObject l_enterableThing = gameObject.GetComponent<EnterAbility>().m_enterable;
+			GameObject l_enterableThing = m_enterAbility.m_enterable;
 			l_enterableThing.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
 			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
 			l_controller.OnUnControlled();

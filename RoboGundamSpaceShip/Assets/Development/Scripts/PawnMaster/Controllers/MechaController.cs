@@ -44,12 +44,17 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	//runs every frame
 	public void Update()
 	{
+		//sprite junk, fix later
+		if (m_rb.velocity.x >= 0.0f)
+			m_renderer.flipX = false;
+		else
+			m_renderer.flipX = true;
+
 		if (!hasAuthority)
-		{
 			return;
-		}
+
 		//set camera zoom while in mecha
-		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 10;
+		m_camCont.m_camSize = 10;
 
 		if (Input.GetKey(KeyCode.W))
 		{
@@ -79,7 +84,12 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		m_rb.AddForce(m_forceMultiplier * m_direction);
 		m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_MaxSpeed);
 		m_rb.angularVelocity = Mathf.Clamp(m_rb.angularVelocity, -m_MaxTorque, m_MaxTorque);
-	
+
+		//rotate towards direction(maybe?)
+		//Vector2 v = m_rb.velocity;
+		//float l_angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+		//transform.rotation = Quaternion.AngleAxis(l_angle, Vector3.forward);
+
 	}
 
 	
