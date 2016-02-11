@@ -24,6 +24,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	private Rigidbody2D m_rb;
 	private GameObject m_PlayerCamera;
 	private CameraController m_camCont;
+	private Vector2 m_originalLocal;
 	#endregion
 
 	#region Accessors
@@ -36,8 +37,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		m_renderer = gameObject.GetComponent<SpriteRenderer>();
 		m_rb = gameObject.GetComponent<Rigidbody2D>();
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
-		transform.GetChild(0).parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
-		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
+		m_PlayerCamera = Managers.GetInstance().GetGameStateManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 		m_rb.isKinematic = true;
 	}
@@ -140,6 +140,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	public void RpcSetPosition(Vector3 p_pos)
 	{
 		gameObject.transform.position = p_pos;
+		m_originalLocal = gameObject.transform.localPosition;
 	}
 	#endregion
 

@@ -19,6 +19,8 @@ public class GameStateManager : MonoBehaviour
 	private Enums.GameStateNames m_currentGameStateIndex = Enums.GameStateNames.GS_00_NULL;
 	private Enums.GameStateNames m_nextGameStateIndex = Enums.GameStateNames.GS_00_NULL;
 	private bool m_initialised = false;
+
+	private GameObject m_localCamera;
 	#endregion
 
 	#region Accessors
@@ -26,13 +28,18 @@ public class GameStateManager : MonoBehaviour
 	{
 		get { return m_currentGameStateIndex; }
 	}
+
+	public GameObject GetPlayerCamera()
+	{
+		return m_localCamera;
+	}
 	#endregion
 
 	#region Unity Defaults
 	// Use this for initialization
 	void Start()
 	{
-
+		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 	}
 
 	// Update is called once per frame

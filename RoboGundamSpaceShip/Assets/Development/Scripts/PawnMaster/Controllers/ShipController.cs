@@ -38,7 +38,7 @@ public class ShipController : NetworkBehaviour, IEnterable {
 		Managers.GetInstance().GetPlayerManager().m_ship = gameObject;
         m_ship_RigidBody = GetComponent<Rigidbody2D>();
         m_direction = new Vector2(0, 0);
-		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
+		m_PlayerCamera = Managers.GetInstance().GetGameStateManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 	}
 	//runs every frame

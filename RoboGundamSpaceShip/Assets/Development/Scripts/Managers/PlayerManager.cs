@@ -1,5 +1,4 @@
 ﻿// This class will keep track of the player prefabs and such and such
-// NOTE THAT RPCS AND COMMANDS WILL NOT WORK ON THIS CLASS
 // Written by: Adam Bysice
 using UnityEngine;
 using System.Collections;
@@ -31,12 +30,14 @@ public class PlayerManager : NetworkBehaviour {
 	#endregion
 
 	#region Unity Defaults
+
 	//initialization
 	public void Start()
 	{
-		m_spawns = new Transform[4];
-		m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
-		DontDestroyOnLoad(m_localCamera);
+		m_spawns = new Transform[20];
+		//m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
+		Managers.GetInstance().SetPlayerManager(this);
+		DontDestroyOnLoad(gameObject);
 	}
 	//runs every frame
 	public void Update()
@@ -77,7 +78,9 @@ public class PlayerManager : NetworkBehaviour {
 		NetworkServer.Spawn(m_gundam);
 		m_gundam.transform.position = m_spawns[3].position;
 		m_gundam.GetComponent<MechaController>().RpcSetPosition(m_gundam.transform.position);
+		
 	}
+
 	#endregion
 
 	#region Protected Methods

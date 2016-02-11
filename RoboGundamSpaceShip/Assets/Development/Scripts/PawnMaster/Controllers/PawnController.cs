@@ -41,10 +41,9 @@ public class PawnController : NetworkBehaviour {
 		m_playerPosition = transform.localPosition;
 		m_enterAbility = gameObject.GetComponent<EnterAbility>();
 		// local Camera
-		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
+		m_PlayerCamera = Managers.GetInstance().GetGameStateManager().GetPlayerCamera();
 		m_PlayerCamera.transform.position = transform.position;
 		m_PlayerCamera.transform.parent = transform.parent;
-		m_PlayerCamera = Managers.GetInstance().GetPlayerManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 	}
 
@@ -66,14 +65,19 @@ public class PawnController : NetworkBehaviour {
 
 			if(m_isPiloting) //while piloting something
 			{
-				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position, Time.deltaTime);
-				m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
+			//	m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position, Time.deltaTime);
+			//	m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
 			}
 				
 	}
 
 	public void FixedUpdate()
 	{
+		if (!isLocalPlayer)
+		{
+			return;
+		}
+			
 		if (m_isPiloting) //while piloting something
 		{
 			m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position,CAMERA_LERP_MULTIPLIER* Time.deltaTime);

@@ -1,0 +1,337 @@
+fileFormatVersion: 2
+guid: 8f4c0476e1d1b9e418b7d515caf5dada
+timeCreated: 1455209906
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: turrets3_0
+    21300002: turrets3_1
+    21300004: turrets3_2
+    21300006: turrets3_3
+    21300008: turrets3_4
+    21300010: turrets3_5
+    21300012: turrets3_6
+    21300014: turrets3_7
+    21300016: turrets3_8
+    21300018: turrets3_9
+    21300020: turrets3_10
+    21300022: turrets3_11
+    21300024: turrets3_12
+    21300026: turrets3_13
+    21300028: turrets3_35
+    21300030: turrets3_36
+    21300032: turrets3_38
+    21300034: turrets3_39
+    21300036: turrets3_40
+    21300038: turrets3_41
+    21300040: turrets3_53
+    21300042: turrets3_54
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 10
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: turrets3_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 255
+        width: 24
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_1
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 255
+        width: 24
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_2
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 252
+        width: 28
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_3
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 256
+        width: 32
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8, y: 32.399994}
+        - {x: -16, y: 26.399994}
+        - {x: -16, y: -12.600006}
+        - {x: 16, y: -12.600006}
+        - {x: 16, y: 23.399994}
+        - {x: 13, y: 32.399994}
+    - name: turrets3_4
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 256
+        width: 24
+        height: 41
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_5
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 251
+        width: 34
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.32}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17, y: 31.959991}
+        - {x: -17, y: -15.040009}
+        - {x: 17, y: -15.040009}
+        - {x: 17, y: 31.959991}
+    - name: turrets3_6
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 256
+        width: 22
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_7
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 227
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_8
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 223
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_9
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 226
+        width: 16
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_10
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 225
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_11
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 225
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_12
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 223
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_13
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 221
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_38
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 118
+        width: 20
+        height: 37
+      alignment: 9
+      pivot: {x: 0.5, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_39
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 118
+        width: 28
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_40
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 118
+        width: 34
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.27}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 32.119995}
+        - {x: -17, y: 21.119995}
+        - {x: -17, y: -8.880005}
+        - {x: -16, y: -11.880005}
+        - {x: 14, y: -11.880005}
+        - {x: 17, y: -9.880005}
+        - {x: 17, y: 10.119995}
+        - {x: 6, y: 32.119995}
+    - name: turrets3_41
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 118
+        width: 34
+        height: 59
+      alignment: 9
+      pivot: {x: 0.5, y: 0.29}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: 41.89}
+        - {x: -17, y: 19.89}
+        - {x: -17, y: -10.110001}
+        - {x: -15, y: -17.11}
+        - {x: 12, y: -17.11}
+        - {x: 17, y: -12.110001}
+        - {x: 17, y: 15.889999}
+        - {x: 7, y: 41.89}
+      - - {x: -16, y: 24.89}
+        - {x: -15, y: 21.89}
+        - {x: -12, y: 21.89}
+        - {x: -10, y: 23.89}
+        - {x: -11, y: 26.89}
+        - {x: -14, y: 26.89}
+      - - {x: 10, y: 24.89}
+        - {x: 11, y: 21.89}
+        - {x: 14, y: 21.89}
+        - {x: 16, y: 23.89}
+        - {x: 15, y: 26.89}
+        - {x: 12, y: 26.89}
+    - name: turrets3_53
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 35
+        width: 16
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: turrets3_54
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 29
+        width: 17
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.31}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -31,4 +31,6 @@ public class GameProperties : MonoBehaviour {
 	public GameObject shipPrefab;
 	public GameObject mechaPrefab;
     public GameObject parallaxPrefab;
+	public GameObject cannonPrefab;
+	public GameObject playerManager;
 }

@@ -14,6 +14,7 @@ public class NetworkController : NetworkManager
     #region Public Variables
 	public string m_ip = "";
 	public bool isServer = false;
+	public GameObject m_playerManager;
     #endregion
 
     #region Protected Variables
@@ -43,6 +44,8 @@ public class NetworkController : NetworkManager
 		base.OnStartServer();
 		Debug.Log("Server Started");
 		isServer = true;
+		//spawn player manager?
+
 	}
 
 	//called by the server when a player is addded.
@@ -55,19 +58,26 @@ public class NetworkController : NetworkManager
 	//called by clients when they connect
 	public override void OnStartClient(NetworkClient client)
 	{
-		Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
+		//Debug.Log("OnStartClient, ID = " + client.connection.connectionId);
 	}
 	//called when another client connects
 	public override void OnClientConnect(NetworkConnection p_connection)
 	{
 		base.OnClientConnect(p_connection);
 		Debug.Log("OnClientConnect " + p_connection.connectionId);
-		
+		if(isServer)
+		{
+			m_playerManager = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().playerManager);
+			NetworkServer.Spawn(m_playerManager);
+		}
+
 	}
 	//called on server
 	public override void OnServerConnect(NetworkConnection p_connection)
 	{
 		base.OnServerConnect(p_connection);
+
+			
 		Debug.Log("OnServerConnect " + p_connection.connectionId);
 	}
 	//called on server when error ocurrs

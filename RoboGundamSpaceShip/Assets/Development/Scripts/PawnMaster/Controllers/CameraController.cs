@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour  {
 		m_gman = Managers.GetInstance().GetGameStateManager();
 		m_cam = gameObject.GetComponent<Camera>();
 		m_camSize = m_cam.orthographicSize;
+		DontDestroyOnLoad(this.gameObject);
 	}
 	//runs every frame
 	public void Update()
