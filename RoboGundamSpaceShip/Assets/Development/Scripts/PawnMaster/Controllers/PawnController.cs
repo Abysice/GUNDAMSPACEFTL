@@ -74,13 +74,15 @@ public class PawnController : NetworkBehaviour {
 	public void FixedUpdate()
 	{
 		if (!isLocalPlayer)
-		{
 			return;
-		}
 			
 		if (m_isPiloting) //while piloting something
 		{
-			m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position,CAMERA_LERP_MULTIPLIER* Time.deltaTime);
+			if(m_enterAbility.m_enterable)
+				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position,CAMERA_LERP_MULTIPLIER* Time.deltaTime);
+			else
+				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
+
 			m_PlayerCamera.transform.rotation = Quaternion.RotateTowards(m_PlayerCamera.transform.rotation, Quaternion.identity, CAMERA_LERP_MULTIPLIER);
 		}
 	}
@@ -94,7 +96,7 @@ public class PawnController : NetworkBehaviour {
 		//tell camera to start zooming out, unparent camera from ship
 		if(isLocalPlayer)
 		{
-			ClientScene.FindLocalObject(p_pawn).GetComponent<SpriteRenderer>().sortingLayerName = Layers.TurretsLayer;
+			//ClientScene.FindLocalObject(p_pawn).GetComponent<SpriteRenderer>().sortingLayerName = Layers.TurretsLayer;
 			GameObject l_enterableThing = ClientScene.FindLocalObject(p_pawn);
 			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
 			l_controller.OnControlled();
@@ -108,11 +110,18 @@ public class PawnController : NetworkBehaviour {
 		m_isPiloting = false;
 		if (isLocalPlayer)
 		{
-			GameObject l_enterableThing = m_enterAbility.m_enterable;
-			l_enterableThing.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
-			IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
-			l_controller.OnUnControlled();
-			m_PlayerCamera.transform.parent = transform.parent;
+			if (m_enterAbility.m_enterable)
+			{ 
+				GameObject l_enterableThing = m_enterAbility.m_enterable;
+				//l_enterableThing.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
+				IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
+				l_controller.OnUnControlled();
+				m_PlayerCamera.transform.parent = transform.parent;
+			}
+			else
+			{
+
+			}
 		}
 	}
 
@@ -145,8 +154,6 @@ public class PawnController : NetworkBehaviour {
 	private void DoLocalMovement()
 	{
 		m_oldinput = m_moveVec;
-		
-		//DO SOME RAYCAST SHIT HERE
 		m_moveVec = Vector2.zero;
 
 		if (Input.GetKey(KeyCode.W))
@@ -158,12 +165,9 @@ public class PawnController : NetworkBehaviour {
 		if (Input.GetKey(KeyCode.A))
 			m_moveVec = new Vector2(-1, m_moveVec.y);
 		
-		
-
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.rotation*m_moveVec, 0.8f, Layers.PawnColLayer);
 		if (hit.collider != null)
 		{
-			//Debug.Log("HIT DISTANCE " + hit.distance + "NORMAL : " + hit.normal);
 			m_moveVec = Vector2.zero;
 		}
 

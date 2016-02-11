@@ -1,13 +1,14 @@
-﻿// This script is the base type for all gameobjects that the player is able to "enter"
-// will be used to take network control of certain game objects
+﻿// Script description goes here.
+//
 // Written by: Adam Bysice
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Networking;
 
-public class ShipConsole : MonoBehaviour {
+public class CannonConsole : MonoBehaviour {
 
 	#region Public Variables
+	public int TurretLocation1;
+	public int TurretLocation2;
 	#endregion
 
 	#region Protected Variables
@@ -23,27 +24,28 @@ public class ShipConsole : MonoBehaviour {
 	//initialization
 	public void Start()
 	{
+
 	}
 	//runs every frame
 	public void Update()
 	{
-		transform.position = transform.position;
+
 	}
 
-	
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		//notify the player controller that they can "enter" this item
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_ship);
-
+		{
+			other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
+		}
 	}
 
 	public void OnTriggerExit2D(Collider2D other)
 	{
-		//notify the player controller that they scan no longer "enter" this item
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
+		{
+			other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
+		}
 	}
 	#endregion
 

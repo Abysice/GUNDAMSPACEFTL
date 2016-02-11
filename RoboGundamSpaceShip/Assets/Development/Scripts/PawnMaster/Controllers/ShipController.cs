@@ -46,9 +46,8 @@ public class ShipController : NetworkBehaviour, IEnterable {
 	{
         // will need to be given AssignClientAuthority by the server before you can control
 		if (!hasAuthority)
-        {
             return;
-        }
+		
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
         if (Input.GetKey(KeyCode.W))

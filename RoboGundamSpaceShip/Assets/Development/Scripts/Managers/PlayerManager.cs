@@ -10,6 +10,7 @@ public class PlayerManager : NetworkBehaviour {
 	#region Public Variables
 	public GameObject m_ship;
 	public GameObject m_gundam;
+	public GameObject[] m_cannons;
 	#endregion
 
 	#region Protected Variables
@@ -17,9 +18,7 @@ public class PlayerManager : NetworkBehaviour {
 
 	#region Private Variables
 	private GameObject m_localCamera;
-
 	private Transform[] m_spawns;
-	
 	#endregion
 
 	#region Accessors
@@ -35,6 +34,7 @@ public class PlayerManager : NetworkBehaviour {
 	public void Start()
 	{
 		m_spawns = new Transform[20];
+		m_cannons = new GameObject[4];
 		//m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		Managers.GetInstance().SetPlayerManager(this);
 		DontDestroyOnLoad(gameObject);
@@ -53,7 +53,8 @@ public class PlayerManager : NetworkBehaviour {
 		//spawn the ship
 		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
 		NetworkServer.Spawn(m_ship);
-		//NetworkServer.AddPlayerForConnection(NetworkServer.connections[0], m_ship, 1);
+		
+		//setup the spawn points for the other things
 		Transform l_spawns = m_ship.transform.Find("Spawns");
 		int count = 0;
 		foreach (Transform child in l_spawns)
@@ -61,7 +62,7 @@ public class PlayerManager : NetworkBehaviour {
 			m_spawns[count] = child;
 			count++;
 		}
-
+		
 		//spawn the players
 		for (int i = 0; i < NetworkServer.connections.Count; i++)
 		{
@@ -78,7 +79,15 @@ public class PlayerManager : NetworkBehaviour {
 		NetworkServer.Spawn(m_gundam);
 		m_gundam.transform.position = m_spawns[3].position;
 		m_gundam.GetComponent<MechaController>().RpcSetPosition(m_gundam.transform.position);
-		
+
+		//spawn the turrets
+		for (int i = 0; i < 4; i++)
+		{
+			m_cannons[i] = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().cannonPrefab);
+			m_cannons[i].transform.position = m_spawns[i+4].position;
+			NetworkServer.Spawn(m_cannons[i]);
+			m_cannons[i].GetComponent<TurretController>().RpcSetPosition(m_cannons[i].transform.position);
+		}
 	}
 
 	#endregion

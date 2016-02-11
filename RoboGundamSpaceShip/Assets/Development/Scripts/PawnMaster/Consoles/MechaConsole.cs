@@ -35,17 +35,15 @@ public class MechaConsole : MonoBehaviour {
 	public void OnTriggerEnter2D(Collider2D other)
 	{
 		//notify the player controller that they can "enter" this item
-		if(other)
-		{
+		if (other && Managers.GetInstance().GetNetworkController().isServer)
 			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_gundam);
-		}
 			
 	}
 
 	public void OnTriggerExit2D(Collider2D other)
 	{
 		//notify the player controller that they scan no longer "enter" this item
-		if(other)
+		if(other && Managers.GetInstance().GetNetworkController().isServer)
 			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
 	}
 	#endregion
