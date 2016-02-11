@@ -29,11 +29,14 @@ public class TurretFire : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!hasAuthority)
+            return;
 
         if (Input.GetMouseButton(0))
         {
-            Rigidbody2D l_projectile = Instantiate(m_bullet, transform.position, transform.rotation) as Rigidbody2D;
-            l_projectile.velocity = transform.TransformDirection(Vector2.up*m_speed);
+            GameObject l_projectile = (GameObject)Instantiate(m_bullet,transform.position,transform.rotation);
+            Rigidbody2D l_rb = l_projectile.GetComponent<Rigidbody2D>();
+            l_rb.velocity = transform.TransformDirection(Vector2.up*m_speed);
         }
 	
 	}
