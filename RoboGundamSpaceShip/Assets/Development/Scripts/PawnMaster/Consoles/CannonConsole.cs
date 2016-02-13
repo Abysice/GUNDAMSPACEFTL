@@ -36,7 +36,9 @@ public class CannonConsole : MonoBehaviour {
 	{
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
 		{
-			other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1]);
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]);
+			//other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
 		}
 	}
 
@@ -44,7 +46,8 @@ public class CannonConsole : MonoBehaviour {
 	{
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
 		{
-			other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
+			//other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
 		}
 	}
 	#endregion

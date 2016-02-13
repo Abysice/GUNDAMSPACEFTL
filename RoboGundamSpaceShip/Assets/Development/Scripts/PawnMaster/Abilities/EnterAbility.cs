@@ -4,28 +4,40 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnterAbility : NetworkBehaviour {
 
 	#region Public Variables
+
+	public GameObject[] m_turrets;
 	#endregion
 
 	#region Protected Variables
 	#endregion
 
 	#region Private Variables
-	public PawnController m_pawn;
-	public GameObject m_enterable;
-	public GameObject[] m_turrets;
+	private PawnController m_pawn;
+	public List<GameObject> m_enterables;
 	#endregion
 
 	#region Accessors
+	public int EnterablesCount()
+	{
+		return m_enterables.Count;
+	}
+
+	public Vector2 EnterablePos()
+	{
+		return m_enterables[0].transform.position;
+	}
 	#endregion
 
 	#region Unity Defaults
 	//initialization
 	public void Start()
 	{
+		m_enterables = new List<GameObject>();
 		m_pawn = gameObject.GetComponent<PawnController>();
 		m_turrets = new GameObject[2];
 	}
@@ -38,7 +50,7 @@ public class EnterAbility : NetworkBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			if (m_enterable || (m_turrets[0] && m_turrets[1]))
+			if (m_enterables.Count > 0)
 			{
 				//send request to server asking to get in or out
 				CmdRequestToEnter();
@@ -54,27 +66,28 @@ public class EnterAbility : NetworkBehaviour {
 		if (!isServer)
 			return;
 
-		m_enterable = p_actor;
-
-		if (m_enterable == null)
+		if (p_actor == null)
 			RpcClearEnterable();
 		else
 			RpcUpdateEnterable(p_actor.GetComponent<NetworkIdentity>().netId);
 	}
+
 
 	//update "enterable" for local players
 	[ClientRpc]
 	public void RpcUpdateEnterable(NetworkInstanceId p_id)
 	{
 		Debug.Log("Updating the enterable");
-		m_enterable = ClientScene.FindLocalObject(p_id);
+		//m_enterable = ClientScene.FindLocalObject(p_id);
+		m_enterables.Add(ClientScene.FindLocalObject(p_id));
 	}
 	//clear any "enterable" objects for the client
 	[ClientRpc]
 	public void RpcClearEnterable()
 	{
 		Debug.Log("Clearing the enterable");
-		m_enterable = null;
+		//m_enterable = null;
+		m_enterables.Clear();
 	}
 
 	//request ownership of the gameobject that you are allowed to enter
@@ -82,47 +95,53 @@ public class EnterAbility : NetworkBehaviour {
 	public void CmdRequestToEnter()
 	{
 		//change ownership of the object
-		if (m_enterable)
+		if (m_enterables.Count > 0)
 		{ 
 			if (!m_pawn.isPiloting())
 			{
 				NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
-				NetworkIdentity l_enterableid = m_enterable.GetComponent<NetworkIdentity>();
-				//don't let them enter if someone is already in it
-				if(l_enterableid.clientAuthorityOwner == null)
+				foreach(GameObject obj in m_enterables)
 				{
-					l_enterableid.AssignClientAuthority(l_id.connectionToClient);
-					m_pawn.RpcSetToPiloting(l_enterableid.netId);
+					NetworkIdentity l_enterableid = obj.GetComponent<NetworkIdentity>();
+					//don't let them enter if someone is already in it
+					if (l_enterableid.clientAuthorityOwner == null)
+					{
+						l_enterableid.AssignClientAuthority(l_id.connectionToClient);
+						m_pawn.RpcSetToPiloting(l_enterableid.netId);
+					}
 				}
 			}
 			else //make them get out
 			{
-				m_enterable.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-				m_pawn.RpcUnpilotPawn();
-			}
-		}
-		else
-		{
-			if (!m_pawn.isPiloting())
-			{
-				NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
-				NetworkIdentity l_enterableid1 = m_turrets[0].GetComponent<NetworkIdentity>();
-				NetworkIdentity l_enterableid2 = m_turrets[1].GetComponent<NetworkIdentity>();
-				//don't let them enter if someone is already in it
-				if (l_enterableid1.clientAuthorityOwner == null && l_enterableid2.clientAuthorityOwner == null)
+				foreach (GameObject obj in m_enterables)
 				{
-					l_enterableid1.AssignClientAuthority(l_id.connectionToClient);
-					l_enterableid2.AssignClientAuthority(l_id.connectionToClient);
-					m_pawn.RpcSetToPiloting(l_enterableid1.netId);
+					obj.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
 				}
-			}
-			else //make them get out
-			{
-				m_turrets[0].GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-				m_turrets[1].GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
 				m_pawn.RpcUnpilotPawn();
 			}
 		}
+		//else
+		//{
+		//	if (!m_pawn.isPiloting())
+		//	{
+		//		NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
+		//		NetworkIdentity l_enterableid1 = m_turrets[0].GetComponent<NetworkIdentity>();
+		//		NetworkIdentity l_enterableid2 = m_turrets[1].GetComponent<NetworkIdentity>();
+		//		//don't let them enter if someone is already in it
+		//		if (l_enterableid1.clientAuthorityOwner == null && l_enterableid2.clientAuthorityOwner == null)
+		//		{
+		//			l_enterableid1.AssignClientAuthority(l_id.connectionToClient);
+		//			l_enterableid2.AssignClientAuthority(l_id.connectionToClient);
+		//			m_pawn.RpcSetToPiloting(l_enterableid1.netId);
+		//		}
+		//	}
+		//	else //make them get out
+		//	{
+		//		m_turrets[0].GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+		//		m_turrets[1].GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+		//		m_pawn.RpcUnpilotPawn();
+		//	}
+		//}
 
 	}
 	/// <summary>

@@ -79,8 +79,8 @@ public class PawnController : NetworkBehaviour {
 		//while piloting something, update camera position
 		if (m_isPiloting) 
 		{
-			if(m_enterAbility.m_enterable)
-				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position,CAMERA_LERP_MULTIPLIER* Time.deltaTime);
+			if (m_enterAbility.EnterablesCount() > 0)
+				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.EnterablePos(), CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 			else
 				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 
@@ -111,16 +111,16 @@ public class PawnController : NetworkBehaviour {
 		m_isPiloting = false;
 		if (isLocalPlayer)
 		{
-			if (m_enterAbility.m_enterable)
+			if (m_enterAbility.EnterablesCount() > 0)
 			{ 
-				GameObject l_enterableThing = m_enterAbility.m_enterable;
-				//l_enterableThing.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
-				IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
-				l_controller.OnUnControlled();
-				m_PlayerCamera.transform.parent = transform.parent;
-			}
-			else
-			{
+				foreach (GameObject l_enterableThing in m_enterAbility.m_enterables)
+				{
+					//GameObject l_enterableThing = m_enterAbility.m_enterable;
+					//l_enterableThing.GetComponent<SpriteRenderer>().sortingLayerName = Layers.ShipLayer;
+					IEnterable l_controller = (IEnterable)l_enterableThing.GetComponent(typeof(IEnterable));
+					l_controller.OnUnControlled();
+					m_PlayerCamera.transform.parent = transform.parent;
+				}
 
 			}
 		}

@@ -48,6 +48,12 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	//runs every frame
 	public void Update()
 	{
+		if(isServer)
+		{
+			if(gameObject.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, m_ship.transform.rotation, TRACKING_SPEED);
+		}
+
 		if (!hasAuthority)
 		{
 			Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
@@ -116,6 +122,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 			return -1;
 		else
 			return 0;
+
 	}  
  
 	#endregion
