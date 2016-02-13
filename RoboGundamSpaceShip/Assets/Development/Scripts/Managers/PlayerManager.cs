@@ -86,7 +86,7 @@ public class PlayerManager : NetworkBehaviour {
 			m_cannons[i] = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().cannonPrefab, m_spawns[i + 4].position, Quaternion.identity);
 			//m_cannons[i].transform.position = m_spawns[i+4].position;
 			NetworkServer.Spawn(m_cannons[i]);
-			m_cannons[i].GetComponent<TurretController>().RpcSetPosition(m_cannons[i].transform.position);
+			m_cannons[i].GetComponent<TurretController>().RpcSetPosition();
 		}
 	}
 

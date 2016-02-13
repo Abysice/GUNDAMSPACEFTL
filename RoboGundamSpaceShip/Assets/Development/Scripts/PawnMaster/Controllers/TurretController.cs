@@ -9,7 +9,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	#region Public Variables
 	public float TRACKING_SPEED = 5.0f;
-	public float m_angle;
+
 	#endregion
 
 	#region Protected Variables
@@ -21,6 +21,8 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	private GameObject m_PlayerCamera;
 	private GameObject m_ship;
 	private bool m_rightSide = false;
+	[SyncVar]
+	private float m_angle = 90.0f;
 	#endregion
 
 	#region Accessors
@@ -47,8 +49,12 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	public void Update()
 	{
 		if (!hasAuthority)
+		{
+			Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rotate, TRACKING_SPEED);
 			return;
-
+		}
+		
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 		//rotate the turrets towards the mouse
 		Vector3 l_mpos = Input.mousePosition;
@@ -59,6 +65,8 @@ public class TurretController : NetworkBehaviour, IEnterable {
 		int l_ret = AngleDir(l_mpos, m_ship.transform.up, m_PlayerCamera.transform.forward);
 		if ((m_rightSide && l_ret == 1) || (!m_rightSide && l_ret == -1))
 			m_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
+		
+		CmdSetRotation(m_angle);
 
 		Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
@@ -79,10 +87,16 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	//initial position setup
 	[ClientRpc]
-	public void RpcSetPosition(Vector3 p_pos)
+	public void RpcSetPosition()
 	{
-		gameObject.transform.position = p_pos;
 		transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
+	}
+
+
+	[Command(channel = 1)]
+	public void CmdSetRotation(float p_rot)
+	{
+		m_angle = p_rot;
 	}
 	#endregion
 

@@ -17,8 +17,8 @@ public class PawnController : NetworkBehaviour {
 
 	#region Private Variables
 	[SyncVar] private Vector2 m_playerPosition; 
-	[SyncVar] private Vector2 m_moveVec;
-	private Vector2 m_oldinput;
+	private Vector2 m_moveVec;
+	private Vector2 m_oldPosition;
 	private GameObject m_PlayerCamera;
 	private CameraController m_camCont;
 	private EnterAbility m_enterAbility;
@@ -51,8 +51,8 @@ public class PawnController : NetworkBehaviour {
 	public void Update()
 	{
 
-			if (isServer)
-				UpdateMovePosition();//set the player's movement direction depending on their input
+			//if (isServer)
+			//	UpdateMovePosition();//set the player's movement direction depending on their input
 
 			if (!isLocalPlayer)
 			{
@@ -75,8 +75,9 @@ public class PawnController : NetworkBehaviour {
 	{
 		if (!isLocalPlayer)
 			return;
-			
-		if (m_isPiloting) //while piloting something
+
+		//while piloting something, update camera position
+		if (m_isPiloting) 
 		{
 			if(m_enterAbility.m_enterable)
 				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.m_enterable.transform.position,CAMERA_LERP_MULTIPLIER* Time.deltaTime);
@@ -126,10 +127,10 @@ public class PawnController : NetworkBehaviour {
 	}
 
 	//send update of input to the server
-	[Command]
+	[Command(channel = 1)]
 	public void CmdUpdateInput(Vector2 p_input)
 	{
-		m_moveVec = p_input;
+		m_playerPosition = p_input;
 	}
 	#endregion
 
@@ -138,22 +139,22 @@ public class PawnController : NetworkBehaviour {
 
 	#region Private Methods
 	//set the player's movement on the server
-	private void UpdateMovePosition()
-	{
-		if (m_moveVec.y == 1)
-			m_playerPosition += (new Vector2(0, 1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-		else if (m_moveVec.y == -1)
-			m_playerPosition += (new Vector2(0, -1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-		if (m_moveVec.x == 1)
-			m_playerPosition += (new Vector2(1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-		else if (m_moveVec.x == -1)
-			m_playerPosition += (new Vector2(-1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-	}
+	//private void UpdateMovePosition()
+	//{
+	//	if (m_moveVec.y == 1)
+	//		m_playerPosition += (new Vector2(0, 1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+	//	else if (m_moveVec.y == -1)
+	//		m_playerPosition += (new Vector2(0, -1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+	//	if (m_moveVec.x == 1)
+	//		m_playerPosition += (new Vector2(1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+	//	else if (m_moveVec.x == -1)
+	//		m_playerPosition += (new Vector2(-1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+	//}
 
 	//preform local movement for clients before sending info to the server
 	private void DoLocalMovement()
 	{
-		m_oldinput = m_moveVec;
+		m_oldPosition = m_playerPosition;
 		m_moveVec = Vector2.zero;
 
 		if (Input.GetKey(KeyCode.W))
@@ -171,10 +172,6 @@ public class PawnController : NetworkBehaviour {
 			m_moveVec = Vector2.zero;
 		}
 
-		//send input vec to server
-		if (m_oldinput != m_moveVec || hit.collider != null)
-			CmdUpdateInput(m_moveVec);
-
 		Vector2 l_localPos = transform.localPosition;
 		if (m_moveVec.y == 1)
 			l_localPos += (new Vector2(0, 1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
@@ -184,6 +181,9 @@ public class PawnController : NetworkBehaviour {
 			l_localPos += (new Vector2(1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
 		else if (m_moveVec.x == -1)
 			l_localPos += (new Vector2(-1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
+
+		//send position vec to server
+		CmdUpdateInput(l_localPos);
 
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 5;
 		transform.localPosition = Vector2.MoveTowards(transform.localPosition, l_localPos, PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
