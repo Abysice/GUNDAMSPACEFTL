@@ -51,6 +51,7 @@ public class TurretFireAbility : NetworkBehaviour {
         GameObject l_projectile = (GameObject)Instantiate(m_bullet, p_position, p_rotation);
         l_projectile.GetComponent<BulletBehaviour>().m_velocity = transform.TransformDirection(Vector2.up * m_speed);
         NetworkServer.Spawn(l_projectile);
+
     }
     #endregion
 
