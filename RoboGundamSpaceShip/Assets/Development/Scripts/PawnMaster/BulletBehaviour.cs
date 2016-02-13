@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class BulletBehaviour : MonoBehaviour {
+public class BulletBehaviour : NetworkBehaviour {
 
     #region Public Variables
     public float m_deathDelay;
-	#endregion
+    public float m_speed;
+    [SyncVar] public Vector3 m_velocity;
+    #endregion
 
-	#region Protected Variables
-	#endregion
+    #region Protected Variables
+    #endregion
 
-	#region Private Variables
+    #region Private Variables
+    private Rigidbody2D m_rb;
 	#endregion
 
 	#region Accessors
@@ -24,11 +28,13 @@ public class BulletBehaviour : MonoBehaviour {
 	void Start()
 	{
         Destroy(gameObject, m_deathDelay);
-	}
+        m_rb = gameObject.GetComponent<Rigidbody2D>();
+    }
 
 	// Update is called once per frame
 	void Update()
 	{
+        m_rb.velocity = m_velocity;
 
 	}
 
