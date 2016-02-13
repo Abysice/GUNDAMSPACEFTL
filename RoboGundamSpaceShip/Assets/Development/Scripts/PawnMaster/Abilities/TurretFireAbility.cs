@@ -2,10 +2,10 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class TurretFire : NetworkBehaviour {
+public class TurretFireAbility : NetworkBehaviour {
 
     #region Public Variables
-    public int m_fireRate;
+    public float m_fireRate;
     public int m_speed;
     public GameObject m_bullet;
     #endregion
@@ -14,7 +14,8 @@ public class TurretFire : NetworkBehaviour {
     #endregion
 
     #region Private Variables
-
+    private Transform m_spawnLoacation;
+    private float m_nextFire;
     #endregion
 
     #region Accessors
@@ -24,19 +25,22 @@ public class TurretFire : NetworkBehaviour {
     // Use this for initialization
     void Start () {
 
-        //m_projectile = GetComponent<Rigidbody2D>();
+        m_spawnLoacation = transform.GetChild(0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if (!hasAuthority)
             return;
-
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && Time.time > m_nextFire)
         {
-            GameObject l_projectile = (GameObject)Instantiate(m_bullet,transform.position,transform.rotation);
+            m_nextFire = Time.time + m_fireRate;
+            GameObject l_projectile = (GameObject)Instantiate(m_bullet, m_spawnLoacation.position, m_spawnLoacation.rotation);
             Rigidbody2D l_rb = l_projectile.GetComponent<Rigidbody2D>();
-            l_rb.velocity = transform.TransformDirection(Vector2.up*m_speed);
+            l_rb.velocity = transform.TransformDirection(Vector2.up * m_speed);
+
+            NetworkServer.Spawn(l_projectile);
+            
         }
 	
 	}
