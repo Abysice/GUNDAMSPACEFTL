@@ -115,5 +115,12 @@ public class PlayerManager : NetworkBehaviour {
 		}
 	}
 
+	//spawn the pointdefenceguns
+	private void SpawnPointDefense()
+	{
+
+
+	}
+
 	#endregion
 }
