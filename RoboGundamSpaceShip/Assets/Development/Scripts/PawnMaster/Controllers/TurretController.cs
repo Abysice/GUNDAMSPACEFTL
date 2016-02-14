@@ -93,7 +93,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	//initial position setup
 	[ClientRpc]
-	public void RpcSetPosition()
+	public void RpcSetup()
 	{
 		transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
 	}

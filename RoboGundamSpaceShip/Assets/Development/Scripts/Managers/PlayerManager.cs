@@ -50,44 +50,15 @@ public class PlayerManager : NetworkBehaviour {
 	
 	public void SpawnPrefabs()
 	{
-		//spawn the ship
-		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
-		NetworkServer.Spawn(m_ship);
+		SpawnPlayerShip(); //spawn the main ship
+		SetupSpawnPoints(); //setup the spawn points for the other things (ship must be spawned first)
+		SpawnPlayers(); //spawn player prefabs
+		SpawnMecha(); // spawn the mecha in the ship
+		SpawnShipTurrets(); //spawn the ship turrets
 		
-		//setup the spawn points for the other things
-		Transform l_spawns = m_ship.transform.Find("Spawns");
-		int count = 0;
-		foreach (Transform child in l_spawns)
-		{
-			m_spawns[count] = child;
-			count++;
-		}
 		
-		//spawn the players
-		for (int i = 0; i < NetworkServer.connections.Count; i++)
-		{
-			Debug.Log("spawnin a dude for :" + NetworkServer.connections[i]);
-			GameObject l_player =(GameObject)Instantiate(Managers.GetInstance().GetGameProperties().playerPrefab, m_spawns[i].position, Quaternion.identity);
-			//l_player.transform.position = m_spawns[i].position;
-			
-			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i], l_player, 0);
-			//l_player.transform.parent = m_ship.transform;
-		}
-		
-		//Spawn Mecha
-		m_gundam = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().mechaPrefab, m_spawns[3].position, Quaternion.identity);
-		NetworkServer.Spawn(m_gundam);
-		//m_gundam.transform.position = m_spawns[3].position;
-		//m_gundam.GetComponent<MechaController>().RpcSetPosition(m_gundam.transform.position);
  
-		//spawn the turrets
-		for (int i = 0; i < 4; i++)
-		{
-			m_cannons[i] = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().cannonPrefab, m_spawns[i + 4].position, Quaternion.identity);
-			//m_cannons[i].transform.position = m_spawns[i+4].position;
-			NetworkServer.Spawn(m_cannons[i]);
-			m_cannons[i].GetComponent<TurretController>().RpcSetPosition();
-		}
+
 	}
 
 	#endregion
@@ -96,5 +67,53 @@ public class PlayerManager : NetworkBehaviour {
 	#endregion
 
 	#region Private Methods
+	//spawn the ship
+	private void SpawnPlayerShip()
+	{
+		m_ship = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab);
+		NetworkServer.Spawn(m_ship);
+	}
+
+	//setup the spawn points from the ship
+	private void SetupSpawnPoints()
+	{
+		Transform l_spawns = m_ship.transform.Find("Spawns");
+		int count = 0;
+		foreach (Transform child in l_spawns)
+		{
+			m_spawns[count] = child;
+			count++;
+		}
+	}
+	
+	//spawn the player prefabs
+	private void SpawnPlayers()
+	{
+		for (int i = 0; i < NetworkServer.connections.Count; i++)
+		{
+			//Debug.Log("spawnin a dude for :" + NetworkServer.connections[i]);
+			GameObject l_player = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().playerPrefab, m_spawns[i].position, Quaternion.identity);
+			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i], l_player, 0);
+		}
+	}
+
+	//spawn the mecha inside the ship
+	private void SpawnMecha()
+	{
+		m_gundam = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().mechaPrefab, m_spawns[3].position, Quaternion.identity);
+		NetworkServer.Spawn(m_gundam);
+	}
+
+	//spawn the turrets
+	private void SpawnShipTurrets()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			m_cannons[i] = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().cannonPrefab, m_spawns[i + 4].position, Quaternion.identity);
+			NetworkServer.Spawn(m_cannons[i]);
+			m_cannons[i].GetComponent<TurretController>().RpcSetup();
+		}
+	}
+
 	#endregion
 }
