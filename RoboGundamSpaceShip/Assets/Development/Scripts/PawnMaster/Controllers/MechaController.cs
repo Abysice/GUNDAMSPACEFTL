@@ -56,35 +56,23 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		//set camera zoom while in mecha
 		m_camCont.m_camSize = 10;
 
+		m_direction = Vector2.zero;
+
 		if (Input.GetKey(KeyCode.W))
-		{
 			m_direction.y = 1;
-		}
 		else if (Input.GetKey(KeyCode.S))
-		{
 			m_direction.y = -1;
-		}
-		else
-		{
-			m_direction.y = 0;
-		}
 		if (Input.GetKey(KeyCode.D))
-		{
 			m_direction.x = 1;
-		}
 		else if (Input.GetKey(KeyCode.A))
-		{
 			m_direction.x = -1;
-		}
-		else
-		{
-			m_direction.x = 0;
-		}
 		
 		m_rb.AddForce(m_forceMultiplier * m_direction);
 		m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_MaxSpeed);
 		m_rb.angularVelocity = Mathf.Clamp(m_rb.angularVelocity, -m_MaxTorque, m_MaxTorque);
 
+		transform.rotation = Quaternion.identity;
+		
 		//rotate towards direction(maybe?)
 		//Vector2 v = m_rb.velocity;
 		//float l_angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
@@ -125,6 +113,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	{
 		m_rb.isKinematic = false;
 		transform.parent = transform.parent.parent;
+		transform.rotation = Quaternion.identity;
 	}
 
 	//tell all clients to reset the mecha
@@ -133,6 +122,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	{
 		m_rb.isKinematic = true;
 		transform.parent = Managers.GetInstance().GetPlayerManager().m_ship.transform;
+		transform.rotation = Managers.GetInstance().GetPlayerManager().m_ship.transform.rotation;
 	}
 
 	//initial position setup
