@@ -11,6 +11,7 @@ public class PlayerManager : NetworkBehaviour {
 	public GameObject m_ship;
 	public GameObject m_gundam;
 	public GameObject[] m_cannons;
+	public GameObject[] m_pointDefense;
 	#endregion
 
 	#region Protected Variables
@@ -19,6 +20,7 @@ public class PlayerManager : NetworkBehaviour {
 	#region Private Variables
 	private GameObject m_localCamera;
 	private Transform[] m_spawns;
+	
 	#endregion
 
 	#region Accessors
@@ -35,6 +37,7 @@ public class PlayerManager : NetworkBehaviour {
 	{
 		m_spawns = new Transform[20];
 		m_cannons = new GameObject[4];
+		m_pointDefense = new GameObject[6];
 		//m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		Managers.GetInstance().SetPlayerManager(this);
 		DontDestroyOnLoad(gameObject);
@@ -55,10 +58,7 @@ public class PlayerManager : NetworkBehaviour {
 		SpawnPlayers(); //spawn player prefabs
 		SpawnMecha(); // spawn the mecha in the ship
 		SpawnShipTurrets(); //spawn the ship turrets
-		
-		
- 
-
+		SpawnPointDefense(); //spawn the ship point defense
 	}
 
 	#endregion
@@ -118,8 +118,12 @@ public class PlayerManager : NetworkBehaviour {
 	//spawn the pointdefenceguns
 	private void SpawnPointDefense()
 	{
-
-
+		for (int i = 0; i < 6; i++)
+		{
+			m_pointDefense[i] = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().pointdefensePrefab, m_spawns[i + 8].position, Quaternion.identity);
+			NetworkServer.Spawn(m_pointDefense[i]);
+			m_pointDefense[i].GetComponent<TurretController>().RpcSetup();
+		}
 	}
 
 	#endregion

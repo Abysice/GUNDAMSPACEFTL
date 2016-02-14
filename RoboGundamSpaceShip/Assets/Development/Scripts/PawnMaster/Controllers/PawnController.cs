@@ -79,7 +79,7 @@ public class PawnController : NetworkBehaviour {
 		//while piloting something, update camera position
 		if (m_isPiloting) 
 		{
-			if (m_enterAbility.EnterablesCount() > 0)
+			if (m_enterAbility.EnterablesCount() <= 1 )
 				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, m_enterAbility.EnterablePos(), CAMERA_LERP_MULTIPLIER * Time.deltaTime);
 			else
 				m_PlayerCamera.transform.position = Vector2.Lerp(m_PlayerCamera.transform.position, gameObject.transform.position, CAMERA_LERP_MULTIPLIER * Time.deltaTime);

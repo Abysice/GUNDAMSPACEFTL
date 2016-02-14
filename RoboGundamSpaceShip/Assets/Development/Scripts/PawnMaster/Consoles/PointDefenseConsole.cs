@@ -1,14 +1,14 @@
-﻿// Script description goes here.
-//
+﻿// Entrance console for point defense
 // Written by: Adam Bysice
 using UnityEngine;
 using System.Collections;
 
-public class CannonConsole : MonoBehaviour {
+public class PointDefenseConsole : MonoBehaviour {
 
 	#region Public Variables
 	public int TurretLocation1;
 	public int TurretLocation2;
+	public int TurretLocation3;
 	#endregion
 
 	#region Protected Variables
@@ -25,9 +25,9 @@ public class CannonConsole : MonoBehaviour {
 	{
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
 		{
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1]);
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]);
-			//other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation1]);
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation2]);
+			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation3]);
 		}
 	}
 
@@ -36,7 +36,6 @@ public class CannonConsole : MonoBehaviour {
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
 		{
 			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
-			//other.gameObject.GetComponent<EnterAbility>().UpdateTurrets(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation1],(Managers.GetInstance().GetPlayerManager().m_cannons[TurretLocation2]));
 		}
 	}
 	#endregion

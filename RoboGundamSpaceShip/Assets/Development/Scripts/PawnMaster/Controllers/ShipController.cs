@@ -50,31 +50,18 @@ public class ShipController : NetworkBehaviour, IEnterable {
 		
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
+		m_direction = Vector2.zero;
+
         if (Input.GetKey(KeyCode.W))
-        {
             m_direction.y = 1;
-        }
         else if (Input.GetKey(KeyCode.S))
-        {
             m_direction.y = -1;
-        }
-        else
-        {
-            m_direction.y = 0;
-        }
         if (Input.GetKey(KeyCode.D))
-        {
             m_direction.x = 1;
-        }
         else if (Input.GetKey(KeyCode.A))
-        {
             m_direction.x = -1;
-        }
-        else
-        {
-            m_direction.x = 0;
-        }
-        //CmdUpdateInput(m_direction);
+        
+		
 		m_ship_RigidBody.AddForce(transform.up* m_forceMultiplier*m_direction.y);
         m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
         m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
