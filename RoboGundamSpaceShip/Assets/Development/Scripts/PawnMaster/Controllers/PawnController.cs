@@ -138,18 +138,6 @@ public class PawnController : NetworkBehaviour {
 	#endregion
 
 	#region Private Methods
-	//set the player's movement on the server
-	//private void UpdateMovePosition()
-	//{
-	//	if (m_moveVec.y == 1)
-	//		m_playerPosition += (new Vector2(0, 1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-	//	else if (m_moveVec.y == -1)
-	//		m_playerPosition += (new Vector2(0, -1) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-	//	if (m_moveVec.x == 1)
-	//		m_playerPosition += (new Vector2(1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-	//	else if (m_moveVec.x == -1)
-	//		m_playerPosition += (new Vector2(-1, 0) * PLAYER_MOVE_MULTIPLIER * Time.deltaTime);
-	//}
 
 	//preform local movement for clients before sending info to the server
 	private void DoLocalMovement()

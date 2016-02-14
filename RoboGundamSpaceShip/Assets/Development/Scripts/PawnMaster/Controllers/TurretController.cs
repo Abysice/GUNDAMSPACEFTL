@@ -77,6 +77,18 @@ public class TurretController : NetworkBehaviour, IEnterable {
 		Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
 	}
+
+	public override void OnStartAuthority()
+	{
+		base.OnStartAuthority();
+		Debug.Log("GOT THIS");
+	}
+
+	public override void OnStopAuthority()
+	{
+		base.OnStopAuthority();
+		Debug.Log("NO LONGER GOT THIS");
+	}
 	#endregion
 
 	#region Public Methods
