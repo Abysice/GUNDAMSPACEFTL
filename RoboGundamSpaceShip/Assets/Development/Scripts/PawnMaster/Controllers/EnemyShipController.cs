@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using System.Collections;
 
 public class EnemyShipController : NetworkBehaviour, IDamageable {
 
     #region Public Variables
-    [SyncVar] public int m_HP = 100;
+    public int MAX_HP = 100;
+    [SyncVar] public int m_currentHP;
+    public Image m_HealthBar;
 	#endregion
 
 	#region Protected Variables
@@ -24,17 +27,21 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
 	}
 	void Start()
 	{
-		
-	}
+        m_currentHP = MAX_HP;
+    }
 
 	// Update is called once per frame
 	void Update()
 	{
         if (isServer)
         {
-            if(m_HP <=0)
+            if(m_currentHP <=0)
                 NetworkServer.Destroy(gameObject);
+            
+
         }
+        m_HealthBar.fillAmount = (float)m_currentHP / (float)MAX_HP;
+
     }
 
     #endregion
@@ -42,7 +49,7 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
     #region Public Methods
     public void Damage(int damageTaken)
     {
-        m_HP -= damageTaken;
+        m_currentHP -= damageTaken;
         
     }
     #endregion
