@@ -7,6 +7,7 @@ public class BulletBehaviour : NetworkBehaviour {
     #region Public Variables
     public float m_deathDelay;
     public float m_speed;
+    public int m_damagePoints;
     [SyncVar] public Vector3 m_velocity;
     #endregion
 
@@ -27,7 +28,10 @@ public class BulletBehaviour : NetworkBehaviour {
 	}
 	void Start()
 	{
-        Destroy(gameObject, m_deathDelay);
+        if (isServer)
+        {
+            Destroy(gameObject, m_deathDelay);
+        }
         m_rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
@@ -37,6 +41,24 @@ public class BulletBehaviour : NetworkBehaviour {
         m_rb.velocity = m_velocity;
 
 	}
+
+    void OnDestroy()
+    {
+        NetworkServer.Destroy(gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag != "Ship")
+        {
+            if (isServer)
+            {
+                IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
+                L_target.Damage(m_damagePoints); 
+                NetworkServer.Destroy(gameObject);
+            }
+        }
+    }
 
 	#endregion
 

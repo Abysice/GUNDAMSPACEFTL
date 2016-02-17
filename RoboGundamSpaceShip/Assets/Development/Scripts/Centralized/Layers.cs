@@ -15,6 +15,8 @@ public class Layers : MonoBehaviour {
 	public const int ShipCol = 9;
 	public const int MechaColLayer = 1 << 10;
 	public const int MechaCol = 10;
+    public const int EnemyColLayer = 1 << 11;
+    public const int EnemyCol = 11;
 
 	//sprite Layers
 	public const string BackroundLayer = "Background";
@@ -25,21 +27,22 @@ public class Layers : MonoBehaviour {
 	public const string TurretsLayer = "Turrets";
 	public const string ParticleLayer = "ParticleEffects";
 	public const string MechaLayer = "Mecha";
+   
 
-	#endregion
+    #endregion
 
-	#region Protected Variables
-	#endregion
+    #region Protected Variables
+    #endregion
 
-	#region Private Variables
-	#endregion
+    #region Private Variables
+    #endregion
 
-	#region Accessors
-	#endregion
+    #region Accessors
+    #endregion
 
-	#region Unity Defaults
-	//initialization
-	public void Start()
+    #region Unity Defaults
+    //initialization
+    public void Start()
 	{
 
 	}
