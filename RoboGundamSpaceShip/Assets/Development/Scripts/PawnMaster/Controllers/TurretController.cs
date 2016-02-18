@@ -21,6 +21,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	private GameObject m_PlayerCamera;
 	private GameObject m_ship;
 	private bool m_rightSide = false;
+	private NetworkIdentity m_id;
 	[SyncVar]
 	private float m_angle = 90.0f;
 	#endregion
@@ -44,6 +45,8 @@ public class TurretController : NetworkBehaviour, IEnterable {
 			m_rightSide = true;
 		else
 			m_rightSide = false;
+
+		m_id = gameObject.GetComponent<NetworkIdentity>();
 	}
 	//runs every frame
 	public void Update()
@@ -53,14 +56,17 @@ public class TurretController : NetworkBehaviour, IEnterable {
 			if(gameObject.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
 				transform.rotation = Quaternion.RotateTowards(transform.rotation, m_ship.transform.rotation, TRACKING_SPEED);
 		}
-
+		
 		if (!hasAuthority)
 		{
 			Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rotate, TRACKING_SPEED);
 			return;
 		}
-		
+
+		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
+			return;
+	
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 		//rotate the turrets towards the mouse
 		Vector3 l_mpos = Input.mousePosition;
@@ -81,13 +87,11 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	public override void OnStartAuthority()
 	{
 		base.OnStartAuthority();
-		Debug.Log("GOT THIS");
 	}
 
 	public override void OnStopAuthority()
 	{
 		base.OnStopAuthority();
-		Debug.Log("NO LONGER GOT THIS");
 	}
 	#endregion
 

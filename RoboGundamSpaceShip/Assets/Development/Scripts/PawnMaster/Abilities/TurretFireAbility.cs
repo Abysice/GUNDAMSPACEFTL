@@ -16,6 +16,7 @@ public class TurretFireAbility : NetworkBehaviour {
     #region Private Variables
     private Transform m_spawnLoacation;
     private float m_nextFire;
+	private NetworkIdentity m_id;
     #endregion
 
     #region Accessors
@@ -26,12 +27,17 @@ public class TurretFireAbility : NetworkBehaviour {
     void Start () {
 
         m_spawnLoacation = transform.GetChild(0);
+		m_id = gameObject.GetComponent<NetworkIdentity>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if (!hasAuthority)
             return;
+
+		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
+			return;
+
         if (Input.GetMouseButton(0) && Time.time > m_nextFire)
         {
             m_nextFire = Time.time + m_fireRate;

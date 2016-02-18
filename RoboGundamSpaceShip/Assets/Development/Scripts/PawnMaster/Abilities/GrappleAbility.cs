@@ -20,6 +20,7 @@ public class GrappleAbility : NetworkBehaviour {
 	private GameObject m_connected;
 	private LineRenderer m_cableLine;
 	private Vector2 m_attachpoint;
+	private NetworkIdentity m_id;
 	#endregion
 
 	#region Accessors
@@ -31,7 +32,7 @@ public class GrappleAbility : NetworkBehaviour {
 	{
 		m_mecha = gameObject.GetComponent<MechaController>();
 		m_cableLine = gameObject.GetComponent<LineRenderer>();
-
+		m_id = gameObject.GetComponent<NetworkIdentity>();
 	}
 	//runs every frame
 	public void Update()
@@ -44,6 +45,9 @@ public class GrappleAbility : NetworkBehaviour {
 				m_cableLine.SetPosition(1, m_connected.transform.TransformPoint(m_attachpoint));
 			return;
 		}
+
+		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
+			return;
 
 		m_cableLine.SetPosition(0, gameObject.transform.position);
 		if(m_hook != null)

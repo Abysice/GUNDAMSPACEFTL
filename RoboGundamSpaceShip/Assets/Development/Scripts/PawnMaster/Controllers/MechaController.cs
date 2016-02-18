@@ -25,6 +25,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	private GameObject m_PlayerCamera;
 	private CameraController m_camCont;
 	private Vector2 m_originalLocal;
+	private NetworkIdentity m_id;
 	#endregion
 
 	#region Accessors
@@ -40,6 +41,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		m_PlayerCamera = Managers.GetInstance().GetGameStateManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 		m_rb.isKinematic = true;
+		m_id = gameObject.GetComponent<NetworkIdentity>();
 	}
 	//runs every frame
 	public void Update()
@@ -51,6 +53,9 @@ public class MechaController : NetworkBehaviour, IEnterable {
 			m_renderer.flipX = true;
 
 		if (!hasAuthority)
+			return;
+
+		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
 			return;
 
 		//set camera zoom while in mecha

@@ -18,16 +18,11 @@ public class PlayerManager : NetworkBehaviour {
 	#endregion
 
 	#region Private Variables
-	private GameObject m_localCamera;
 	private Transform[] m_spawns;
 	
 	#endregion
 
 	#region Accessors
-	public GameObject GetPlayerCamera()
-	{
-		return m_localCamera;
-	}
 	#endregion
 
 	#region Unity Defaults
