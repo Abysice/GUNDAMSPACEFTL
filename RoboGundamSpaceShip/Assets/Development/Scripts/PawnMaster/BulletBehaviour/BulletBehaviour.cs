@@ -6,28 +6,30 @@ public class BulletBehaviour : NetworkBehaviour {
 
     #region Public Variables
     public float m_deathDelay;
-    public float m_speed;
     public int m_damagePoints;
+    public Vector2 m_target;
+    public Vector2 m_bulletPos;
     [SyncVar] public Vector3 m_velocity;
     #endregion
 
     #region Protected Variables
+    protected Rigidbody2D m_rb;
     #endregion
 
     #region Private Variables
-    private Rigidbody2D m_rb;
-	#endregion
+    #endregion
 
-	#region Accessors
-	#endregion
+    #region Accessors
+    #endregion
 
-	#region Unity Defaults
+    #region Unity Defaults
 
-	void Awake()
+    void Awake()
 	{
 	}
 	void Start()
 	{
+        
         if (isServer)
         {
             Destroy(gameObject, m_deathDelay);
