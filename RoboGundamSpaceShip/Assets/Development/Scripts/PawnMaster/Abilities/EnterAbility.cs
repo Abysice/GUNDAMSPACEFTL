@@ -113,9 +113,12 @@ public class EnterAbility : NetworkBehaviour {
 			}
 			else //make them get out
 			{
+				NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
 				foreach (GameObject obj in m_enterables)
 				{
-					obj.GetComponent<NetworkIdentity>().RemoveClientAuthority(gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+					NetworkIdentity l_enterableid = obj.GetComponent<NetworkIdentity>();
+					if (l_enterableid.clientAuthorityOwner != null)
+						l_enterableid.RemoveClientAuthority(l_id.connectionToClient);
 				}
 				m_pawn.RpcUnpilotPawn();
 			}

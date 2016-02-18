@@ -21,8 +21,12 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	private GameObject m_PlayerCamera;
 	private GameObject m_ship;
 	private bool m_rightSide = false;
-	[SyncVar]
+	private NetworkIdentity m_id;
 	private float m_angle = 90.0f;
+	[SyncVar] private bool m_readyForControl = true;
+
+
+	private Vector2 m_offset;
 	#endregion
 
 	#region Accessors
@@ -44,24 +48,31 @@ public class TurretController : NetworkBehaviour, IEnterable {
 			m_rightSide = true;
 		else
 			m_rightSide = false;
+
+		m_id = gameObject.GetComponent<NetworkIdentity>();
+
+		m_offset = transform.localPosition;
 	}
 	//runs every frame
 	public void Update()
 	{
-		if(isServer)
-		{
-			if(gameObject.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, m_ship.transform.rotation, TRACKING_SPEED);
-		}
-
+		//if(isServer)
+		//{
+		//	if (m_id.clientAuthorityOwner == null)
+		//		transform.rotation = Quaternion.RotateTowards(transform.rotation, m_ship.transform.rotation, TRACKING_SPEED);
+		//}
+		
 		if (!hasAuthority)
 		{
-			Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rotate, TRACKING_SPEED);
+		//	Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
+		//	transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rotate, TRACKING_SPEED);
 			return;
 		}
-		
-		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
+
+		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
+			return;
+
+		m_camCont.m_camSize = 30;
 		//rotate the turrets towards the mouse
 		Vector3 l_mpos = Input.mousePosition;
 		l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
@@ -71,25 +82,32 @@ public class TurretController : NetworkBehaviour, IEnterable {
 		int l_ret = AngleDir(l_mpos, m_ship.transform.up, m_PlayerCamera.transform.forward);
 		if ((m_rightSide && l_ret == 1) || (!m_rightSide && l_ret == -1))
 			m_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
-		
-		CmdSetRotation(m_angle);
+
+		//gameObject.GetComponent<Rigidbody2D>().MoveRotation(m_angle);
+	
+		//Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
+		//l_rot = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
+		//gameObject.GetComponent<Rigidbody2D>().MoveRotation(l_rot.eulerAngles.z);
+		//transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
+
+	}
+
+	#endregion
+	public void FixedUpdate()
+	{
+		transform.position = new Vector3(m_offset.x, m_offset.y, 0) + m_ship.transform.position;
+
+		if (!hasAuthority)
+			return;
+
+
 
 		Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
+		l_rot = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
+		gameObject.GetComponent<Rigidbody2D>().MoveRotation(l_rot.eulerAngles.z);
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
-	}
 
-	public override void OnStartAuthority()
-	{
-		base.OnStartAuthority();
-		Debug.Log("GOT THIS");
 	}
-
-	public override void OnStopAuthority()
-	{
-		base.OnStopAuthority();
-		Debug.Log("NO LONGER GOT THIS");
-	}
-	#endregion
 
 	#region Public Methods
 	public void OnControlled()
@@ -99,7 +117,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	public void OnUnControlled()
 	{
-	
+		
 	}
 
 
@@ -107,15 +125,22 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	[ClientRpc]
 	public void RpcSetup()
 	{
-		transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
+		//transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
 	}
 
 
-	[Command(channel = 1)]
-	public void CmdSetRotation(float p_rot)
-	{
-		m_angle = p_rot;
-	}
+	//[ClientRpc]
+	//public void RpcSetRotation(float p_rot)
+	//{
+	//	m_angle = p_rot;
+	//}
+
+	//[Command]
+	//public void CmdSetRotation(float p_rot)
+	//{
+	//	RpcSetRotation(p_rot);
+	//	//m_angle = p_rot;
+	//}
 	#endregion
 
 	#region Protected Methods
