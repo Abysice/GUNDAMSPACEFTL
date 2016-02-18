@@ -23,6 +23,7 @@ public class ShipController : NetworkBehaviour, IEnterable {
     private Rigidbody2D m_ship_RigidBody;	
 	private GameObject m_PlayerCamera;
 	private CameraController m_camCont;
+	private NetworkIdentity m_id;
 
 	#endregion
 
@@ -40,6 +41,7 @@ public class ShipController : NetworkBehaviour, IEnterable {
         m_direction = new Vector2(0, 0);
 		m_PlayerCamera = Managers.GetInstance().GetGameStateManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
+		m_id = gameObject.GetComponent<NetworkIdentity>();
 	}
 	//runs every frame
 	public void Update()
@@ -47,7 +49,10 @@ public class ShipController : NetworkBehaviour, IEnterable {
         // will need to be given AssignClientAuthority by the server before you can control
 		if (!hasAuthority)
             return;
-		
+
+		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
+			return;
+
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
 		m_direction = Vector2.zero;
