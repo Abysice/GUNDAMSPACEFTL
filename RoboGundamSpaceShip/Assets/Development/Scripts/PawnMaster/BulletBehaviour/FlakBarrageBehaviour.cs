@@ -2,9 +2,11 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class FlakBarrageBehaviour : BulletBehaviour{
+public class FlakBarrageBehaviour : BulletBehaviour
+{
 
     #region Public Variables
+    public GameObject m_flakBarrage;
     #endregion
 
     #region Protected Variables
@@ -23,7 +25,7 @@ public class FlakBarrageBehaviour : BulletBehaviour{
     }
     void Start()
     {
-        Debug.Log(m_deathDelay);
+
         if (isServer)
         {
             Destroy(gameObject, m_deathDelay);
@@ -40,7 +42,14 @@ public class FlakBarrageBehaviour : BulletBehaviour{
 
     void OnDestroy()
     {
+        GameObject l_projectile = (GameObject)Instantiate(m_flakBarrage, transform.position, transform.rotation);
         NetworkServer.Destroy(gameObject);
+        if (isServer)
+        {
+            NetworkServer.Spawn(l_projectile);
+        }
+
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -49,7 +58,8 @@ public class FlakBarrageBehaviour : BulletBehaviour{
         {
             if (isServer)
             {
-                IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
+                IDamageable L_target = (IDamageable)
+other.GetComponent(typeof(IDamageable));
                 L_target.Damage(m_damagePoints);
                 NetworkServer.Destroy(gameObject);
             }
