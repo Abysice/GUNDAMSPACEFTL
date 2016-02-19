@@ -99,6 +99,16 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		CmdRequestToResetMecha();
 	}
 
+	public void ServerPowerDown()
+	{
+
+	}
+
+	public void ServerFinishPowerDown()
+	{
+
+	}
+
 	//ask the server to setup the mecha
 	[Command]
 	public void CmdRequestToSetupMecha()

@@ -115,11 +115,8 @@ public class EnterAbility : NetworkBehaviour {
 			{
 				foreach (GameObject obj in m_enterables)
 				{
-					TurretController l_temp = obj.GetComponent<TurretController>();
-					if(l_temp)
-					{
-						l_temp.m_readyForControl = false;
-					}
+					IEnterable l_controller = (IEnterable)obj.GetComponent(typeof(IEnterable));
+					l_controller.ServerPowerDown();
 				}
 				StartCoroutine(BlockWait());
 			}
@@ -133,7 +130,7 @@ public class EnterAbility : NetworkBehaviour {
 	#region Private Methods
 	IEnumerator BlockWait()
 	{
-	    yield return new WaitForSeconds(1.0f);
+	    yield return new WaitForSeconds(0.5f);
 		Debug.Log("WAIT FINISHED");
 		NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
 		foreach (GameObject obj in m_enterables)
@@ -141,12 +138,9 @@ public class EnterAbility : NetworkBehaviour {
 			NetworkIdentity l_enterableid = obj.GetComponent<NetworkIdentity>();
 			if (l_enterableid.clientAuthorityOwner != null)
 				l_enterableid.RemoveClientAuthority(l_id.connectionToClient);
-
-			TurretController l_temp = obj.GetComponent<TurretController>();
-			if (l_temp)
-			{
-				l_temp.m_readyForControl = true;
-			}
+			
+			IEnterable l_controller = (IEnterable)obj.GetComponent(typeof(IEnterable));
+			l_controller.ServerFinishPowerDown();
 		}
 		m_pawn.RpcUnpilotPawn();
 	}

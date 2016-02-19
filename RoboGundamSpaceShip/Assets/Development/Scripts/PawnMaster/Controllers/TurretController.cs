@@ -9,7 +9,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	#region Public Variables
 	public float TRACKING_SPEED = 5.0f;
-
+	[SyncVar] public float m_angle = 90.0f;
 	#endregion
 
 	#region Protected Variables
@@ -22,10 +22,8 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	private GameObject m_ship;
 	private bool m_rightSide = false;
 	private NetworkIdentity m_id;
-	[SyncVar] public float m_angle = 90.0f;
+
 	[SyncVar] public bool m_readyForControl = true;
-
-
 	//private Vector2 m_offset;
 	#endregion
 
@@ -93,26 +91,38 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	}
 
+
 	#endregion
 	#region Public Methods
 
 	public void OnControlled()
 	{
-	
 	}
 
 	public void OnUnControlled()
 	{
 		
 	}
+
+
+	public void ServerPowerDown()
+	{
+		m_readyForControl = false;
+	}
+
+	public void ServerFinishPowerDown()
+	{
+		m_readyForControl = true;
+	}
 	//initial position setup
 	[ClientRpc]
 	public void RpcSetup()
 	{
 		transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
+
 	}
 
-	[Command]
+	[Command(channel=1)]
 	public void CmdUpdateRotation(float p_rotation)
 	{
 		m_angle = p_rotation;

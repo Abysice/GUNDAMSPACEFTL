@@ -89,6 +89,16 @@ public class ShipController : NetworkBehaviour, IEnterable {
 	{
 
 	}
+
+	public void ServerPowerDown()
+	{
+
+	}
+
+	public void ServerFinishPowerDown()
+	{
+
+	}
     #endregion
 
     #region Protected Methods
