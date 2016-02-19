@@ -23,7 +23,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	private bool m_rightSide = false;
 	private NetworkIdentity m_id;
 
-	[SyncVar] public bool m_readyForControl = true;
+	[SyncVar] private bool m_readyForControl = true;
 	//private Vector2 m_offset;
 	#endregion
 

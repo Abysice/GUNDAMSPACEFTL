@@ -26,6 +26,8 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	private CameraController m_camCont;
 	private Vector2 m_originalLocal;
 	private NetworkIdentity m_id;
+	[SyncVar]
+	private bool m_readyForControl = true;
 	#endregion
 
 	#region Accessors
@@ -58,31 +60,33 @@ public class MechaController : NetworkBehaviour, IEnterable {
 		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
 			return;
 
-		//set camera zoom while in mecha
-		m_camCont.m_camSize = 10;
+		if(m_readyForControl)
+		{
+			//set camera zoom while in mecha
+			m_camCont.m_camSize = 10;
 
-		m_direction = Vector2.zero;
+			m_direction = Vector2.zero;
 
-		if (Input.GetKey(KeyCode.W))
-			m_direction.y = 1;
-		else if (Input.GetKey(KeyCode.S))
-			m_direction.y = -1;
-		if (Input.GetKey(KeyCode.D))
-			m_direction.x = 1;
-		else if (Input.GetKey(KeyCode.A))
-			m_direction.x = -1;
+			if (Input.GetKey(KeyCode.W))
+				m_direction.y = 1;
+			else if (Input.GetKey(KeyCode.S))
+				m_direction.y = -1;
+			if (Input.GetKey(KeyCode.D))
+				m_direction.x = 1;
+			else if (Input.GetKey(KeyCode.A))
+				m_direction.x = -1;
 		
-		m_rb.AddForce(m_forceMultiplier * m_direction);
-		m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_MaxSpeed);
-		m_rb.angularVelocity = Mathf.Clamp(m_rb.angularVelocity, -m_MaxTorque, m_MaxTorque);
+			m_rb.AddForce(m_forceMultiplier * m_direction);
+			m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_MaxSpeed);
+			m_rb.angularVelocity = Mathf.Clamp(m_rb.angularVelocity, -m_MaxTorque, m_MaxTorque);
 
-		transform.rotation = Quaternion.identity;
+			transform.rotation = Quaternion.identity;
 		
-		//rotate towards direction(maybe?)
-		//Vector2 v = m_rb.velocity;
-		//float l_angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-		//transform.rotation = Quaternion.AngleAxis(l_angle, Vector3.forward);
-
+			//rotate towards direction(maybe?)
+			//Vector2 v = m_rb.velocity;
+			//float l_angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+			//transform.rotation = Quaternion.AngleAxis(l_angle, Vector3.forward);
+		}
 	}
 
 	
@@ -101,12 +105,12 @@ public class MechaController : NetworkBehaviour, IEnterable {
 
 	public void ServerPowerDown()
 	{
-
+		m_readyForControl = false;
 	}
 
 	public void ServerFinishPowerDown()
 	{
-
+		m_readyForControl = true;
 	}
 
 	//ask the server to setup the mecha

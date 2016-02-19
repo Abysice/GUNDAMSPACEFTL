@@ -131,7 +131,6 @@ public class EnterAbility : NetworkBehaviour {
 	IEnumerator BlockWait()
 	{
 	    yield return new WaitForSeconds(0.5f);
-		Debug.Log("WAIT FINISHED");
 		NetworkIdentity l_id = gameObject.GetComponent<NetworkIdentity>();
 		foreach (GameObject obj in m_enterables)
 		{

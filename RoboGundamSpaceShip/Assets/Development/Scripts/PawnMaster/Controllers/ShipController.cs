@@ -24,7 +24,8 @@ public class ShipController : NetworkBehaviour, IEnterable {
 	private GameObject m_PlayerCamera;
 	private CameraController m_camCont;
 	private NetworkIdentity m_id;
-
+	[SyncVar]
+	private bool m_readyForControl = true;
 	#endregion
 
 	#region Accessors
@@ -53,27 +54,32 @@ public class ShipController : NetworkBehaviour, IEnterable {
 		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
 			return;
 
-		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
-		m_direction = Vector2.zero;
+		if (m_readyForControl)
+		{
 
-        if (Input.GetKey(KeyCode.W))
-            m_direction.y = 1;
-        else if (Input.GetKey(KeyCode.S))
-            m_direction.y = -1;
-        if (Input.GetKey(KeyCode.D))
-            m_direction.x = 1;
-        else if (Input.GetKey(KeyCode.A))
-            m_direction.x = -1;
-        
-		
-		m_ship_RigidBody.AddForce(transform.up* m_forceMultiplier*m_direction.y);
-        m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
-        m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
-        m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
+			m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
+
+			m_direction = Vector2.zero;
+
+			if (Input.GetKey(KeyCode.W))
+				m_direction.y = 1;
+			else if (Input.GetKey(KeyCode.S))
+				m_direction.y = -1;
+			if (Input.GetKey(KeyCode.D))
+				m_direction.x = 1;
+			else if (Input.GetKey(KeyCode.A))
+				m_direction.x = -1;
 
 
-		m_velocity = m_ship_RigidBody.velocity;
+			m_ship_RigidBody.AddForce(transform.up * m_forceMultiplier * m_direction.y);
+			m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
+			m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
+			m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
+
+
+			m_velocity = m_ship_RigidBody.velocity;
+		}
     }
 
     #endregion
@@ -92,12 +98,12 @@ public class ShipController : NetworkBehaviour, IEnterable {
 
 	public void ServerPowerDown()
 	{
-
+		m_readyForControl = false;
 	}
 
 	public void ServerFinishPowerDown()
 	{
-
+		m_readyForControl = true;
 	}
     #endregion
 
