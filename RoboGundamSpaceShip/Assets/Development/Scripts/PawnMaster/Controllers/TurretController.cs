@@ -22,11 +22,11 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	private GameObject m_ship;
 	private bool m_rightSide = false;
 	private NetworkIdentity m_id;
-	private float m_angle = 90.0f;
-	[SyncVar] private bool m_readyForControl = true;
+	[SyncVar] public float m_angle = 90.0f;
+	[SyncVar] public bool m_readyForControl = true;
 
 
-	private Vector2 m_offset;
+	//private Vector2 m_offset;
 	#endregion
 
 	#region Accessors
@@ -50,66 +50,52 @@ public class TurretController : NetworkBehaviour, IEnterable {
 			m_rightSide = false;
 
 		m_id = gameObject.GetComponent<NetworkIdentity>();
-
-		m_offset = transform.localPosition;
+		
 	}
 	//runs every frame
 	public void Update()
 	{
-		//if(isServer)
-		//{
-		//	if (m_id.clientAuthorityOwner == null)
-		//		transform.rotation = Quaternion.RotateTowards(transform.rotation, m_ship.transform.rotation, TRACKING_SPEED);
-		//}
-		
-		if (!hasAuthority)
+		if(isServer)
+ 		{
+			if (m_id.clientAuthorityOwner == null)
+ 				transform.rotation = Quaternion.RotateTowards(transform.rotation, m_ship.transform.rotation, TRACKING_SPEED);
+ 		}
+  		
+  		if (!hasAuthority)
+  		{
+ 			Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
+ 			transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rotate, TRACKING_SPEED);
+  			return;
+  		}
+  
+  		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
+  			return;
+
+		if (m_readyForControl)
 		{
-		//	Quaternion l_rotate = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
-		//	transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rotate, TRACKING_SPEED);
-			return;
+			m_camCont.m_camSize = 30;
+			//rotate the turrets towards the mouse
+			Vector3 l_mpos = Input.mousePosition;
+			l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
+			l_mpos = l_mpos - transform.position;
+
+			//returns -1 when to the left, 1 to the right
+			int l_ret = AngleDir(l_mpos, m_ship.transform.up, m_PlayerCamera.transform.forward);
+			if ((m_rightSide && l_ret == 1) || (!m_rightSide && l_ret == -1))
+				m_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
+			
+			CmdUpdateRotation(m_angle);
+
+			Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
 		}
-
-		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
-			return;
-
-		m_camCont.m_camSize = 30;
-		//rotate the turrets towards the mouse
-		Vector3 l_mpos = Input.mousePosition;
-		l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
-		l_mpos = l_mpos - transform.position;
-	
-		//returns -1 when to the left, 1 to the right
-		int l_ret = AngleDir(l_mpos, m_ship.transform.up, m_PlayerCamera.transform.forward);
-		if ((m_rightSide && l_ret == 1) || (!m_rightSide && l_ret == -1))
-			m_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
-
-		//gameObject.GetComponent<Rigidbody2D>().MoveRotation(m_angle);
-	
-		//Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
-		//l_rot = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
-		//gameObject.GetComponent<Rigidbody2D>().MoveRotation(l_rot.eulerAngles.z);
-		//transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
+		
 
 	}
 
 	#endregion
-	public void FixedUpdate()
-	{
-		transform.position = new Vector3(m_offset.x, m_offset.y, 0) + m_ship.transform.position;
-
-		if (!hasAuthority)
-			return;
-
-
-
-		Quaternion l_rot = Quaternion.AngleAxis(m_angle - 90.0f, Vector3.forward);
-		l_rot = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
-		gameObject.GetComponent<Rigidbody2D>().MoveRotation(l_rot.eulerAngles.z);
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, TRACKING_SPEED);
-
-	}
-
 	#region Public Methods
+
 	public void OnControlled()
 	{
 	
@@ -119,28 +105,19 @@ public class TurretController : NetworkBehaviour, IEnterable {
 	{
 		
 	}
-
-
 	//initial position setup
 	[ClientRpc]
 	public void RpcSetup()
 	{
-		//transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
+		transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
 	}
 
+	[Command]
+	public void CmdUpdateRotation(float p_rotation)
+	{
+		m_angle = p_rotation;
+	}
 
-	//[ClientRpc]
-	//public void RpcSetRotation(float p_rot)
-	//{
-	//	m_angle = p_rot;
-	//}
-
-	//[Command]
-	//public void CmdSetRotation(float p_rot)
-	//{
-	//	RpcSetRotation(p_rot);
-	//	//m_angle = p_rot;
-	//}
 	#endregion
 
 	#region Protected Methods
