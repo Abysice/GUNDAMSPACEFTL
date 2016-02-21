@@ -9,11 +9,9 @@ public class BulletBehaviour : NetworkBehaviour {
     public int m_damagePoints;
     public Vector2 m_target;
     public Vector2 m_bulletPos;
-    [SyncVar] public Vector3 m_velocity;
     #endregion
 
     #region Protected Variables
-    protected Rigidbody2D m_rb;
     #endregion
 
     #region Private Variables
@@ -34,16 +32,8 @@ public class BulletBehaviour : NetworkBehaviour {
         {
             Destroy(gameObject, m_deathDelay);
         }
-        m_rb = gameObject.GetComponent<Rigidbody2D>();
     }
-
-	// Update is called once per frame
-	void Update()
-	{
-        m_rb.velocity = m_velocity;
-
-	}
-
+	
     void OnDestroy()
     {
         NetworkServer.Destroy(gameObject);
