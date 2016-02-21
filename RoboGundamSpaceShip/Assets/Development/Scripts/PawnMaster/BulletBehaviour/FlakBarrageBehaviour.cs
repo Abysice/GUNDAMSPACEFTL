@@ -12,7 +12,6 @@ public class FlakBarrageBehaviour : BulletBehaviour
     #endregion
 
     #region Private Variables
-	private bool AMISERVER = false;
     #endregion
 
     #region Accessors
@@ -20,18 +19,7 @@ public class FlakBarrageBehaviour : BulletBehaviour
 
     #region Unity Defaults
 
-    void Awake()
-    {
-    }
-    void Start()
-    {
-
-        if (isServer)
-        {
-			AMISERVER = true;
-            Destroy(gameObject, m_deathDelay);
-        }
-    }
+    
 
     void OnDestroy()
     {
@@ -51,7 +39,10 @@ public class FlakBarrageBehaviour : BulletBehaviour
             if (isServer)
             {
                 IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
-                L_target.Damage(m_damagePoints);
+                if (L_target != null)
+                {
+                    L_target.Damage(m_damagePoints);
+                }
                 NetworkServer.Destroy(gameObject);
             }
         }
