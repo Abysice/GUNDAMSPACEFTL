@@ -40,7 +40,8 @@ public class GameProperties : MonoBehaviour {
 	//EFFECTS + OTHER OBJECTS
 	public GameObject playerManager;
 	public GameObject flakBarrage;
+    public GameObject BulletExplosion;
 
-	//ENEMY SHIT
-	public GameObject enemyPlacholderPrefab;
+    //ENEMY SHIT
+    public GameObject enemyPlacholderPrefab;
 }

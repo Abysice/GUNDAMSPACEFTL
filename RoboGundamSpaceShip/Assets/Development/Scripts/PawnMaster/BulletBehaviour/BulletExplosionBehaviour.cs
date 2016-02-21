@@ -2,7 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class FlakExplosionBehaviour : NetworkBehaviour{
+public class BulletExplosionBehaviour : NetworkBehaviour {
 
     #region Public Variables
     #endregion
@@ -29,7 +29,6 @@ public class FlakExplosionBehaviour : NetworkBehaviour{
             AMISERVER = true;
             Destroy(gameObject, 1f);
         }
-
     }
 
 	// Update is called once per frame
