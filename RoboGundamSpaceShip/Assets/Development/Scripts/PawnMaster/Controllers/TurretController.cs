@@ -135,7 +135,7 @@ public class TurretController : NetworkBehaviour, IEnterable {
 
 	#region Private Methods
 	//returns -1 when to the left, 1 to the right, and 0 for forward/backward
-	public int AngleDir(Vector3 p_fwd, Vector3 p_targetDir, Vector3 p_up)
+	private int AngleDir(Vector3 p_fwd, Vector3 p_targetDir, Vector3 p_up)
 	{
 		Vector3 l_perp = Vector3.Cross(p_fwd, p_targetDir);
 		float l_dir = Vector3.Dot(l_perp, p_up);
