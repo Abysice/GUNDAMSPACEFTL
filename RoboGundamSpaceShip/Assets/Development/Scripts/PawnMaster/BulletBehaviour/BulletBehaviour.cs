@@ -12,9 +12,11 @@ public class BulletBehaviour : NetworkBehaviour {
     #endregion
 
     #region Protected Variables
+    protected bool AMISERVER = false;
     #endregion
 
     #region Private Variables
+
     #endregion
 
     #region Accessors
@@ -30,13 +32,20 @@ public class BulletBehaviour : NetworkBehaviour {
         
         if (isServer)
         {
+            AMISERVER = true;
             Destroy(gameObject, m_deathDelay);
         }
     }
-	
+
     void OnDestroy()
     {
-        NetworkServer.Destroy(gameObject);
+        if (AMISERVER)
+        {
+            GameObject l_projectile = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().BulletExplosion, transform.position, transform.rotation);
+            NetworkServer.Spawn(l_projectile);
+            NetworkServer.Destroy(gameObject);
+        }
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -46,7 +55,8 @@ public class BulletBehaviour : NetworkBehaviour {
             if (isServer)
             {
                 IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
-                L_target.Damage(m_damagePoints); 
+                if (L_target != null)
+                    L_target.Damage(m_damagePoints);
                 NetworkServer.Destroy(gameObject);
             }
         }
