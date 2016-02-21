@@ -25,9 +25,13 @@ public class PointDefenseConsole : MonoBehaviour {
 	{
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
 		{
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation1]);
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation2]);
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation3]);
+			EnterAbility l_ab = other.gameObject.GetComponent<EnterAbility>();
+			if (l_ab)
+			{
+				l_ab.UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation1]);
+				l_ab.UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation2]);
+				l_ab.UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_pointDefense[TurretLocation3]);
+			}
 		}
 	}
 
@@ -35,7 +39,9 @@ public class PointDefenseConsole : MonoBehaviour {
 	{
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
 		{
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
+			EnterAbility l_ab = other.gameObject.GetComponent<EnterAbility>();
+			if (l_ab)
+				l_ab.UpdateEnterable(null);
 		}
 	}
 	#endregion

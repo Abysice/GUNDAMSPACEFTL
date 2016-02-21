@@ -35,7 +35,12 @@ public class ShipConsole : MonoBehaviour {
 	{
 		//notify the player controller that they can "enter" this item
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_ship);
+		{
+			EnterAbility l_ab = other.gameObject.GetComponent<EnterAbility>();
+			if(l_ab)
+				l_ab.UpdateEnterable(Managers.GetInstance().GetPlayerManager().m_ship);
+		}
+			
 
 	}
 
@@ -43,7 +48,11 @@ public class ShipConsole : MonoBehaviour {
 	{
 		//notify the player controller that they scan no longer "enter" this item
 		if (other && Managers.GetInstance().GetNetworkController().isServer)
-			other.gameObject.GetComponent<EnterAbility>().UpdateEnterable(null);
+		{
+			EnterAbility l_ab = other.gameObject.GetComponent<EnterAbility>();
+			if (l_ab)
+				l_ab.UpdateEnterable(null);
+		}
 	}
 	#endregion
 
