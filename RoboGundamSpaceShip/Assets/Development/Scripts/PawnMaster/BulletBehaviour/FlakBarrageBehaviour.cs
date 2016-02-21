@@ -58,9 +58,9 @@ public class FlakBarrageBehaviour : BulletBehaviour
         {
             if (isServer)
             {
-               // IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
-               // L_target.Damage(m_damagePoints);
-               // NetworkServer.Destroy(gameObject);
+                IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
+                L_target.Damage(m_damagePoints);
+                NetworkServer.Destroy(gameObject);
             }
         }
     }
