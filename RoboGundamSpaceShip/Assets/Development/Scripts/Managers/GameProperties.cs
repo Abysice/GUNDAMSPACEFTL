@@ -34,4 +34,5 @@ public class GameProperties : MonoBehaviour {
 	public GameObject cannonPrefab;
 	public GameObject pointdefensePrefab;
 	public GameObject playerManager;
+	public GameObject flakBarrage;
 }

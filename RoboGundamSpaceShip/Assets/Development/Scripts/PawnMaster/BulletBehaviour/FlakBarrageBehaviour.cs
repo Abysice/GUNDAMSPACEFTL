@@ -6,13 +6,13 @@ public class FlakBarrageBehaviour : BulletBehaviour
 {
 
     #region Public Variables
-    public GameObject m_flakBarrage;
     #endregion
 
     #region Protected Variables
     #endregion
 
     #region Private Variables
+	private bool AMISERVER = false;
     #endregion
 
     #region Accessors
@@ -28,6 +28,7 @@ public class FlakBarrageBehaviour : BulletBehaviour
 
         if (isServer)
         {
+			AMISERVER = true;
             Destroy(gameObject, m_deathDelay);
         }
         m_rb = gameObject.GetComponent<Rigidbody2D>();
@@ -42,15 +43,12 @@ public class FlakBarrageBehaviour : BulletBehaviour
 
     void OnDestroy()
     {
-        
-        
-        if (isServer)
-        {
-            GameObject l_projectile = (GameObject)Instantiate(m_flakBarrage, transform.position, transform.rotation);
-            NetworkServer.Spawn(l_projectile);
-            NetworkServer.Destroy(gameObject);
-        }
-        
+		if (AMISERVER)
+		{
+			GameObject l_projectile = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().flakBarrage, transform.position, transform.rotation);
+			NetworkServer.Spawn(l_projectile);
+			NetworkServer.Destroy(gameObject);
+		}
 
     }
 
@@ -60,11 +58,9 @@ public class FlakBarrageBehaviour : BulletBehaviour
         {
             if (isServer)
             {
-                IDamageable L_target = (IDamageable)
-
-other.GetComponent(typeof(IDamageable));
-                L_target.Damage(m_damagePoints);
-                NetworkServer.Destroy(gameObject);
+               // IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
+               // L_target.Damage(m_damagePoints);
+               // NetworkServer.Destroy(gameObject);
             }
         }
     }
