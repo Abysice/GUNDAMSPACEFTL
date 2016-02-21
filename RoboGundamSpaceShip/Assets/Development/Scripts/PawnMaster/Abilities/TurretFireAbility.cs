@@ -55,7 +55,7 @@ public class TurretFireAbility : NetworkBehaviour {
         Vector2 l_velocity = transform.TransformDirection(Vector2.up * m_speed);
         float timeDelay = Mathf.Abs(L_totalDist)/ l_velocity.magnitude;
         GameObject l_projectile = (GameObject)Instantiate(m_bullet, p_position, p_rotation);
-        l_projectile.GetComponent<BulletBehaviour>().m_velocity = l_velocity;
+        l_projectile.GetComponent<Rigidbody2D>().velocity = l_velocity;
         l_projectile.GetComponent<BulletBehaviour>().m_deathDelay = timeDelay;
         NetworkServer.Spawn(l_projectile);
 

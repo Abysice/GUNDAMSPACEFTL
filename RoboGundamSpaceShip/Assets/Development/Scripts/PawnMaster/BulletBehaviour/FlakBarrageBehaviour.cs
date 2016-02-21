@@ -31,14 +31,6 @@ public class FlakBarrageBehaviour : BulletBehaviour
 			AMISERVER = true;
             Destroy(gameObject, m_deathDelay);
         }
-        m_rb = gameObject.GetComponent<Rigidbody2D>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        m_rb.velocity = m_velocity;
-
     }
 
     void OnDestroy()
@@ -58,9 +50,15 @@ public class FlakBarrageBehaviour : BulletBehaviour
         {
             if (isServer)
             {
+<<<<<<< HEAD
                 IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
                 L_target.Damage(m_damagePoints);
                 NetworkServer.Destroy(gameObject);
+=======
+				IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
+				L_target.Damage(m_damagePoints);
+				NetworkServer.Destroy(gameObject);
+>>>>>>> 150b7690e4980e91d74ee561df68f6f4ff73c4b0
             }
         }
     }
