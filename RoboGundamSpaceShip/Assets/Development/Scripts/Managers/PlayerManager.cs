@@ -54,6 +54,8 @@ public class PlayerManager : NetworkBehaviour {
 		SpawnMecha(); // spawn the mecha in the ship
 		SpawnShipTurrets(); //spawn the ship turrets
 		SpawnPointDefense(); //spawn the ship point defense
+		//spawn level goes here
+		SpawnFrienemies(); //spawn the enemies for the level
 	}
 
 	#endregion
@@ -119,6 +121,13 @@ public class PlayerManager : NetworkBehaviour {
 			NetworkServer.Spawn(m_pointDefense[i]);
 			m_pointDefense[i].GetComponent<TurretController>().RpcSetup();
 		}
+	}
+
+	//spawn some test Enemies
+	private void SpawnFrienemies()
+	{
+		GameObject l_enemy = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().enemyPlacholderPrefab, m_ship.transform.position + new Vector3(30.0f, 0, 0), Quaternion.identity);
+		NetworkServer.Spawn(l_enemy);
 	}
 
 	#endregion

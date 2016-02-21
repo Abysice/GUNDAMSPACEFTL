@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/// Placeholder enemy ship controller
+///
+/// Written By: Adam Bysice + Bryan Ramoul
+
+using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections;

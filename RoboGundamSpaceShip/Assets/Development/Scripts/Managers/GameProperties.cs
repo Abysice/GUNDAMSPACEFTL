@@ -24,15 +24,23 @@ public class GameProperties : MonoBehaviour {
 		get { return m_lobbyScene; }
 	}
 
+	//GUI OBJECTS
 	public GameObject MainMenu;
 	public GameObject LobbyMenu;
 	public GameObject mainCamera;
+	
+	//GAME OBJECTS
 	public GameObject playerPrefab;
 	public GameObject shipPrefab;
 	public GameObject mechaPrefab;
     public GameObject parallaxPrefab;
 	public GameObject cannonPrefab;
 	public GameObject pointdefensePrefab;
+
+	//EFFECTS + OTHER OBJECTS
 	public GameObject playerManager;
 	public GameObject flakBarrage;
+
+	//ENEMY SHIT
+	public GameObject enemyPlacholderPrefab;
 }
