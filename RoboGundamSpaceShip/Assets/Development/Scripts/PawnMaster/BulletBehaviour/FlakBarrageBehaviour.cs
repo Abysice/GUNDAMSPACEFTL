@@ -42,13 +42,15 @@ public class FlakBarrageBehaviour : BulletBehaviour
 
     void OnDestroy()
     {
-        GameObject l_projectile = (GameObject)Instantiate(m_flakBarrage, transform.position, transform.rotation);
-        NetworkServer.Destroy(gameObject);
+        
+        
         if (isServer)
         {
+            GameObject l_projectile = (GameObject)Instantiate(m_flakBarrage, transform.position, transform.rotation);
             NetworkServer.Spawn(l_projectile);
+            NetworkServer.Destroy(gameObject);
         }
-
+        
 
     }
 
@@ -58,7 +60,8 @@ public class FlakBarrageBehaviour : BulletBehaviour
         {
             if (isServer)
             {
-                IDamageable L_target = (IDamageable)
+                IDamageable L_target = (IDamageable)
+
 other.GetComponent(typeof(IDamageable));
                 L_target.Damage(m_damagePoints);
                 NetworkServer.Destroy(gameObject);
