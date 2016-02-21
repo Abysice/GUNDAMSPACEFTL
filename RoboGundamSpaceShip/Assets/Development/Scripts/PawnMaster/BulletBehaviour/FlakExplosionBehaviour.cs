@@ -1,36 +1,29 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 using System.Collections;
 
-public class FlakExplosionBehaviour : NetworkBehaviour{
+public class FlakExplosionBehaviour : MonoBehaviour {
 
-    #region Public Variables
-    #endregion
+	#region Public Variables
+	#endregion
 
-    #region Protected Variables
-    #endregion
+	#region Protected Variables
+	#endregion
 
-    #region Private Variables
-    private bool AMISERVER = false;
-    #endregion
+	#region Private Variables
+	#endregion
 
-    #region Accessors
-    #endregion
+	#region Accessors
+	#endregion
 
-    #region Unity Defaults
+	#region Unity Defaults
 
-    void Awake()
+	void Awake()
 	{
 	}
 	void Start()
 	{
-        if (isServer)
-        {
-            AMISERVER = true;
-            Destroy(gameObject, 1f);
-        }
-
-    }
+		
+	}
 
 	// Update is called once per frame
 	void Update()
@@ -38,24 +31,15 @@ public class FlakExplosionBehaviour : NetworkBehaviour{
 
 	}
 
-    void OnDestroy()
-    {
-        if (AMISERVER)
-        {
-            NetworkServer.Destroy(gameObject);
-        }
+	#endregion
 
-    }
+	#region Public Methods
+	#endregion
 
-    #endregion
+	#region Protected Methods
+	#endregion
 
-    #region Public Methods
-    #endregion
-
-    #region Protected Methods
-    #endregion
-
-    #region Private Methods
-    #endregion
+	#region Private Methods
+	#endregion
 
 }

@@ -1,0 +1,17 @@
+﻿hopefully fixing stuff
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   RoboGundamSpaceShip/Assets/Development/Prefabs/GameManager.prefab
+#	modified:   RoboGundamSpaceShip/Assets/Development/Prefabs/Turrets/BulletFlak.prefab
+#	modified:   RoboGundamSpaceShip/Assets/Development/Prefabs/Turrets/FlakBarrage.prefab
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/Managers/GameProperties.cs
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/BulletBehaviour/BulletBehaviour.cs
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/BulletBehaviour/FlakBarrageBehaviour.cs
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/BulletBehaviour/FlakExplosionBehaviour.cs
+#	new file:   dy2kcnlo.3xu.txt
+#
+

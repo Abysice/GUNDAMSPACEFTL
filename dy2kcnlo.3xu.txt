@@ -1,0 +1,22 @@
+﻿Revert "enemy ship fires test bullets"
+
+This reverts commit 3c65e28862044192c0ed7ba72a4d7707115e4273.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is behind 'origin/master' by 4 commits, and can be fast-forwarded.
+#   (use "git pull" to update your local branch)
+#
+# Changes to be committed:
+#	modified:   RoboGundamSpaceShip/Assets/Development/Prefabs/GameManager.prefab
+#	modified:   RoboGundamSpaceShip/Assets/Development/Prefabs/TestEnemy.prefab
+#	deleted:    RoboGundamSpaceShip/Assets/Development/Prefabs/Turrets/EnemyBullet.prefab
+#	deleted:    RoboGundamSpaceShip/Assets/Development/Prefabs/Turrets/EnemyBullet.prefab.meta
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/Managers/GameProperties.cs
+#	deleted:    RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/BulletBehaviour/EnemyBulletBehaviour.cs
+#	deleted:    RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/BulletBehaviour/EnemyBulletBehaviour.cs.meta
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/Controllers/EnemyShipController.cs
+#	modified:   RoboGundamSpaceShip/Assets/Development/Scripts/PawnMaster/Controllers/TurretController.cs
+#
+
