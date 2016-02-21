@@ -46,8 +46,12 @@ public class BulletBehaviour : NetworkBehaviour {
             if (isServer)
             {
                 IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
-                L_target.Damage(m_damagePoints); 
-                NetworkServer.Destroy(gameObject);
+				if (L_target != null)
+				{
+					L_target.Damage(m_damagePoints);
+					NetworkServer.Destroy(gameObject);
+				}
+
             }
         }
     }
