@@ -15,6 +15,7 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
     public Image m_HealthBar;
 	public float TURRET_TRACKINGSPEED = 3.0f;
 	public float m_speed = 15.0f;
+	public float m_fireRate = 1.0f;
 	#endregion
 
 	#region Protected Variables
@@ -23,6 +24,7 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
 	#region Private Variables
 	private GameObject m_ship;
 	private GameObject[] m_cannons;
+	private float m_lastshotTime;
 	#endregion
 
 	#region Accessors
@@ -40,6 +42,7 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
 		m_cannons = new GameObject[2];
 		m_cannons[0] = transform.GetChild(0).gameObject;
 		m_cannons[1] = transform.GetChild(1).gameObject;
+		m_lastshotTime = Time.time;
     }
 
 	// Update is called once per frame
@@ -55,19 +58,26 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
 			cannon.transform.rotation = Quaternion.RotateTowards(cannon.transform.rotation, l_rot, TURRET_TRACKINGSPEED);
 		}
 
+
+
 		if (isServer)
 		{
 			if (m_currentHP <= 0)
 				NetworkServer.Destroy(gameObject);
-
-			//shoot code here
-			foreach (GameObject cannon in m_cannons)
+			
+			if (Time.time > m_lastshotTime)
 			{
-				GameObject l_bullet = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().enemyBullet, cannon.transform.position, cannon.transform.rotation);
-				Vector2 l_velocity = cannon.transform.TransformDirection(Vector2.up * m_speed);
-				l_bullet.GetComponent<Rigidbody2D>().velocity = l_velocity;
-				NetworkServer.Spawn(l_bullet);
+				m_lastshotTime = Time.time + m_fireRate;
+				//shoot code here
+				foreach (GameObject cannon in m_cannons)
+				{
+					GameObject l_bullet = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().enemyBullet, cannon.transform.position, cannon.transform.rotation);
+					Vector2 l_velocity = cannon.transform.TransformDirection(Vector2.up * m_speed);
+					l_bullet.GetComponent<Rigidbody2D>().velocity = l_velocity;
+					NetworkServer.Spawn(l_bullet);
+				}
 			}
+			
 
 		}
 		m_HealthBar.fillAmount = (float)m_currentHP / (float)MAX_HP;
