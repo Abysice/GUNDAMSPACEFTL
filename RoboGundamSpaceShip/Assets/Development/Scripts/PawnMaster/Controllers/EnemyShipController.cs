@@ -58,8 +58,6 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
 			cannon.transform.rotation = Quaternion.RotateTowards(cannon.transform.rotation, l_rot, TURRET_TRACKINGSPEED);
 		}
 
-
-
 		if (isServer)
 		{
 			if (m_currentHP <= 0)
@@ -77,8 +75,10 @@ public class EnemyShipController : NetworkBehaviour, IDamageable {
 					NetworkServer.Spawn(l_bullet);
 				}
 			}
-			
 
+			//test movementcode
+			transform.RotateAround(m_ship.transform.position, Vector3.forward, 2 * Time.deltaTime);
+			
 		}
 		m_HealthBar.fillAmount = (float)m_currentHP / (float)MAX_HP;
 	}
