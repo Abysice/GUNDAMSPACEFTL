@@ -33,6 +33,7 @@ public class BulletBehaviour : NetworkBehaviour {
         if (isServer)
         {
             AMISERVER = true;
+            m_deathDelay = 2f;
             Destroy(gameObject, m_deathDelay);
         }
     }

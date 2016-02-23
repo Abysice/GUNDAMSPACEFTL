@@ -21,16 +21,17 @@ public class EnemyBulletBehaviour : BulletBehaviour {
 	{
 		if (other.tag == "Ship")
 		{
+            Debug.Log("Collides");
 			if (isServer)
 			{
 				IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
 				if (L_target != null)
 				{
 					L_target.Damage(m_damagePoints);
-					NetworkServer.Destroy(gameObject);
 				}
+                NetworkServer.Destroy(gameObject);
 
-			}
+            }
 		}
 	}
 	#endregion
