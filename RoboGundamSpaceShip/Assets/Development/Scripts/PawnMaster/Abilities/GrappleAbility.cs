@@ -49,17 +49,28 @@ public class GrappleAbility : NetworkBehaviour {
 		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
 			return;
 
+
+		// if object dies while attached
+		if (m_hook != null && m_hook.connectedBody == null)
+		{
+			if (gameObject.GetComponent<DistanceJoint2D>())
+				DestroyImmediate(gameObject.GetComponent<DistanceJoint2D>());
+			m_cableLine.enabled = false;
+			//disable line on network
+			CmdRequestDisableLine();
+		}
+
 		m_cableLine.SetPosition(0, gameObject.transform.position);
 		if(m_hook != null)
 			m_cableLine.SetPosition(1, m_hook.connectedBody.transform.TransformPoint(m_hook.connectedAnchor));
-			
+
 		//fire the cable
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(1))
 		{
 			Vector3 l_mpos = Input.mousePosition;
 			l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
 			RaycastHit2D hit;
-			hit = Physics2D.Raycast(transform.position, l_mpos - transform.position , Vector2.Distance(transform.position, l_mpos), Layers.ShipColLayer);
+			hit = Physics2D.Raycast(transform.position, l_mpos - transform.position , Vector2.Distance(transform.position, l_mpos), Layers.ShipColLayer ^ Layers.EnemyColLayer);
 			if (!hit)
 				return;
 
@@ -85,7 +96,7 @@ public class GrappleAbility : NetworkBehaviour {
 			
 		}
 		//release the cable
-		if (Input.GetMouseButtonUp(0))
+		if (Input.GetMouseButtonUp(1))
 		{
 			if (gameObject.GetComponent<DistanceJoint2D>())
 				DestroyImmediate(gameObject.GetComponent<DistanceJoint2D>());
