@@ -8,7 +8,7 @@ public class Tags : MonoBehaviour {
     public const string PawnTag = "Pawn";
     public const string MechaTag = "Mecha";
     public const string ConsoleTag = "Console";
-    public const string ShipTag = "Pawn";
+    public const string ShipTag = "Ship";
     public const string EnemyTag = "Enemy";
     public const string BulletTag = "Bullet";
 

@@ -51,6 +51,7 @@ public class BulletBehaviour : NetworkBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+
 		if (other.tag != Tags.ShipTag && other.tag != Tags.MechaTag && other.tag != Tags.BulletTag)
         {
             if (isServer)
