@@ -70,7 +70,7 @@ public class GrappleAbility : NetworkBehaviour {
 			Vector3 l_mpos = Input.mousePosition;
 			l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
 			RaycastHit2D hit;
-			hit = Physics2D.Raycast(transform.position, l_mpos - transform.position , Vector2.Distance(transform.position, l_mpos), Layers.ShipColLayer ^ Layers.EnemyColLayer);
+			hit = Physics2D.Raycast(transform.position, l_mpos - transform.position , Vector2.Distance(transform.position, l_mpos), Layers.ShipColLayer ^ Layers.EnemyColLayer ^ Layers.PawnColLayer);
 			if (!hit)
 				return;
 
@@ -93,7 +93,6 @@ public class GrappleAbility : NetworkBehaviour {
 
 			//enable line on the network
 			CmdRequestEnableLine(m_connected.GetComponent<NetworkIdentity>().netId, m_hook.connectedAnchor);
-			
 		}
 		//release the cable
 		if (Input.GetMouseButtonUp(1))
@@ -119,19 +118,20 @@ public class GrappleAbility : NetworkBehaviour {
 		m_cableLine.enabled = true;
 	}
 
-	[Command]
-	public void CmdRequestDisableLine()
-	{
-		m_cableLine.enabled = false;
-		RpcDisableLine();
-	}
-
 	[ClientRpc]
 	public void RpcEnableLine(NetworkInstanceId p_id, Vector2 p_attachpoint)
 	{
 		m_connected = ClientScene.FindLocalObject(p_id);
 		m_attachpoint = p_attachpoint;
 		m_cableLine.enabled = true;
+		m_connected.GetComponent<Rigidbody2D>().isKinematic = false;
+	}
+
+	[Command]
+	public void CmdRequestDisableLine()
+	{
+		m_cableLine.enabled = false;
+		RpcDisableLine();
 	}
 
 	[ClientRpc]

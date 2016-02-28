@@ -44,5 +44,6 @@ public class GameProperties : MonoBehaviour {
 
 	//ENEMY SHIT
 	public GameObject enemyPlacholderPrefab;
+	public GameObject enemyPlaceholderArmor;
 	public GameObject enemyBullet;
 }

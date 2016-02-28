@@ -128,6 +128,11 @@ public class PlayerManager : NetworkBehaviour {
 	{
 		GameObject l_enemy = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().enemyPlacholderPrefab, m_ship.transform.position + new Vector3(30.0f, 0, 0), Quaternion.identity);
 		NetworkServer.Spawn(l_enemy);
+		Vector3 l_pos = l_enemy.transform.FindChild("WeakSpot").position;
+		GameObject l_armor = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().enemyPlaceholderArmor, l_pos, Quaternion.identity);
+		l_armor.transform.parent = l_enemy.transform;
+		NetworkServer.Spawn(l_armor);
+		l_armor.GetComponent<EnemyArmor>().RpcSetup(l_enemy.GetComponent<NetworkIdentity>().netId);
 	}
 
 	#endregion

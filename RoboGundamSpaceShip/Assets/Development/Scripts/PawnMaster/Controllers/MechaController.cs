@@ -131,7 +131,7 @@ public class MechaController : NetworkBehaviour, IEnterable {
 	public void RpcSetupMecha()
 	{
 		m_rb.isKinematic = false;
-		transform.parent = transform.parent.parent;
+		transform.parent = null;
 		transform.rotation = Quaternion.identity;
 	}
 
