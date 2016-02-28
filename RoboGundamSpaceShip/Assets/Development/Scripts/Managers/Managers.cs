@@ -17,6 +17,7 @@ public class Managers : MonoBehaviour {
 	//private LoadManager m_loadmanager = null;
 	//private InputManager m_inputmanager = null;
 	private GUIManager m_guimanager = null;
+    private WindManager m_windmanager = null;
 
 	//private GameObject m_spawnerObject = null;
 	#endregion
@@ -58,12 +59,22 @@ public class Managers : MonoBehaviour {
 	{
 		m_playermanager = p_man;
 	}
-	//public InputManager GetInputManager()
-	//{
-	//	return m_inputmanager;
-	//}
 
-	public GUIManager GetGUIManager()
+    public WindManager GetWindManager()
+    {
+        return m_windmanager;
+    }
+
+    public void SetWindManager(WindManager p_man)
+    {
+        m_windmanager = p_man;
+    }
+    //public InputManager GetInputManager()
+    //{
+    //	return m_inputmanager;
+    //}
+
+    public GUIManager GetGUIManager()
 	{
 		return m_guimanager;
 	}
