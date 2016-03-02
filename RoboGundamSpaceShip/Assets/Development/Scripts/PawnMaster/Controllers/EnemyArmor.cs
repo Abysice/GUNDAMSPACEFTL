@@ -19,6 +19,7 @@ public class EnemyArmor : NetworkBehaviour, IDamageable {
 	private NetworkIdentity m_gundamID;
 	private NetworkIdentity m_armorID;
 	private Rigidbody2D m_rb;
+	private SpringJoint2D m_spring;
 	#endregion
 
 	#region Accessors
@@ -27,6 +28,10 @@ public class EnemyArmor : NetworkBehaviour, IDamageable {
 	#region Unity Defaults
 	public void Start()
 	{
+		m_spring = gameObject.AddComponent<SpringJoint2D>();
+		m_spring.breakForce = 10;
+		m_spring.connectedBody = transform.parent.Find("WeakSpot").GetComponent<Rigidbody2D>();
+	
 		if (isServer)
 		{
 			m_armorID = gameObject.GetComponent<NetworkIdentity>();
@@ -50,10 +55,7 @@ public class EnemyArmor : NetworkBehaviour, IDamageable {
 				{
 					NetworkServer.Destroy(gameObject);
 				}
-
 			}
-
-
 		}
 	}
 	#endregion
