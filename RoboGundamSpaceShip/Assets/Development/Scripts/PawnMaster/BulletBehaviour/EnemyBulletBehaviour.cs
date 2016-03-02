@@ -21,7 +21,7 @@ public class EnemyBulletBehaviour : BulletBehaviour {
 	{
 		if (other.tag == "Ship")
 		{
-            Debug.Log("Collides");
+            //Debug.Log("Collides");
 			if (isServer)
 			{
 				IDamageable L_target = (IDamageable)other.GetComponent(typeof(IDamageable));
