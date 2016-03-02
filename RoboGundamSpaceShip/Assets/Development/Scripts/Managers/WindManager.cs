@@ -54,7 +54,7 @@ public class WindManager : NetworkBehaviour {
         {
             m_windDirection = new Vector2(0, 0);
         }
-        Debug.Log(m_windDirection);
+       
     }
 
 	#endregion
