@@ -36,6 +36,19 @@ public class PlayerManager : NetworkBehaviour {
 		//m_localCamera = GameObject.Instantiate(Managers.GetInstance().GetGameProperties().mainCamera);
 		Managers.GetInstance().SetPlayerManager(this);
 		DontDestroyOnLoad(gameObject);
+
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().shipPrefab);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerPrefab);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().mechaPrefab);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().playerManager);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().cannonPrefab, SpawnCannonHandler, UnSpawnHandler);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().pointdefensePrefab, SpawnPointDefenseHandler, UnSpawnHandler);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().enemyBullet);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().bulletPrefab);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().flakBarrage);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().BulletExplosion);
+		ClientScene.RegisterPrefab(Managers.GetInstance().GetGameProperties().enemyPlaceholderArmor);
+		
 	}
 	//runs every frame
 	public void Update()
@@ -57,6 +70,30 @@ public class PlayerManager : NetworkBehaviour {
 		//spawn level goes here
 		SpawnFrienemies(); //spawn the enemies for the level
 	}
+
+	#region SpawnHandlers
+	
+	public GameObject SpawnCannonHandler(Vector3 position, NetworkHash128 assetID)
+	{
+		GameObject l_cannon = (GameObject)GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab, position, Quaternion.identity);
+		l_cannon.transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
+		return l_cannon;
+	}
+
+	public GameObject SpawnPointDefenseHandler(Vector3 position, NetworkHash128 assetID)
+	{
+		GameObject l_cannon = (GameObject)GameObject.Instantiate(Managers.GetInstance().GetGameProperties().shipPrefab, position, Quaternion.identity);
+		l_cannon.transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
+		return l_cannon;
+	}
+
+	public void UnSpawnHandler(GameObject gameObject)
+	{
+		Destroy(gameObject);
+		return;
+	}
+
+	#endregion
 
 	#endregion
 
@@ -107,8 +144,8 @@ public class PlayerManager : NetworkBehaviour {
 		for (int i = 0; i < 4; i++)
 		{
 			m_cannons[i] = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().cannonPrefab, m_spawns[i + 4].position, Quaternion.identity);
+			m_cannons[i].transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
 			NetworkServer.Spawn(m_cannons[i]);
-			m_cannons[i].GetComponent<TurretController>().RpcSetup();
 		}
 	}
 
@@ -118,8 +155,8 @@ public class PlayerManager : NetworkBehaviour {
 		for (int i = 0; i < 6; i++)
 		{
 			m_pointDefense[i] = (GameObject)Instantiate(Managers.GetInstance().GetGameProperties().pointdefensePrefab, m_spawns[i + 8].position, Quaternion.identity);
+			m_pointDefense[i].transform.parent = GameObject.Find("ShipPrefab(Clone)").transform;
 			NetworkServer.Spawn(m_pointDefense[i]);
-			m_pointDefense[i].GetComponent<TurretController>().RpcSetup();
 		}
 	}
 

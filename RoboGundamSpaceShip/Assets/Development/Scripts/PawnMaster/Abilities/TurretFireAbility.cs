@@ -41,7 +41,7 @@ public class TurretFireAbility : NetworkBehaviour {
         if (Input.GetMouseButton(0) && Time.time > m_nextFire)
         {
             m_nextFire = Time.time + m_fireRate;
-            CmdRequestBullet(m_spawnLoacation.position, m_spawnLoacation.rotation, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            CmdRequestBullet(m_spawnLoacation.position, m_spawnLoacation.rotation.eulerAngles.z, Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
 	
 	}
@@ -49,12 +49,12 @@ public class TurretFireAbility : NetworkBehaviour {
 
     #region Public Methods
     [Command]
-    public void CmdRequestBullet(Vector2 p_position, Quaternion p_rotation, Vector2 target)
+    public void CmdRequestBullet(Vector2 p_position, float p_rotation, Vector2 target)
     {
         float L_totalDist = Vector2.Distance(target, p_position);
         Vector2 l_velocity = transform.TransformDirection(Vector2.up * m_speed);
         float timeDelay = Mathf.Abs(L_totalDist)/ l_velocity.magnitude;
-        GameObject l_projectile = (GameObject)Instantiate(m_bullet, p_position, p_rotation);
+        GameObject l_projectile = (GameObject)Instantiate(m_bullet, p_position, Quaternion.Euler(0,0, p_rotation));
         l_projectile.GetComponent<Rigidbody2D>().velocity = l_velocity;
         l_projectile.GetComponent<BulletBehaviour>().m_deathDelay = timeDelay;
         NetworkServer.Spawn(l_projectile);
