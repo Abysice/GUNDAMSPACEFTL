@@ -29,7 +29,9 @@ public class EnemyArmor : NetworkBehaviour, IDamageable {
 	public void Start()
 	{
 		m_spring = gameObject.AddComponent<SpringJoint2D>();
-		m_spring.breakForce = 10;
+		m_spring.breakForce = 1;
+		m_spring.frequency = 0;
+		m_spring.dampingRatio = 0;
 		m_spring.connectedBody = transform.parent.Find("WeakSpot").GetComponent<Rigidbody2D>();
 	
 		if (isServer)
