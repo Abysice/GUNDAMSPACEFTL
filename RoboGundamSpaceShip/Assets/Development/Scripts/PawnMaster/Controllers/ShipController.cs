@@ -19,7 +19,6 @@ public class ShipController : NetworkBehaviour, IEnterable {
     #endregion
 
     #region Private Variables
-    private GameObject m_sails;
     private Vector2 m_direction;
     private Rigidbody2D m_ship_RigidBody;	
 	private GameObject m_PlayerCamera;
@@ -27,8 +26,7 @@ public class ShipController : NetworkBehaviour, IEnterable {
 	private NetworkIdentity m_id;
 	[SyncVar]
 	private bool m_readyForControl = true;
-    [SyncVar]
-    private float m_sailRotation;
+
 	#endregion
 
 	#region Accessors
@@ -46,7 +44,6 @@ public class ShipController : NetworkBehaviour, IEnterable {
 		m_PlayerCamera = Managers.GetInstance().GetGameStateManager().GetPlayerCamera();
 		m_camCont = m_PlayerCamera.GetComponent<CameraController>();
 		m_id = gameObject.GetComponent<NetworkIdentity>();
-        m_sails = transform.Find("Sails").gameObject;
         
 	}
 	//runs every frame
@@ -54,48 +51,13 @@ public class ShipController : NetworkBehaviour, IEnterable {
 	{
         // will need to be given AssignClientAuthority by the server before you can control
         if (!hasAuthority)
-        {
-            m_sails.transform.rotation = Quaternion.RotateTowards(m_sails.transform.rotation, Quaternion.Euler(0, 0, m_sailRotation), Time.deltaTime * 10f);
             return;
-        }
-            
 
 		if (isServer && m_id.clientAuthorityOwner == null) //prevent server default authority bug
 			return;
 
-
 		if (m_readyForControl)
-		{
-
-			m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
-
-			m_direction = Vector2.zero;
-
-			if (Input.GetKey(KeyCode.W))
-				m_direction.y = 1;
-			else if (Input.GetKey(KeyCode.S))
-				m_direction.y = -1;
-			if (Input.GetKey(KeyCode.D))
-				m_direction.x = 1;
-			else if (Input.GetKey(KeyCode.A))
-				m_direction.x = -1;
-            if (Input.GetKey(KeyCode.Q))
-                m_sails.transform.Rotate(Vector3.forward*Time.deltaTime*10f);
-            if (Input.GetKey(KeyCode.Z))
-                m_sails.transform.Rotate(Vector3.forward * Time.deltaTime * -10f);
-            if(isServer)
-                m_sailRotation = m_sails.transform.rotation.eulerAngles.z;
-            else
-                CmdUpdateRotation(m_sails.transform.rotation.eulerAngles.z);
-
-            m_ship_RigidBody.AddForce(transform.up * m_forceMultiplier * m_direction.y);
-			m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
-			m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
-			m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
-
-
-			m_velocity = m_ship_RigidBody.velocity;
-		}
+			HandleMovement();
     }
 
     #endregion
@@ -122,16 +84,50 @@ public class ShipController : NetworkBehaviour, IEnterable {
 		m_readyForControl = true;
 	}
 
-    [Command]
-    public void CmdUpdateRotation(float f)
-    {
-        m_sailRotation = f;
-    }
     #endregion
 
     #region Protected Methods
     #endregion
 
     #region Private Methods
+	private void HandleMovement()
+	{
+		//Camera stuff
+		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
+
+		//rotate towards mouse
+		//Vector3 l_mpos = Input.mousePosition;
+		//l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
+		//l_mpos = l_mpos - transform.position;
+		
+		//float l_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
+
+		//Quaternion l_rot = Quaternion.AngleAxis(l_angle - 90.0f, Vector3.forward);
+		//transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, 1);
+		//m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
+		//m_ship_RigidBody.MoveRotation(l_angle - 90.0f);
+		
+		//m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
+
+		m_direction = Vector2.zero;
+
+		if (Input.GetKey(KeyCode.W))
+			m_direction.y = 1;
+		else if (Input.GetKey(KeyCode.S))
+			m_direction.y = -1;
+		if (Input.GetKey(KeyCode.D))
+			m_direction.x = 1;
+		else if (Input.GetKey(KeyCode.A))
+			m_direction.x = -1;
+		
+		m_ship_RigidBody.AddForce(transform.up * m_forceMultiplier * m_direction.y);
+		//m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
+		m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
+		//m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
+
+		}
+
+
+
     #endregion
 }

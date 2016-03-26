@@ -15,7 +15,6 @@ public class GrappleAbility : NetworkBehaviour {
 	#endregion
 
 	#region Private Variables
-	private MechaController m_mecha;
 	private DistanceJoint2D m_hook;
 	private GameObject m_connected;
 	private LineRenderer m_cableLine;
@@ -30,7 +29,6 @@ public class GrappleAbility : NetworkBehaviour {
 	//initialization
 	public void Start()
 	{
-		m_mecha = gameObject.GetComponent<MechaController>();
 		m_cableLine = gameObject.GetComponent<LineRenderer>();
 		m_id = gameObject.GetComponent<NetworkIdentity>();
 	}
