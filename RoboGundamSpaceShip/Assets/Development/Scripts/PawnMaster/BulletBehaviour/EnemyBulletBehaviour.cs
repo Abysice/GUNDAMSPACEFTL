@@ -19,7 +19,7 @@ public class EnemyBulletBehaviour : BulletBehaviour {
 	#region Unity Defaults
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if (other.tag == "Ship")
+		if (other.tag == "Ship" || other.tag == "Mecha")
 		{
             //Debug.Log("Collides");
 			if (isServer)
