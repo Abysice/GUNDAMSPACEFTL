@@ -10,6 +10,7 @@ public class ShipController : NetworkBehaviour, IEnterable {
     #region Public Variables
     public float m_forceMultiplier = 40000f;
     public float m_torqueMultiplier = 400000f;
+	public float m_rotationSpeed = 0.5f;
     public float m_MaxSpeed = 7f;
     public float m_MaxTorque = 5f;
     public Vector2 m_velocity;
@@ -96,19 +97,15 @@ public class ShipController : NetworkBehaviour, IEnterable {
 		m_PlayerCamera.GetComponent<CameraController>().m_camSize = 30;
 
 		//rotate towards mouse
-		//Vector3 l_mpos = Input.mousePosition;
-		//l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
-		//l_mpos = l_mpos - transform.position;
-		
-		//float l_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
+		Vector3 l_mpos = Input.mousePosition;
+		l_mpos = Camera.main.ScreenToWorldPoint(l_mpos);
+		l_mpos = l_mpos - transform.position;
 
-		//Quaternion l_rot = Quaternion.AngleAxis(l_angle - 90.0f, Vector3.forward);
-		//transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, 1);
-		//m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
-		//m_ship_RigidBody.MoveRotation(l_angle - 90.0f);
-		
-		//m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
+		float l_angle = Mathf.Atan2(l_mpos.y, l_mpos.x) * Mathf.Rad2Deg;
 
+		Quaternion l_rot = Quaternion.AngleAxis(l_angle - 90.0f, Vector3.forward);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, l_rot, m_rotationSpeed);
+	
 		m_direction = Vector2.zero;
 
 		if (Input.GetKey(KeyCode.W))
@@ -121,6 +118,7 @@ public class ShipController : NetworkBehaviour, IEnterable {
 			m_direction.x = -1;
 		
 		m_ship_RigidBody.AddForce(transform.up * m_forceMultiplier * m_direction.y);
+		m_ship_RigidBody.AddForce(transform.right * m_forceMultiplier * m_direction.x);
 		//m_ship_RigidBody.AddTorque(-m_direction.x * m_torqueMultiplier);
 		m_ship_RigidBody.velocity = Vector2.ClampMagnitude(m_ship_RigidBody.velocity, m_MaxSpeed);
 		//m_ship_RigidBody.angularVelocity = Mathf.Clamp(m_ship_RigidBody.angularVelocity, -m_MaxTorque, m_MaxTorque);
